@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class ThankYou_Screen extends AppCompatActivity {
                 Intent intent=new Intent(getApplicationContext(),Tanishq_Screen.class);
                 startActivity(intent);
                 finish();
+                Log.d("ddd", "run: ");
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             }
         },2000);
