@@ -31,6 +31,7 @@ public class ThankYou_Screen extends AppCompatActivity {
                 Intent intent=new Intent(getApplicationContext(),Tanishq_Screen.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             }
         },2000);
     }
