@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    tools:context="com.feet.tanishq.ThankYou_Screen">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="60dp"
+        android:background="@drawable/et_border_gold"
+        android:layout_centerInParent="true">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/thank_you"
+            android:textSize="60sp"
+            android:textColor="@color/tanishq_gold"
+            android:gravity="center"
+            android:id="@+id/tv_thankyou" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tanishq_gold">
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/for_log"
+            android:layout_marginTop="20dp"
+            android:textSize="25sp"
+            android:textColor="@color/tanishq_gold"
+            android:gravity="center"
+            android:id="@+id/tv_for_log" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/asif_sb"
+            android:layout_marginTop="20dp"
+            android:textSize="25sp"
+            android:textColor="@color/tanishq_gold"
+            android:gravity="center"
+            android:id="@+id/tv_username" />
+    </LinearLayout>
+</RelativeLayout>

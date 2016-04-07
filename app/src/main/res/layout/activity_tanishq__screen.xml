@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    tools:context="com.feet.tanishq.Tanishq_Screen">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_display"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv_toggle"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/menu_bar"
+                    />
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/tanishq_unit_login_page"
+                    android:id="@+id/iv_logo3"
+                    android:layout_alignParentStart="false" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/asif_sb"
+                        android:textColor="@color/tanishq_gold"
+                        android:textSize="19sp"
+                        android:id="@+id/tv_welcome_user"
+                        android:gravity="right" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/logout"
+                        android:padding="5dp"
+                        android:textColor="@color/tanishq_gold"
+                        android:textSize="12sp"
+                        android:id="@+id/tv_logout"
+                        android:gravity="right" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:weightSum="4"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/collection"
+                            android:layout_weight="1"
+                            android:id="@+id/iv_collection" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/wishlist"
+                            android:layout_weight="1"
+                            android:id="@+id/iv_wish" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/compare"
+                            android:layout_weight="1"
+                            android:id="@+id/iv_compare" />
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/help"
+                            android:layout_weight="1"
+                            android:id="@+id/iv_help" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_fragment"
+                android:layout_width="match_parent"
+                android:padding="16dp"
+                android:layout_height="match_parent">
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_filter"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:weightSum="6"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/ll_icon"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:paddingTop="16dp"
+                android:background="@color/black_filter"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:src="@drawable/menu_bar"
+                    android:id="@+id/iv_toggle_filter" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/category"
+                    android:padding="16dp"
+                    android:id="@+id/iv_category_icon" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/collection"
+                    android:padding="16dp"
+                    android:id="@+id/iv_collection_icon" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/material"
+                    android:padding="16dp"
+                    android:id="@+id/iv_material_icon" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/occassion"
+                    android:padding="16dp"
+                    android:id="@+id/iv_occasion_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_recycler"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:paddingTop="60dp"
+                android:background="@color/light_black_filter"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collection"
+                    android:textColor="@color/tanishq_gold"
+                    android:textSize="40sp"
+                    android:id="@+id/tv_item_name" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:id="@+id/rv_cat_item"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_selected_filters"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="3.5"
+                android:background="@color/trans_black"
+                android:layout_height="match_parent">
+
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:weightSum="10"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:scrollbars="vertical"
+                        android:layout_weight="8"
+                        android:id="@+id/rv_selected_filter"
+                        >
+                    </android.support.v7.widget.RecyclerView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:weightSum="2"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.7"
+                            android:layout_height="match_parent"></LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="0dp"
+                            android:layout_weight="1.3"
+                            android:layout_height="match_parent"
+                            android:padding="20dp"
+                            android:weightSum="2"
+                            android:gravity="center"
+                            >
+
+                            <Button
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="@string/clear_all"
+                                android:textSize="19sp"
+                                android:textColor="@color/tanishq_gold"
+                                android:background="@drawable/bt_dark_gold"
+                                android:layout_margin="5dp"
+                                android:gravity="center"
+                                android:id="@+id/bt_clear" />
+
+                            <Button
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:text="@string/done"
+                                android:textSize="19sp"
+                                android:layout_margin="5dp"
+                                android:gravity="center"
+                                android:textColor="@color/tanishq_gold"
+                                android:background="@drawable/bt_dark_gold"
+                                android:id="@+id/bt_done" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</RelativeLayout>
