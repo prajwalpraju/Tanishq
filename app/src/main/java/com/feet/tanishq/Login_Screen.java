@@ -131,7 +131,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
     }
 
     private void insertIntoCatTable(String cat_id,String cat_name,String item_id,String item_name){
-        Log.d(TAG, "insertIntoCatTable: "+item_name);
+//        Log.d(TAG, "insertIntoCatTable: "+item_name);
         ContentValues values=new ContentValues();
         values.put("cat_id",cat_id);
         values.put("cat_name",cat_name);
@@ -149,7 +149,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         UserDetails user=new UserDetails(getApplicationContext());
         HashMap<String,String> params=new HashMap<String,String>();
         params.put(Const.URL,Const.OTP_VERIFY);
-        Log.d(TAG, "callVerfiyOtp: "+user.getUserName());
+//        Log.d(TAG, "callVerfiyOtp: "+user.getUserName());
         params.put(Const.Params.USERNAME,user.getUserName());
         params.put(Const.Params.MOBILE,user.getMobileNumber());
         params.put(Const.Params.OTP_CODE, otp_code);
@@ -268,7 +268,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         switch (serviceCode){
             case Const.ServiceCode.USERLOGIN:
                 if (AsifUtils.validateResponse(getApplicationContext(),response)) {
-                    Log.d(TAG, "onTaskCompleted: response success");
+//                    Log.d(TAG, "onTaskCompleted: response success");
                     Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
                     UserDetails user=new UserDetails(getApplicationContext());
                     user.setUserName(et_username.getText().toString().trim());

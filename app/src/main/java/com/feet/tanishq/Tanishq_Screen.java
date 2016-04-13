@@ -206,9 +206,9 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 int position=intent.getIntExtra("position",0);
                 Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
                 if (type==0) {
-                    deleteFilterRecycler(position);
+                    deleteFilterRecycler(model_category);
                 } else {
-                    addFilterRecycler(position,model_category);
+                    addFilterRecycler(model_category);
                 }
             }
         };
@@ -218,7 +218,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         LocalBroadcastManager.getInstance(this).unregisterReceiver(FilterRecyclerBroadcast);
     }
     RecyclerView.Adapter filter_adapter;
-    private synchronized void addFilterRecycler(int position,Model_Category model_category){
+    private synchronized void addFilterRecycler(Model_Category model_category){
         Model_Filter filter=new Model_Filter(model_category.getCat_id(),model_category.getId(),model_category.getName());
         arr_filter.add(filter);
         filter_adapter=new Filter_Adapter(this,arr_filter);
@@ -226,10 +226,19 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         filter_adapter.notifyDataSetChanged();
     }
 
-    private synchronized void deleteFilterRecycler(int position){
-            if(arr_filter.size()>0){
-                arr_filter.remove(position);
+    private synchronized void deleteFilterRecycler(Model_Category model_category){
+       String cat_id= model_category.getCat_id();
+        String item_id=model_category.getId();
+        if(arr_filter.size()>0){
+        for (int i=0;i<arr_filter.size();i++){
+            Model_Filter model=arr_filter.get(i);
+            if(cat_id.matches(model.getCat_id())&&item_id.matches(model.getItem_id())){
+                    arr_filter.remove(i);
+                break;
             }
+        }
+        }
+
         filter_adapter.notifyDataSetChanged();
     }
 
