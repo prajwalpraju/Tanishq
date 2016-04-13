@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.UserDetails;
 
 public class ThankYou_Screen extends AppCompatActivity {
@@ -21,6 +22,10 @@ public class ThankYou_Screen extends AppCompatActivity {
         tv_thankyou=(TextView) findViewById(R.id.tv_thankyou);
         tv_forllog=(TextView) findViewById(R.id.tv_for_log);
         tv_username=(TextView) findViewById(R.id.tv_username);
+
+        tv_thankyou.setTypeface(AsifUtils.getRaleWay_Thin(this));
+        tv_forllog.setTypeface(AsifUtils.getRaleWay_Thin(this));
+        tv_username.setTypeface(AsifUtils.getRaleWay_Thin(this));
 
         UserDetails user=new UserDetails(getApplicationContext());
         tv_username.setText(user.getUserName());

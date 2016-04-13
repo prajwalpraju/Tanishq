@@ -16,7 +16,8 @@
     <string name="collection">COLLECTION</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="all_collection">All collection fragment</string>
-    <string name="wish_list">Wish list fragment</string>
+    <string name="all_collection">All COLLECTIONS</string>
+    <string name="wish_list">WISH LIST</string>
+    <string name="divyam">DIVYAM</string>
 
 </resources>

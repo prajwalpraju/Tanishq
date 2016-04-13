@@ -1,7 +1,5 @@
 package com.feet.tanishq.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -16,36 +14,26 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +54,23 @@ public class AsifUtils {
 		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = windowManager.getDefaultDisplay();
 		return display.getWidth();
+	}
+
+	public static Typeface getRaleWay_Bold(Context context){
+		Typeface tf_raleway_bold=Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Bold.otf");
+;		return tf_raleway_bold;
+	}
+	public static Typeface getRaleWay_Medium(Context context){
+		Typeface tf_raleway_medium=Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Medium.otf");
+;		return tf_raleway_medium;
+	}
+	public static Typeface getRaleWay_SemiBold(Context context){
+		Typeface tf_raleway_semibold=Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-SemiBold.otf");
+;		return tf_raleway_semibold;
+	}
+	public static Typeface getRaleWay_Thin(Context context){
+		Typeface tf_raleway_thin=Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Thin.otf");
+;		return tf_raleway_thin;
 	}
 
 
@@ -103,6 +108,8 @@ public class AsifUtils {
 			e.printStackTrace();
 		}
 	}
+
+
 
 	public static void showSimpleProgressDialog(Context context) {
 		showSimpleProgressDialog(context, null, "Loading...", false);

@@ -46,6 +46,7 @@ public class VolleyHttpRequest extends Request<String> {
 		HashMap<String,String> mapAuth=new HashMap<String,String>();
 		String authCred=String.format("%s:%s", Const.BASEAUTH_USERNAME, Const.BASEAUTH_PASSWORD);
 		String auth="Basic "+Base64.encodeToString(authCred.getBytes(),Base64.NO_WRAP);
+//		mapAuth.put("Content-Type", "application/json; charset=utf-8");
 		mapAuth.put("Authorization",auth);
 		return mapAuth;
 	}

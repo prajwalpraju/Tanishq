@@ -4,8 +4,6 @@ public class Const {
 	
 	public static final String URL_MAIN="https://www.tanishq.co.in/";
 	
-//	public static final int CALL_LIST_CODE=1;
-	
 	public static final String URL="url";
 	public static final String FRAG_All_COLL="all_collection";
 	public static final String FRAG_WISH_LIST="wish_list";
@@ -17,9 +15,11 @@ public class Const {
     public static final String USER_LOGIN=STORE_API+"userlogin?";
     public static final String OTP_VERIFY=STORE_API+"otpcodeverification?";
     public static final String LOGOUT=STORE_API+"signout?";
+    public static final String ALL_COLLECTIONS=STORE_API+"tanishqcollections?";
+
 
 	public class Params{
-		public static final String STATUS="status";
+		public static final String ID="id";
 		public static final String USERNAME="username";
 		public static final String MOBILE="mobile";
 		public static final String OTP_CODE="otpcode";
@@ -29,5 +29,6 @@ public class Const {
         public static final int USERLOGIN=1;
         public static final int OTP_VERIFY=2;
         public static final int LOGOUT=3;
+        public static final int ALL_COLLECTIONS=4;
     }
 }

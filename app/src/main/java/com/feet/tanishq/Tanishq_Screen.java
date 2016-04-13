@@ -1,16 +1,27 @@
 package com.feet.tanishq;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,23 +35,27 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.adapter.Category_Adapter;
+import com.feet.tanishq.adapter.Filter_Adapter;
+import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
 import com.feet.tanishq.fragments.Wish_List;
 import com.feet.tanishq.model.Model_Category;
+import com.feet.tanishq.model.Model_Filter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.DividerItemDecoration;
+import com.feet.tanishq.utils.SimpleGestureFilter;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener {
+public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener{
 
 
-    LinearLayout ll_display,ll_filter;
+    LinearLayout ll_display,ll_filter,ll_icon,ll_recycler,ll_selected_filters;
     ImageView iv_toggle,iv_collection,iv_wish,iv_compare,iv_help,iv_toggle_filter,iv_collection_icon,
             iv_category_icon,iv_material_icon,iv_occasion_icon;
     TextView tv_welcome_user,tv_logout,tv_item_name;
@@ -49,8 +64,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     RecyclerView rv_cat_item,rv_selected_filter;
     RecyclerView.LayoutManager layoutManager;
+    RecyclerView.LayoutManager filter_layoutManager;
 
     RequestQueue requestQueue;
+
+    ArrayList<Model_Filter> arr_filter=new ArrayList<Model_Filter>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +77,13 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         setContentView(R.layout.activity_tanishq__screen);
 
         requestQueue= Volley.newRequestQueue(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(FilterRecyclerBroadcast,new IntentFilter("filter"));
 
         ll_display = (LinearLayout) findViewById(R.id.ll_display);
         ll_filter=(LinearLayout) findViewById(R.id.ll_filter);
+        ll_icon=(LinearLayout) findViewById(R.id.ll_icon);
+        ll_recycler=(LinearLayout) findViewById(R.id.ll_recycler);
+        ll_selected_filters=(LinearLayout) findViewById(R.id.ll_selected_filters);
 
         iv_toggle=(ImageView) findViewById(R.id.iv_toggle);
         iv_collection=(ImageView) findViewById(R.id.iv_collection);
@@ -78,8 +101,17 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         tv_logout=(TextView) findViewById(R.id.tv_logout);
         tv_item_name=(TextView) findViewById(R.id.tv_item_name);
 
+        tv_welcome_user.setTypeface(AsifUtils.getRaleWay_SemiBold(this));
+        tv_logout.setTypeface(AsifUtils.getRaleWay_SemiBold(this));
+        tv_item_name.setTypeface(AsifUtils.getRaleWay_Bold(this));
+
+
         bt_clear=(Button) findViewById(R.id.bt_clear);
         bt_done=(Button) findViewById(R.id.bt_done);
+
+        bt_clear.setTypeface(AsifUtils.getRaleWay_Thin(this));
+        bt_done.setTypeface(AsifUtils.getRaleWay_Thin(this));
+
 
         rv_cat_item=(RecyclerView) findViewById(R.id.rv_cat_item);
         rv_selected_filter=(RecyclerView) findViewById(R.id.rv_selected_filter);
@@ -87,18 +119,20 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         rv_cat_item.setHasFixedSize(true);
         rv_selected_filter.setHasFixedSize(true);
         layoutManager=new LinearLayoutManager(this);
+        filter_layoutManager=new LinearLayoutManager(this);
+
 
         rv_cat_item.setLayoutManager(layoutManager);
+        rv_selected_filter.setLayoutManager(filter_layoutManager);
 //        rv_selected_filter.setLayoutManager(layoutManager);
-        rv_cat_item.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.line_divider)));
+//        rv_cat_item.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.line_divider)));
 //        rv_selected_filter.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.line_divider)));
 
         iv_toggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ddd", "onClick: iv click");
                 if (ll_filter.getVisibility() == View.GONE) {
-                    ll_filter.setVisibility(View.VISIBLE);
+                    openSlideWithAnim();
                 }
             }
         });
@@ -106,10 +140,30 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         iv_toggle_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("ddd", "onClick: iv click22");
                 if (ll_filter.getVisibility() == View.VISIBLE) {
-                    ll_filter.setVisibility(View.GONE);
+                     closeSlideWithAnim();
                 }
+            }
+        });
+
+        ll_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                return;
+            }
+        });
+
+        ll_recycler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                return;
+            }
+        });
+
+        ll_selected_filters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                return;
             }
         });
 
@@ -120,18 +174,15 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
             }
         });
 
-
-        ArrayList<Model_Category> arr_list=new ArrayList<Model_Category>();
-        arr_list.clear();
-        for (int i = 0; i <5; i++) {
-            Model_Category model=new Model_Category(""+i,"bangles "+i,false);
-            arr_list.add(model);
-        }
-
-        RecyclerView.Adapter adapter=new Category_Adapter(this,arr_list);
+        bt_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setUpFilterRecycler();
+            }
+        });
 
         fl_fragment=(FrameLayout) findViewById(R.id.fl_fragment);
-        gotoAllCollectionFragment();
+
 
         iv_wish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +190,192 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 gotoWishListFragment();
             }
         });
+
+        UserDetails user=new UserDetails(getApplicationContext());
+        tv_welcome_user.setText(user.getUserName());
+
+        gotoAllCollectionFragment();
+        setUpFrameUI();
+
+    }
+
+        BroadcastReceiver FilterRecyclerBroadcast=new BroadcastReceiver() {
+            @Override
+             public void onReceive(Context context, Intent intent) {
+                int type=intent.getIntExtra("type", 0);
+                int position=intent.getIntExtra("position",0);
+                Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
+                if (type==0) {
+                    deleteFilterRecycler(position);
+                } else {
+                    addFilterRecycler(position,model_category);
+                }
+            }
+        };
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(FilterRecyclerBroadcast);
+    }
+    RecyclerView.Adapter filter_adapter;
+    private synchronized void addFilterRecycler(int position,Model_Category model_category){
+        Model_Filter filter=new Model_Filter(model_category.getCat_id(),model_category.getId(),model_category.getName());
+        arr_filter.add(filter);
+        filter_adapter=new Filter_Adapter(this,arr_filter);
+        rv_selected_filter.setAdapter(filter_adapter);
+        filter_adapter.notifyDataSetChanged();
+    }
+
+    private synchronized void deleteFilterRecycler(int position){
+            if(arr_filter.size()>0){
+                arr_filter.remove(position);
+            }
+        filter_adapter.notifyDataSetChanged();
+    }
+
+    private void setUpFilterRecycler(){
+
+    }
+
+    private void setUpFrameUI(){
+
+        iv_category_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
+        iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+        iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+        iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+        tv_item_name.setText("CATEGORY");
+        new SetUpFrameFilters("1").execute();
+
+            iv_category_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SetUpFrameFilters("1").execute();
+                    iv_category_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
+                    iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+
+
+                }
+            });
+
+            iv_collection_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SetUpFrameFilters("2").execute();
+                    iv_category_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
+                    iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+
+                }
+            });
+
+            iv_material_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SetUpFrameFilters("3").execute();
+                    iv_category_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
+                    iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+
+                }
+            });
+
+            iv_occasion_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SetUpFrameFilters("4").execute();
+                    iv_category_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
+                }
+            });
+
+    }
+
+    SQLiteDatabase db;
+    private void getValuesFromDb(String id){
+
+        arr_list.clear();
+        db=openOrCreateDatabase(DataBaseHandler.DATABASE_NAME,MODE_PRIVATE,null);
+
+        Cursor cs=db.rawQuery("select * from "+DataBaseHandler.TABLE_CATEGORY+" where cat_id="+id,null);
+
+        if (cs.moveToFirst()){
+            do {
+                String item_id=cs.getString(cs.getColumnIndex("item_id"));
+                String item_name=cs.getString(cs.getColumnIndex("item_name"));
+                String cat_id=cs.getString(cs.getColumnIndex("cat_id"));
+                String cat_name=cs.getString(cs.getColumnIndex("cat_name"));
+
+                Model_Category model=new Model_Category(cat_id,cat_name,item_id,item_name,false);
+                arr_list.add(model);
+            } while (cs.moveToNext());
+
+        }
+
+        db.close();
+    }
+
+    ArrayList<Model_Category> arr_list=new ArrayList<Model_Category>();
+    class SetUpFrameFilters extends AsyncTask<Void,Void,Void>{
+
+        String cat_id;
+        SetUpFrameFilters(String cat_id){
+            this.cat_id=cat_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            arr_list.clear();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            getValuesFromDb(cat_id);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            RecyclerView.Adapter adapter=new Category_Adapter(Tanishq_Screen.this,arr_list);
+            rv_cat_item.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+            switch (cat_id){
+                case "1":
+                    tv_item_name.setText("CATEGORY");
+                    break;
+                case "2":
+                    tv_item_name.setText("COLLECTION");
+                    break;
+                case "3":
+                    tv_item_name.setText("MATERIAL");
+                    break;
+                case "4":
+                    tv_item_name.setText("OCCASION");
+                    break;
+            }
+        }
+    }
+
+
+
+    private void openSlideWithAnim(){
+        final Animation anim= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.pull_in_left);
+        ll_filter.setVisibility(View.VISIBLE);
+        ll_filter.setAnimation(anim);
+    }
+
+    private void closeSlideWithAnim(){
+        final Animation anim= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.push_out_left);
+        ll_filter.setAnimation(anim);
+        ll_filter.setVisibility(View.GONE);
 
     }
 
@@ -222,6 +459,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        Toast.makeText(getApplicationContext(),""+error.getMessage(),Toast.LENGTH_SHORT).show();
 
     }
 }
