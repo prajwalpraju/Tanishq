@@ -299,7 +299,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(getApplicationContext(),error.toString(),Toast.LENGTH_SHORT).show();
+        AsifUtils.validateResponse(this, error.getMessage());
 
     }
 

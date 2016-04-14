@@ -95,7 +95,7 @@ public class Category_Adapter  extends RecyclerView.Adapter<Category_Adapter.MyV
             }
 
             intent.putExtra("model",model);
-            intent.putExtra("position",getAdapterPosition());
+//            intent.putExtra("position",getAdapterPosition());
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
         }

@@ -126,7 +126,6 @@ public class All_Collection extends Fragment implements AsyncTaskCompleteListene
         View view=inflater.inflate(R.layout.fragment_all__collection, container, false);
 
         tv_header_coll=(TextView) view.findViewById(R.id.tv_header_coll);
-//        Typeface tf_raleway_bold=Typeface.createFromAsset(getContext().getAssets(), "fonts/Raleway-Bold.otf");
         tv_header_coll.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         rv_collection=(RecyclerView) view.findViewById(R.id.rv_collection);
         gridLayoutManager=new GridLayoutManager(getActivity(),3);
@@ -178,7 +177,7 @@ public class All_Collection extends Fragment implements AsyncTaskCompleteListene
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(getContext(),""+error.getMessage(),Toast.LENGTH_SHORT).show();
+        AsifUtils.validateResponse(getContext(), error.getMessage());
     }
 
     class ParseCollectionResponse extends AsyncTask<Void,Void,Void>{

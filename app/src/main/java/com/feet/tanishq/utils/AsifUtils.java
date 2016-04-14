@@ -183,8 +183,9 @@ public class AsifUtils {
 	public static boolean validateResponse(Context context,String response){
 		boolean validate=false;
 		try {
-			int status=new JSONObject(response).getInt("status");
 			Log.d("response", "validateResponse: "+response);
+			int status=new JSONObject(response).getInt("status");
+
 			Toast.makeText(context,new JSONObject(response).getString("message"),Toast.LENGTH_SHORT).show();
 			switch (status){
 				case 200:
@@ -212,7 +213,8 @@ public class AsifUtils {
 
 			Log.d("response", "validateResponse: "+status+" val="+validate);
 		} catch (Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
+			Log.e("eee", "validateResponse: "+Log.getStackTraceString(e) );
 		}
 
 		return validate;

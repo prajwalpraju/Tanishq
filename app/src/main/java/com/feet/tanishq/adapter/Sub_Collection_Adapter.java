@@ -12,27 +12,25 @@ import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.feet.tanishq.R;
-import com.feet.tanishq.Tanishq_Screen;
-import com.feet.tanishq.model.Model_AllCollection;
+import com.feet.tanishq.model.Model_SubColl;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.Singleton_volley;
 
 import java.util.ArrayList;
 
 /**
- * Created by asif on 11-04-2016.
+ * Created by asif on 14-04-2016.
  */
-public class All_Collection_Adapter extends RecyclerView.Adapter<All_Collection_Adapter.MyHolder>{
+public class Sub_Collection_Adapter extends RecyclerView.Adapter<Sub_Collection_Adapter.MyHolder> {
 
     Context context;
-    ArrayList<Model_AllCollection> arr_list;
-    AdapterCallback adapterCallback;
+    ArrayList<Model_SubColl> arr_list;
+
 
     ImageLoader imageLoader;
-    public All_Collection_Adapter(Context context, ArrayList<Model_AllCollection> arr_list){
+    public Sub_Collection_Adapter(Context context, ArrayList<Model_SubColl> arr_list){
         this.context=context;
         this.arr_list=arr_list;
-        this.adapterCallback=((AdapterCallback)context);
         imageLoader= Singleton_volley.getInstance().getImageLoader();
     }
 
@@ -45,10 +43,10 @@ public class All_Collection_Adapter extends RecyclerView.Adapter<All_Collection_
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
 
-        Model_AllCollection model=arr_list.get(holder.getAdapterPosition());
-        holder.tv_product_name.setText(model.getName());
+        Model_SubColl model=arr_list.get(holder.getAdapterPosition());
+        holder.tv_product_name.setText(model.getItem_name());
         try {
-            holder.nv_product.setImageUrl(model.getImage(),imageLoader);
+            holder.nv_product.setImageUrl(model.getItem_image(),imageLoader);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,15 +58,14 @@ public class All_Collection_Adapter extends RecyclerView.Adapter<All_Collection_
         return arr_list.size();
     }
 
-    public static interface AdapterCallback {
-        void onMethodCallback(int frag,String cat_id,String cat_name);
-    }
 
-     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-         CardView card;
-         NetworkImageView nv_product;
-         TextView tv_product_name;
+
+    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        CardView card;
+        NetworkImageView nv_product;
+        TextView tv_product_name;
 
         public MyHolder(View view) {
             super(view);
@@ -82,8 +79,8 @@ public class All_Collection_Adapter extends RecyclerView.Adapter<All_Collection_
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context,""+getAdapterPosition(),Toast.LENGTH_SHORT).show();
-            adapterCallback.onMethodCallback(2,arr_list.get(getAdapterPosition()).getId(),arr_list.get(getAdapterPosition()).getName());
+            Toast.makeText(context, "sub= " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+
         }
     }
 }

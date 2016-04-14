@@ -1,5 +1,6 @@
 package com.feet.tanishq;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,10 +35,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.feet.tanishq.adapter.All_Collection_Adapter;
 import com.feet.tanishq.adapter.Category_Adapter;
 import com.feet.tanishq.adapter.Filter_Adapter;
+import com.feet.tanishq.adapter.Sub_Collection_Adapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
+import com.feet.tanishq.fragments.Sub_Collection;
 import com.feet.tanishq.fragments.Wish_List;
 import com.feet.tanishq.model.Model_Category;
 import com.feet.tanishq.model.Model_Filter;
@@ -52,7 +56,7 @@ import com.feet.tanishq.utils.VolleyHttpRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener{
+public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener,All_Collection_Adapter.AdapterCallback{
 
 
     LinearLayout ll_display,ll_filter,ll_icon,ll_recycler,ll_selected_filters;
@@ -69,12 +73,14 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     RequestQueue requestQueue;
 
     ArrayList<Model_Filter> arr_filter=new ArrayList<Model_Filter>();
+    public static Activity activity;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tanishq__screen);
+        activity=this;
 
         requestQueue= Volley.newRequestQueue(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(FilterRecyclerBroadcast,new IntentFilter("filter"));
@@ -203,7 +209,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
             @Override
              public void onReceive(Context context, Intent intent) {
                 int type=intent.getIntExtra("type", 0);
-                int position=intent.getIntExtra("position",0);
+//                int position=intent.getIntExtra("position",0);
                 Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
                 if (type==0) {
                     deleteFilterRecycler(model_category);
@@ -330,6 +336,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     }
 
     ArrayList<Model_Category> arr_list=new ArrayList<Model_Category>();
+
+
     class SetUpFrameFilters extends AsyncTask<Void,Void,Void>{
 
         String cat_id;
@@ -397,7 +405,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         HashMap<String,String> params=new HashMap<String,String>();
         params.put(Const.URL,Const.LOGOUT);
         params.put(Const.Params.USERNAME,user.getUserName());
-        params.put(Const.Params.MOBILE,user.getMobileNumber());
+        params.put(Const.Params.MOBILE, user.getMobileNumber());
 
         requestQueue.add(new VolleyHttpRequest(Request.Method.POST, params, Const.ServiceCode.LOGOUT, this, this));
     }
@@ -435,12 +443,18 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     }
     public void gotoWishListFragment(){
         Wish_List wish_list=Wish_List.newInstance();
-        addFragment(wish_list,false, Const.FRAG_All_COLL);
+        addFragment(wish_list,false, Const.FRAG_WISH_LIST);
+    }
+
+    public void gotoSub_CollectionFragment(String cat_id,String cat_name){
+        Sub_Collection sub_collection=Sub_Collection.newInstance(cat_id,cat_name);
+        addFragment(sub_collection,false,Const.FRAG_SUB_COLL);
+
     }
     public void gotoCompareFragment(){
 
     }
-    public void gotoDeatailsFragment(){
+    public void gotoDetailsFragment(){
 
     }
     public void gotoFeedBackFragment(){
@@ -448,6 +462,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     }
     public void gotoUserFragment(){
 
+    }
+
+
+    @Override
+    public void onMethodCallback(int frag,String cat_id,String cat_name) {
+            gotoSub_CollectionFragment(cat_id,cat_name);
     }
 
 
@@ -468,7 +488,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     @Override
     public void onErrorResponse(VolleyError error) {
-        Toast.makeText(getApplicationContext(),""+error.getMessage(),Toast.LENGTH_SHORT).show();
+        AsifUtils.validateResponse(this, error.getMessage());
 
     }
 }
