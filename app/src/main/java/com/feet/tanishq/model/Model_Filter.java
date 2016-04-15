@@ -1,9 +1,13 @@
 package com.feet.tanishq.model;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by asif on 06-04-2016.
  */
-public class Model_Filter {
+public class Model_Filter implements Serializable{
 
     String cat_id,item_id,item_name;
 

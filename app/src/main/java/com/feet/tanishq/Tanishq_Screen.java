@@ -41,10 +41,12 @@ import com.feet.tanishq.adapter.Filter_Adapter;
 import com.feet.tanishq.adapter.Sub_Collection_Adapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
+import com.feet.tanishq.fragments.Filter_Products;
 import com.feet.tanishq.fragments.Sub_Collection;
 import com.feet.tanishq.fragments.Wish_List;
 import com.feet.tanishq.model.Model_Category;
 import com.feet.tanishq.model.Model_Filter;
+import com.feet.tanishq.model.Model_Params;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
@@ -183,7 +185,11 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         bt_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setUpFilterRecycler();
+               if(arr_filter.size()>0){
+                   closeSlideWithAnim();
+                   setUpFilterProducts();
+
+               }
             }
         });
 
@@ -205,7 +211,36 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     }
 
-        BroadcastReceiver FilterRecyclerBroadcast=new BroadcastReceiver() {
+    private void setUpFilterProducts() {
+        String collection_id="",jewellery_id="",material_id="",occassion_id="",
+        collection_name="",jewellery_name="",occassion_name="",material_name="";
+        for(Model_Filter model:arr_filter){
+            switch (model.getCat_id()){
+                case "1":
+                    jewellery_id=model.getItem_id();
+                    jewellery_name=model.getItem_name();
+                    break;
+                case "2":
+                    collection_id=model.getItem_id();
+                    collection_name=model.getItem_name();
+                    break;
+                case "3":
+                    material_id=model.getItem_id();
+                    material_name=model.getItem_name();
+                    break;
+                case "4":
+                    occassion_id=model.getItem_id();
+                    occassion_name=model.getItem_name();
+                    break;
+            }
+        }
+
+        Model_Params model_params=new Model_Params(collection_id,jewellery_id,occassion_id,material_id,
+                collection_name,jewellery_name,occassion_name,material_name);
+        gotoFilterProductFragment(model_params);
+    }
+
+    BroadcastReceiver FilterRecyclerBroadcast=new BroadcastReceiver() {
             @Override
              public void onReceive(Context context, Intent intent) {
                 int type=intent.getIntExtra("type", 0);
@@ -248,9 +283,6 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         filter_adapter.notifyDataSetChanged();
     }
 
-    private void setUpFilterRecycler(){
-
-    }
 
     private void setUpFrameUI(){
 
@@ -450,6 +482,11 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         Sub_Collection sub_collection=Sub_Collection.newInstance(cat_id,cat_name);
         addFragment(sub_collection,false,Const.FRAG_SUB_COLL);
 
+    }
+
+    public void gotoFilterProductFragment(Model_Params params){
+        Filter_Products filter_products=Filter_Products.newInstance(params);
+        addFragment(filter_products,false,Const.FRAG_SUB_COLL);
     }
     public void gotoCompareFragment(){
 
