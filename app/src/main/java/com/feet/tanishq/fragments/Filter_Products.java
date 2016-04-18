@@ -4,7 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,12 +15,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
 import com.feet.tanishq.adapter.FilterTop_Adapter;
@@ -30,6 +36,8 @@ import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
+import com.feet.tanishq.utils.OnAddMoreListener;
+import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.SpacesItemDecoration;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
@@ -40,6 +48,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
@@ -175,7 +185,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         gridLayoutManager=new GridLayoutManager(getActivity(),3);
         rv_filter_product.setHasFixedSize(true);
         rv_filter_product.setLayoutManager(gridLayoutManager);
-        rv_filter_product.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
+//        rv_filter_product.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
         rv_filter_product.addItemDecoration(new SpacesItemDecoration(30));
 
         rv_filter_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -202,6 +212,8 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
             }
         });
 
+
+
         if (model!=null){
             setUpTopFilter();
             callFilterApi();
@@ -225,7 +237,8 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         super.onDetach();
     }
 
-    RecyclerView.Adapter madapter;
+    Product_Adapter madapter;
+    int count=0;
 
     class ParseProductListResponse extends AsyncTask<Void,Void,Void>{
         String response;
@@ -247,11 +260,13 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if (count==0){
+                count++;
+                madapter=new Product_Adapter(getContext(),arr_list);
+                rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
+            }
 
-            madapter=new Product_Adapter(getContext(),arr_list);
-            rv_filter_product.setAdapter(madapter);
             madapter.notifyDataSetChanged();
-            rv_filter.smoothScrollToPosition(visibleItemCount);
             loading=true;
         }
     }
@@ -319,4 +334,5 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

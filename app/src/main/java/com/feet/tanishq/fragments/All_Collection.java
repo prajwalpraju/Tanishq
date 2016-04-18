@@ -36,6 +36,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
@@ -203,7 +205,7 @@ public class All_Collection extends Fragment implements AsyncTaskCompleteListene
             super.onPostExecute(aVoid);
 
             All_Collection_Adapter adapter=new All_Collection_Adapter(getContext(),arr_list);
-            rv_collection.setAdapter(adapter);
+            rv_collection.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(adapter)));
         }
     }
 

@@ -446,7 +446,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     @Override
     public void onBackPressed() {
-        gotoAllCollectionFragment();
+        if (ll_filter.getVisibility()==View.VISIBLE){
+            closeSlideWithAnim();
+        }else {
+            gotoAllCollectionFragment();
+        }
+
     }
 
     @Override
