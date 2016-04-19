@@ -1,0 +1,14 @@
+package com.feet.tanishq.interfaces;
+
+import com.feet.tanishq.model.Model_Product;
+import com.feet.tanishq.model.Model_TopFilter;
+
+import java.util.ArrayList;
+
+/**
+ * Created by asif on 19-04-2016.
+ */
+public interface AdapterCallback {
+    void onMethodCallback(String cat_id,String cat_name);
+    void onMethodCallbackArr(ArrayList<Model_Product> arr_list,ArrayList<Model_TopFilter> arr_top);
+}

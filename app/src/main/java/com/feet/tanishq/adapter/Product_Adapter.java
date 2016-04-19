@@ -13,7 +13,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
+import com.feet.tanishq.interfaces.AdapterCallback;
+import com.feet.tanishq.interfaces.OnItemClickListener;
 import com.feet.tanishq.model.Model_Product;
+import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.Singleton_volley;
 
@@ -25,11 +28,16 @@ import java.util.ArrayList;
 public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyViewHolder>{
     Context context;
     ArrayList<Model_Product> arr_list;
+    ArrayList<Model_TopFilter> arr_top;
     ImageLoader imageLoader;
+//    OnItemClickListener onItemClickListener;
+    AdapterCallback adapterCallback;
 
-    public Product_Adapter(Context context,ArrayList<Model_Product> arr_list){
+    public Product_Adapter(Context context,ArrayList<Model_Product> arr_list,ArrayList<Model_TopFilter> arr_top){
         this.context=context;
         this.arr_list=arr_list;
+        this.arr_top=arr_top;
+        this.adapterCallback=((AdapterCallback)context);
         this.imageLoader= Singleton_volley.getInstance().getImageLoader();
 
     }
@@ -53,6 +61,11 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
 
     }
 
+//    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+//        this.onItemClickListener=onItemClickListener;
+//
+//    }
+
     @Override
     public int getItemCount() {
         return arr_list.size();
@@ -75,7 +88,8 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, "pro= " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+//            onItemClickListener.onItemClick(v,getAdapterPosition());
+            adapterCallback.onMethodCallbackArr(arr_list,arr_top);
         }
     }
 }

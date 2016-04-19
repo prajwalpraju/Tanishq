@@ -13,6 +13,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.feet.tanishq.R;
 import com.feet.tanishq.Tanishq_Screen;
+import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_AllCollection;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.Singleton_volley;
@@ -60,9 +61,7 @@ public class All_Collection_Adapter extends RecyclerView.Adapter<All_Collection_
         return arr_list.size();
     }
 
-    public static interface AdapterCallback {
-        void onMethodCallback(int frag,String cat_id,String cat_name);
-    }
+
 
      class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -83,7 +82,7 @@ public class All_Collection_Adapter extends RecyclerView.Adapter<All_Collection_
         @Override
         public void onClick(View v) {
             Toast.makeText(context,""+getAdapterPosition(),Toast.LENGTH_SHORT).show();
-            adapterCallback.onMethodCallback(2,arr_list.get(getAdapterPosition()).getId(),arr_list.get(getAdapterPosition()).getName());
+            adapterCallback.onMethodCallback(arr_list.get(getAdapterPosition()).getId(),arr_list.get(getAdapterPosition()).getName());
         }
     }
 }

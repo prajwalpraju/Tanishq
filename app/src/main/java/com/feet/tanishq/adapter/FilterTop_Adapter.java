@@ -27,7 +27,7 @@ public class FilterTop_Adapter extends RecyclerView.Adapter<FilterTop_Adapter.My
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.filter_item,null);
+        View view= LayoutInflater.from(context).inflate(R.layout.filter_item_trans,null);
         return new MyViewHolder(view);
     }
 

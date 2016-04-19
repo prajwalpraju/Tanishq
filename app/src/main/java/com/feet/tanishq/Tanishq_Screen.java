@@ -38,15 +38,20 @@ import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.adapter.All_Collection_Adapter;
 import com.feet.tanishq.adapter.Category_Adapter;
 import com.feet.tanishq.adapter.Filter_Adapter;
+import com.feet.tanishq.adapter.Product_Adapter;
 import com.feet.tanishq.adapter.Sub_Collection_Adapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
 import com.feet.tanishq.fragments.Filter_Products;
+import com.feet.tanishq.fragments.PagerFilter_Product;
 import com.feet.tanishq.fragments.Sub_Collection;
 import com.feet.tanishq.fragments.Wish_List;
+import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_Category;
 import com.feet.tanishq.model.Model_Filter;
 import com.feet.tanishq.model.Model_Params;
+import com.feet.tanishq.model.Model_Product;
+import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
@@ -58,7 +63,7 @@ import com.feet.tanishq.utils.VolleyHttpRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener,All_Collection_Adapter.AdapterCallback{
+public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener,AdapterCallback{
 
 
     LinearLayout ll_display,ll_filter,ll_icon,ll_recycler,ll_selected_filters;
@@ -370,6 +375,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     ArrayList<Model_Category> arr_list=new ArrayList<Model_Category>();
 
 
+
+
     class SetUpFrameFilters extends AsyncTask<Void,Void,Void>{
 
         String cat_id;
@@ -491,12 +498,14 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     public void gotoFilterProductFragment(Model_Params params){
         Filter_Products filter_products=Filter_Products.newInstance(params);
-        addFragment(filter_products,false,Const.FRAG_SUB_COLL);
+        addFragment(filter_products,false,Const.FRAG_FILTER);
     }
     public void gotoCompareFragment(){
 
     }
-    public void gotoDetailsFragment(){
+    public void gotoPagerFilterProductFragment(ArrayList<Model_Product> arr_list,ArrayList<Model_TopFilter> arr_top){
+        PagerFilter_Product pagerFilter_product=PagerFilter_Product.newInstance(arr_list,arr_top);
+        addFragment(pagerFilter_product,false,Const.FRAG_PAGERFILTER);
 
     }
     public void gotoFeedBackFragment(){
@@ -508,8 +517,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
 
     @Override
-    public void onMethodCallback(int frag,String cat_id,String cat_name) {
+    public void onMethodCallback(String cat_id,String cat_name) {
             gotoSub_CollectionFragment(cat_id,cat_name);
+    }
+    @Override
+    public void onMethodCallbackArr(ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top) {
+        gotoPagerFilterProductFragment(arr_list, arr_top);
     }
 
 

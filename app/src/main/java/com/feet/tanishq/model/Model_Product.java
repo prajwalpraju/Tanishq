@@ -1,9 +1,11 @@
 package com.feet.tanishq.model;
 
+import java.io.Serializable;
+
 /**
  * Created by asif on 15-04-2016.
  */
-public class Model_Product {
+public class Model_Product implements Serializable{
     String product_image,product_title,product_price,discount_price,discount_percent,product_url;
 
     public Model_Product(String product_image,String product_title,String product_price,String discount_price,String discount_percent,String product_url){

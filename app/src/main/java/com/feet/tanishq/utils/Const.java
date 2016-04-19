@@ -9,6 +9,7 @@ public class Const {
 	public static final String FRAG_WISH_LIST="wish_list";
 	public static final String FRAG_SUB_COLL="sub_collection";
 	public static final String FRAG_FILTER="filter_product";
+	public static final String FRAG_PAGERFILTER="pager_filter_product";
 
 	public static final String BASEAUTH_USERNAME="tanishqapiroot";
 	public static final String BASEAUTH_PASSWORD="w0D0YdJtt";

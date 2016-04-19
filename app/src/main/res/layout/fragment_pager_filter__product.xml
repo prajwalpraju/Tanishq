@@ -1,0 +1,143 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.feet.tanishq.fragments.PagerFilter_Product">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:weightSum="5">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_filter_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scrollbars="horizontal"
+            android:layout_weight="1"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:weightSum="5"
+            android:layout_weight="4">
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:weightSum="6"
+                android:layout_weight="3">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5">
+
+                </android.support.v4.view.ViewPager>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:background="@color/tanishq_light_gold"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/wishlist"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:id="@+id/iv_wish_pro" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/compare"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:id="@+id/iv_compare_pro" />
+                </LinearLayout>
+
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center|left"
+                android:padding="40dp"
+                android:layout_weight="2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RING"
+                    android:id="@+id/tv_header_pager"
+                    android:textSize="30sp"
+                    android:textColor="@color/tanishq_gold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DYGF54"
+                    android:layout_marginTop="30dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/tanishq_gold"
+                    android:id="@+id/tv_pro_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:layout_marginTop="20dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/tanishq_gold"
+                    android:id="@+id/tv_pro_price" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:layout_marginTop="20dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/tanishq_gold"
+                    android:id="@+id/tv_pro_material" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:layout_marginTop="20dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/tanishq_gold"
+                    android:id="@+id/tv_pro_category" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:layout_marginTop="20dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/tanishq_gold"
+                    android:id="@+id/tv_pro_collection" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

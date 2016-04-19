@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
 import com.feet.tanishq.adapter.FilterTop_Adapter;
 import com.feet.tanishq.adapter.Product_Adapter;
+import com.feet.tanishq.interfaces.OnItemClickListener;
 import com.feet.tanishq.model.Model_Filter;
 import com.feet.tanishq.model.Model_Params;
 import com.feet.tanishq.model.Model_Product;
@@ -124,9 +125,9 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
 
 
     }
-
+    ArrayList<Model_TopFilter> arr_TopFilter=new ArrayList<Model_TopFilter>();
     private void setUpTopFilter() {
-        ArrayList<Model_TopFilter> arr_TopFilter=new ArrayList<Model_TopFilter>();
+
         Model_TopFilter coll=new Model_TopFilter(model.getCollection_id(),model.getCollection_name());
         Model_TopFilter jewel=new Model_TopFilter(model.getJewellery_id(),model.getJewellery_name());
         Model_TopFilter occas=new Model_TopFilter(model.getOccassion_id(),model.getOccassion_name());
@@ -262,7 +263,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
             super.onPostExecute(aVoid);
             if (count==0){
                 count++;
-                madapter=new Product_Adapter(getContext(),arr_list);
+                madapter=new Product_Adapter(getContext(),arr_list,arr_TopFilter);
                 rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
             }
 
