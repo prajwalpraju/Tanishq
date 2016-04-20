@@ -100,4 +100,6 @@ public class Category_Adapter  extends RecyclerView.Adapter<Category_Adapter.MyV
 
         }
     }
+
+
 }

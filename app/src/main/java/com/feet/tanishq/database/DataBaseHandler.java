@@ -12,6 +12,7 @@ public class DataBaseHandler {
             "cat_id varchar," +
             "cat_name varchar," +
             "item_id varchar," +
-            "item_name varchar)";
+            "item_name varchar," +
+            "selected varchar)";
 
 }

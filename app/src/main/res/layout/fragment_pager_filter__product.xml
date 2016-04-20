@@ -79,7 +79,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:gravity="center|left"
-                android:padding="40dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="16dp"
                 android:layout_weight="2">
 
                 <TextView
@@ -88,14 +89,16 @@
                     android:text="RING"
                     android:id="@+id/tv_header_pager"
                     android:textSize="30sp"
+                    android:singleLine="true"
                     android:textColor="@color/tanishq_gold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DYGF54"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="40dp"
                     android:textSize="20sp"
+                    android:singleLine="true"
                     android:textColor="@color/tanishq_gold"
                     android:id="@+id/tv_pro_name" />
 
@@ -105,6 +108,7 @@
                     android:text="New Text"
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
+                    android:singleLine="true"
                     android:textColor="@color/tanishq_gold"
                     android:id="@+id/tv_pro_price" />
 
@@ -114,6 +118,7 @@
                     android:text="New Text"
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
+                    android:singleLine="true"
                     android:textColor="@color/tanishq_gold"
                     android:id="@+id/tv_pro_material" />
 
@@ -132,6 +137,7 @@
                     android:text="New Text"
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
+                    android:singleLine="true"
                     android:textColor="@color/tanishq_gold"
                     android:id="@+id/tv_pro_collection" />
             </LinearLayout>

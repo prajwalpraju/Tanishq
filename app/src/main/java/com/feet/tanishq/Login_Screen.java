@@ -130,13 +130,14 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         }
     }
 
-    private void insertIntoCatTable(String cat_id,String cat_name,String item_id,String item_name){
+    private void insertIntoCatTable(String cat_id,String cat_name,String item_id,String item_name,String selected){
 //        Log.d(TAG, "insertIntoCatTable: "+item_name);
         ContentValues values=new ContentValues();
         values.put("cat_id",cat_id);
         values.put("cat_name",cat_name);
         values.put("item_id",item_id);
         values.put("item_name",item_name);
+        values.put("selected",selected);
         db.insert(DataBaseHandler.TABLE_CATEGORY,null,values);
 
     }
@@ -209,52 +210,52 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             JSONObject jobj=new JSONObject(response);
             JSONObject jobj_response=jobj.getJSONObject("response");
             JSONArray jArrUser=jobj_response.getJSONArray("userinfo");
-            Log.d(TAG, "parseUserAndCategoryInsertDb: jArrUser="+jArrUser.length());
+//            Log.d(TAG, "parseUserAndCategoryInsertDb: jArrUser="+jArrUser.length());
             for (int i=0;i<jArrUser.length();i++){
                 JSONObject jArrObj=jArrUser.getJSONObject(i);
                 UserDetails user=new UserDetails(this);
                 user.setUserId(jArrObj.getString("id"));
                 user.setUserName(jArrObj.getString("username"));
                 user.setMobileNumber(jArrObj.getString("mobile"));
-                Log.d(TAG, "parseUserAndCategoryInsertDb: UserId-"+jArrObj.getString("id"));
+//                Log.d(TAG, "parseUserAndCategoryInsertDb: UserId-"+jArrObj.getString("id"));
             }
 
             JSONObject jobj_filter=jobj_response.getJSONObject("filterconfiginfo");
             JSONArray jArrCategory=jobj_filter.getJSONArray("Category");
             int cat_size=jArrCategory.length();
-            Log.d(TAG, "parseUserAndCategoryInsertDb: cat_size="+cat_size);
+//            Log.d(TAG, "parseUserAndCategoryInsertDb: cat_size="+cat_size);
             for (int i=0;i<cat_size;i++){
                 JSONObject cat_obj=jArrCategory.getJSONObject(i);
                 String id=cat_obj.getString("id");
                 String name=cat_obj.getString("name");
-                insertIntoCatTable("1","Category",id,name);
+                insertIntoCatTable("1","Category",id,name,"0");
             }
             JSONArray jArrCollection=jobj_filter.getJSONArray("Collection");
             int col_size=jArrCollection.length();
-            Log.d(TAG, "parseUserAndCategoryInsertDb: col_size="+col_size);
+//            Log.d(TAG, "parseUserAndCategoryInsertDb: col_size="+col_size);
             for (int i=0;i<col_size;i++){
                 JSONObject col_obj=jArrCollection.getJSONObject(i);
                 String id=col_obj.getString("id");
                 String name=col_obj.getString("name");
-                insertIntoCatTable("2","Collection",id,name);
+                insertIntoCatTable("2","Collection",id,name,"0");
             }
             JSONArray jArrMaterial=jobj_filter.getJSONArray("Material");
             int mat_size=jArrMaterial.length();
-            Log.d(TAG, "parseUserAndCategoryInsertDb: mat_size="+mat_size);
+//            Log.d(TAG, "parseUserAndCategoryInsertDb: mat_size="+mat_size);
             for (int i=0;i<mat_size;i++){
                 JSONObject mat_obj=jArrMaterial.getJSONObject(i);
                 String id=mat_obj.getString("id");
                 String name=mat_obj.getString("name");
-                insertIntoCatTable("3","Material",id,name);
+                insertIntoCatTable("3","Material",id,name,"0");
             }
             JSONArray jArrOccasion=jobj_filter.getJSONArray("Occasion");
             int occ_size=jArrOccasion.length();
-            Log.d(TAG, "parseUserAndCategoryInsertDb: occ_size="+occ_size);
+//            Log.d(TAG, "parseUserAndCategoryInsertDb: occ_size="+occ_size);
             for (int i=0;i<occ_size;i++){
                 JSONObject occ_obj=jArrOccasion.getJSONObject(i);
                 String id=occ_obj.getString("id");
                 String name=occ_obj.getString("name");
-                insertIntoCatTable("4","Occasion",id,name);
+                insertIntoCatTable("4","Occasion",id,name,"0");
             }
 
         } catch (Exception e) {

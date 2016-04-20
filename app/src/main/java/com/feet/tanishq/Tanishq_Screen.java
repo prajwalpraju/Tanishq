@@ -2,6 +2,7 @@ package com.feet.tanishq;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -60,8 +61,11 @@ import com.feet.tanishq.utils.SimpleGestureFilter;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener,AdapterCallback{
 
@@ -217,31 +221,41 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     }
 
     private void setUpFilterProducts() {
-        String collection_id="",jewellery_id="",material_id="",occassion_id="",
-        collection_name="",jewellery_name="",occassion_name="",material_name="";
+        HashMap<String,String> jewel_map=new HashMap<String,String>();//chains,bangles..
+        HashMap<String,String> coll_map=new HashMap<String,String>();//zuhur,iva..
+        HashMap<String,String> mat_map=new HashMap<String,String>();//gold,diamond..
+        HashMap<String,String> occas_map=new HashMap<String,String>();//anniversary,valetine..
+
         for(Model_Filter model:arr_filter){
             switch (model.getCat_id()){
                 case "1":
-                    jewellery_id=model.getItem_id();
-                    jewellery_name=model.getItem_name();
-                    break;
+                    jewel_map.put("cat_id",model.getCat_id());
+                    jewel_map.put("id",model.getItem_id());
+                    jewel_map.put("name", model.getItem_name());
+                    Log.d("ttt", "setUpFilterProducts: "+jewel_map);
+                break;
                 case "2":
-                    collection_id=model.getItem_id();
-                    collection_name=model.getItem_name();
+                    coll_map.put("cat_id",model.getCat_id());
+                    coll_map.put("id",model.getItem_id());
+                    coll_map.put("name",model.getItem_name());
+                    Log.d("ttt", "setUpFilterProducts: " + coll_map);
                     break;
                 case "3":
-                    material_id=model.getItem_id();
-                    material_name=model.getItem_name();
+                    mat_map.put("cat_id",model.getCat_id());
+                    mat_map.put("id",model.getItem_id());
+                    mat_map.put("name",model.getItem_name());
+                    Log.d("ttt", "setUpFilterProducts: " + mat_map);
                     break;
                 case "4":
-                    occassion_id=model.getItem_id();
-                    occassion_name=model.getItem_name();
+                    occas_map.put("cat_id",model.getCat_id());
+                    occas_map.put("id",model.getItem_id());
+                    occas_map.put("name",model.getItem_name());
+                    Log.d("ttt", "setUpFilterProducts: " + occas_map);
                     break;
             }
         }
 
-        Model_Params model_params=new Model_Params(collection_id,jewellery_id,occassion_id,material_id,
-                collection_name,jewellery_name,occassion_name,material_name);
+        Model_Params model_params=new Model_Params(coll_map,jewel_map,occas_map,mat_map);
         gotoFilterProductFragment(model_params);
     }
 
@@ -270,22 +284,49 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         filter_adapter=new Filter_Adapter(this,arr_filter);
         rv_selected_filter.setAdapter(filter_adapter);
         filter_adapter.notifyDataSetChanged();
+        new UpdateCategforyAsync(model_category.getCat_id(), model_category.getId(), "1").execute();
     }
 
     private synchronized void deleteFilterRecycler(Model_Category model_category){
        String cat_id= model_category.getCat_id();
         String item_id=model_category.getId();
+
         if(arr_filter.size()>0){
         for (int i=0;i<arr_filter.size();i++){
             Model_Filter model=arr_filter.get(i);
             if(cat_id.matches(model.getCat_id())&&item_id.matches(model.getItem_id())){
-                    arr_filter.remove(i);
+                arr_filter.remove(i);
                 break;
             }
         }
         }
 
         filter_adapter.notifyDataSetChanged();
+        new UpdateCategforyAsync(cat_id,item_id,"0").execute();
+    }
+
+    class UpdateCategforyAsync extends AsyncTask<Void,Void,Void>{
+        String cat_id,item_id,value;
+
+        UpdateCategforyAsync(String cat_id,String item_id,String value){
+            this.cat_id=cat_id;
+            this.item_id=item_id;
+            this.value=value;
+
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            updateCategoryTableSelected(cat_id,item_id,value);
+            return null;
+        }
+    }
+
+    private synchronized void updateCategoryTableSelected(String cat_id,String item_id,String value){
+        db=openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, MODE_PRIVATE, null);
+        ContentValues values=new ContentValues();
+        values.put("selected",value);
+        db.update(DataBaseHandler.TABLE_CATEGORY,values,"cat_id = "+cat_id+" and item_id = "+item_id,null);
+        db.close();
     }
 
 
@@ -362,8 +403,14 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 String item_name=cs.getString(cs.getColumnIndex("item_name"));
                 String cat_id=cs.getString(cs.getColumnIndex("cat_id"));
                 String cat_name=cs.getString(cs.getColumnIndex("cat_name"));
+                String selected=cs.getString(cs.getColumnIndex("selected"));
+                boolean isSelected=false;
+                if (selected.matches("1")){
+                    isSelected=true;
+                }
 
-                Model_Category model=new Model_Category(cat_id,cat_name,item_id,item_name,false);
+
+                Model_Category model=new Model_Category(cat_id,cat_name,item_id,item_name,isSelected);
                 arr_list.add(model);
             } while (cs.moveToNext());
 

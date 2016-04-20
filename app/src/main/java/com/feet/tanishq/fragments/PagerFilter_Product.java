@@ -88,26 +88,33 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     }
 
     private void setUpPagerView() {
+
         RecyclerView.Adapter adapter=new FilterTop_Adapter(getContext(),arr_filter);
         rv_filter_pager.setAdapter(adapter);
-//        for (Model_TopFilter filter:arr_filter){
-//            switch (filter.getId()){
-//                case "1":
-//                    break;
-//                case "2":
-//                    break;
-//                case "3":
-//                    break;
-//                case "4":
-//                    break;
-//            }
-//            tv_pro_material.setText(model_product.getProduct_title());
-//            tv_pro_category.setText(model_product.getProduct_title());
-//            tv_pro_collection.setText(model_product.getProduct_title());
-//        }
+
+        for (Model_TopFilter filter:arr_filter){
+            switch (filter.getCat_id()){
+                case "1":
+                    tv_pro_category.setText(filter.getName());
+                    tv_header_pager.setText(filter.getName());
+                    break;
+                case "2":
+                    tv_pro_collection.setText(filter.getName());
+                    break;
+                case "3":
+                    tv_pro_material.setText(filter.getName());
+                    break;
+                case "4":
+                    break;
+            }
+        }
 
         viewPagerAdapter=new ViewPagerAdapter(getFragmentManager(),arr_product);
         vp_product.setAdapter(viewPagerAdapter);
+        vp_product.addOnPageChangeListener(this);
+        if (arr_product.size()>0){
+            setUpText(arr_product.get(0));
+        }
     }
 
     @Override
@@ -134,11 +141,11 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         tv_pro_collection=(TextView) view.findViewById(R.id.tv_pro_collection);
 
         tv_header_pager.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
-        tv_pro_name.setTypeface(AsifUtils.getRaleWay_Thin(getContext()));
-        tv_pro_price.setTypeface(AsifUtils.getRaleWay_Thin(getContext()));
-        tv_pro_material.setTypeface(AsifUtils.getRaleWay_Thin(getContext()));
-        tv_pro_category.setTypeface(AsifUtils.getRaleWay_Thin(getContext()));
-        tv_pro_collection.setTypeface(AsifUtils.getRaleWay_Thin(getContext()));
+        tv_pro_name.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_pro_price.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_pro_material.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_pro_category.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_pro_collection.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
         setUpPagerView();
 
@@ -148,13 +155,12 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     private void setUpText(Model_Product model_product){
 
         tv_pro_name.setText(model_product.getProduct_title());
-        tv_pro_price.setText(model_product.getProduct_price());
+        tv_pro_price.setText("Rs. "+model_product.getProduct_price());
 
 
     }
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     @Override

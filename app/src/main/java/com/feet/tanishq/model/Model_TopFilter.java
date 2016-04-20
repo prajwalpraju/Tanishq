@@ -6,11 +6,20 @@ import java.io.Serializable;
  * Created by asif on 15-04-2016.
  */
 public class Model_TopFilter implements Serializable {
-        String id,name;
-    public Model_TopFilter(String id, String name){
+        String cat_id,id,name;
+    public Model_TopFilter(String cat_id,String id, String name){
+        this.cat_id=cat_id;
         this.id=id;
         this.name=name;
 
+    }
+
+    public String getCat_id() {
+        return cat_id;
+    }
+
+    public void setCat_id(String cat_id) {
+        this.cat_id = cat_id;
     }
 
     public String getId() {
