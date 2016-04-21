@@ -3,6 +3,7 @@ package com.feet.tanishq.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,14 @@ import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.feet.tanishq.R;
+import com.feet.tanishq.interfaces.AdapterCallback;
+import com.feet.tanishq.model.Model_Params;
 import com.feet.tanishq.model.Model_SubColl;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.Singleton_volley;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by asif on 14-04-2016.
@@ -25,12 +29,14 @@ public class Sub_Collection_Adapter extends RecyclerView.Adapter<Sub_Collection_
 
     Context context;
     ArrayList<Model_SubColl> arr_list;
+    AdapterCallback adapterCallback;
 
 
     ImageLoader imageLoader;
     public Sub_Collection_Adapter(Context context, ArrayList<Model_SubColl> arr_list){
         this.context=context;
         this.arr_list=arr_list;
+        this.adapterCallback= (AdapterCallback) context;
         imageLoader= Singleton_volley.getInstance().getImageLoader();
     }
 
@@ -79,8 +85,25 @@ public class Sub_Collection_Adapter extends RecyclerView.Adapter<Sub_Collection_
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, "sub= " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+            setModel();
+        }
 
+        private void setModel(){
+
+            Model_SubColl model=arr_list.get(getAdapterPosition());
+            HashMap<String,String> jewel_map=new HashMap<String,String>();//chains,bangles..
+            HashMap<String,String> coll_map=new HashMap<String,String>();//zuhur,iva..
+
+            jewel_map.put("cat_id","1");
+            jewel_map.put("id",model.getItem_id());
+            jewel_map.put("name", model.getItem_name());
+
+            coll_map.put("cat_id","2");
+            coll_map.put("id", model.getCat_id());
+            coll_map.put("name", model.getCat_name());
+
+            Model_Params params=new Model_Params(coll_map,jewel_map);
+            adapterCallback.onMethodCallFilterProduct(params);
         }
     }
 }

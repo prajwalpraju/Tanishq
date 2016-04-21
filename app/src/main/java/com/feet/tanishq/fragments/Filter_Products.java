@@ -127,17 +127,22 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
     }
     ArrayList<Model_TopFilter> arr_TopFilter=new ArrayList<Model_TopFilter>();
     private void setUpTopFilter() {
-
-
-        Log.d("ttt", "setUpTopFilter: "+model.getColl_map().get("id")+" "+model.getJewel_map().get("id")+" "+model.getOccas_map().get("id")+" "+model.getMat_map().get("id"));
-        Model_TopFilter coll=new Model_TopFilter(model.getColl_map().get("cat_id"),model.getColl_map().get("id"),model.getColl_map().get("name"));
-        Model_TopFilter jewel=new Model_TopFilter(model.getJewel_map().get("cat_id"),model.getJewel_map().get("id"),model.getJewel_map().get("name"));
-        Model_TopFilter occas=new Model_TopFilter(model.getOccas_map().get("cat_id"),model.getOccas_map().get("id"),model.getOccas_map().get("name"));
-        Model_TopFilter mat=new Model_TopFilter(model.getMat_map().get("cat_id"),model.getMat_map().get("id"),model.getMat_map().get("name"));
-        arr_TopFilter.add(coll);
-        arr_TopFilter.add(jewel);
-        arr_TopFilter.add(occas);
-        arr_TopFilter.add(mat);
+        if (model.getColl_map()!=null&&model.getColl_map().get("cat_id")!=null){
+            Model_TopFilter coll=new Model_TopFilter(model.getColl_map().get("cat_id"),model.getColl_map().get("id"),model.getColl_map().get("name"));
+            arr_TopFilter.add(coll);
+        }
+        if(model.getJewel_map() !=null&&model.getJewel_map().get("cat_id")!=null){
+            Model_TopFilter jewel=new Model_TopFilter(model.getJewel_map().get("cat_id"),model.getJewel_map().get("id"),model.getJewel_map().get("name"));
+            arr_TopFilter.add(jewel);
+        }
+        if (model.getOccas_map()!=null&&model.getOccas_map().get("cat_id")!=null){
+            Model_TopFilter occas=new Model_TopFilter(model.getOccas_map().get("cat_id"),model.getOccas_map().get("id"),model.getOccas_map().get("name"));
+            arr_TopFilter.add(occas);
+        }
+        if (model.getMat_map()!=null&&model.getMat_map().get("cat_id")!=null){
+            Model_TopFilter mat=new Model_TopFilter(model.getMat_map().get("cat_id"),model.getMat_map().get("id"),model.getMat_map().get("name"));
+            arr_TopFilter.add(mat);
+        }
 
         RecyclerView.Adapter adapter=new FilterTop_Adapter(getContext(),arr_TopFilter);
         rv_filter.setAdapter(adapter);
@@ -145,10 +150,10 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
 
     private void callFilterApi() {
 
-        String cat_id=model.getColl_map().get("id");
-        String jewellery=model.getJewel_map().get("id");
-        String occasion=model.getOccas_map().get("id");
-        String material=model.getMat_map().get("id");
+        String cat_id=model.getColl_map()!=null&&model.getColl_map().get("id")!=null?model.getColl_map().get("id"):"";
+        String jewellery=model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null?model.getJewel_map().get("id"):"";
+        String occasion=model.getOccas_map()!=null&&model.getOccas_map().get("id")!=null?model.getOccas_map().get("id"):"";
+        String material=model.getMat_map()!=null&&model.getMat_map().get("id")!=null?model.getMat_map().get("id"):"";
 
         if (!AsifUtils.isNetworkAvailable(getActivity())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
@@ -159,10 +164,10 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         HashMap<String,String> map=new HashMap<String,String>();
         map.put(Const.URL,Const.PRODUCT_LIST);
         map.put(Const.Params.ID, user.getUserId());
-        map.put(Const.Params.COLLECTIONID, cat_id!=null?cat_id:"");
-        map.put(Const.Params.JEWELLERY, jewellery!=null?jewellery:"");
-        map.put(Const.Params.OCCASSION, occasion!=null?occasion:"");
-        map.put(Const.Params.MATERIAL, material!=null?material:"");
+        map.put(Const.Params.COLLECTIONID, cat_id);
+        map.put(Const.Params.JEWELLERY, jewellery);
+        map.put(Const.Params.OCCASSION, occasion);
+        map.put(Const.Params.MATERIAL, material);
         map.put(Const.Params.PAGENO, ""+next_page);
         requestQueue.add(new VolleyHttpRequest(Request.Method.GET,map,Const.ServiceCode.PRODUCT_LIST,this,this));
     }

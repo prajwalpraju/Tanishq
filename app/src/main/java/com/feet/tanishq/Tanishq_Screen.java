@@ -217,6 +217,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
         gotoAllCollectionFragment();
         setUpFrameUI();
+        resetCategory();
 
     }
 
@@ -274,9 +275,23 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         };
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(FilterRecyclerBroadcast);
+        super.onDestroy();
     }
+
+    private void resetCategory() {
+        Log.d("ttt", "resetCategory: ");
+        try {
+            db=openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, MODE_PRIVATE, null);
+            ContentValues values=new ContentValues();
+            values.put("selected","0");
+            db.update(DataBaseHandler.TABLE_CATEGORY,values,"",null);
+        } finally {
+            db.close();
+        }
+    }
+
+
     RecyclerView.Adapter filter_adapter;
     private synchronized void addFilterRecycler(Model_Category model_category){
         Model_Filter filter=new Model_Filter(model_category.getCat_id(),model_category.getId(),model_category.getName());
@@ -322,11 +337,16 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     }
 
     private synchronized void updateCategoryTableSelected(String cat_id,String item_id,String value){
-        db=openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, MODE_PRIVATE, null);
-        ContentValues values=new ContentValues();
-        values.put("selected",value);
-        db.update(DataBaseHandler.TABLE_CATEGORY,values,"cat_id = "+cat_id+" and item_id = "+item_id,null);
-        db.close();
+
+        try {
+            db=openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, MODE_PRIVATE, null);
+            ContentValues values=new ContentValues();
+            values.put("selected",value);
+            db.update(DataBaseHandler.TABLE_CATEGORY,values,"cat_id = "+cat_id+" and item_id = "+item_id,null);
+        } finally {
+            db.close();
+        }
+
     }
 
 
@@ -393,36 +413,39 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     private void getValuesFromDb(String id){
 
         arr_list.clear();
-        db=openOrCreateDatabase(DataBaseHandler.DATABASE_NAME,MODE_PRIVATE,null);
+        try {
+            db=openOrCreateDatabase(DataBaseHandler.DATABASE_NAME,MODE_PRIVATE,null);
 
-        Cursor cs=db.rawQuery("select * from "+DataBaseHandler.TABLE_CATEGORY+" where cat_id="+id,null);
+            Cursor cs=db.rawQuery("select * from "+DataBaseHandler.TABLE_CATEGORY+" where cat_id="+id,null);
 
-        if (cs.moveToFirst()){
-            do {
-                String item_id=cs.getString(cs.getColumnIndex("item_id"));
-                String item_name=cs.getString(cs.getColumnIndex("item_name"));
-                String cat_id=cs.getString(cs.getColumnIndex("cat_id"));
-                String cat_name=cs.getString(cs.getColumnIndex("cat_name"));
-                String selected=cs.getString(cs.getColumnIndex("selected"));
-                boolean isSelected=false;
-                if (selected.matches("1")){
-                    isSelected=true;
-                }
+            if (cs.moveToFirst()){
+                do {
+                    String item_id=cs.getString(cs.getColumnIndex("item_id"));
+                    String item_name=cs.getString(cs.getColumnIndex("item_name"));
+                    String cat_id=cs.getString(cs.getColumnIndex("cat_id"));
+                    String cat_name=cs.getString(cs.getColumnIndex("cat_name"));
+                    String selected=cs.getString(cs.getColumnIndex("selected"));
+                    boolean isSelected=false;
+                    if (selected.matches("1")){
+                        isSelected=true;
+                    }
 
 
-                Model_Category model=new Model_Category(cat_id,cat_name,item_id,item_name,isSelected);
-                arr_list.add(model);
-            } while (cs.moveToNext());
+                    Model_Category model=new Model_Category(cat_id,cat_name,item_id,item_name,isSelected);
+                    arr_list.add(model);
+                } while (cs.moveToNext());
 
+            }
+        } finally {
+            db.close();
         }
 
-        db.close();
+
     }
 
+
+
     ArrayList<Model_Category> arr_list=new ArrayList<Model_Category>();
-
-
-
 
     class SetUpFrameFilters extends AsyncTask<Void,Void,Void>{
 
@@ -571,6 +594,10 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     public void onMethodCallbackArr(ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top) {
         gotoPagerFilterProductFragment(arr_list, arr_top);
     }
+    @Override
+    public void onMethodCallFilterProduct(Model_Params model_params) {
+        gotoFilterProductFragment(model_params);
+    }
 
 
     @Override
@@ -587,6 +614,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 break;
         }
     }
+
+
 
     @Override
     public void onErrorResponse(VolleyError error) {

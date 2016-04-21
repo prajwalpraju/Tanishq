@@ -81,7 +81,6 @@ public class All_Collection_Adapter extends RecyclerView.Adapter<All_Collection_
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context,""+getAdapterPosition(),Toast.LENGTH_SHORT).show();
             adapterCallback.onMethodCallback(arr_list.get(getAdapterPosition()).getId(),arr_list.get(getAdapterPosition()).getName());
         }
     }

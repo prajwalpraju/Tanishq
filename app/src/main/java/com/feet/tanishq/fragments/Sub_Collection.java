@@ -34,6 +34,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 /**
@@ -138,7 +140,7 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
         gridLayoutManager=new GridLayoutManager(getActivity(),3);
         rv_subcollection.setHasFixedSize(true);
         rv_subcollection.setLayoutManager(gridLayoutManager);
-        rv_subcollection.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
+//        rv_subcollection.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
         rv_subcollection.addItemDecoration(new SpacesItemDecoration(30));
         return view;
     }
@@ -166,7 +168,7 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
             super.onPostExecute(aVoid);
 
             Sub_Collection_Adapter adapter=new Sub_Collection_Adapter(getContext(),arr_list);
-            rv_subcollection.setAdapter(adapter);
+            rv_subcollection.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(adapter)));
         }
     }
 
@@ -181,7 +183,7 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
                 String id=jObjArr.getString("categoryid");
                 String name=jObjArr.getString("categoryname");
                 String image=jObjArr.getString("categoryimage");
-                Model_SubColl model=new Model_SubColl(cat_id,id,name,image);
+                Model_SubColl model=new Model_SubColl(cat_id,cat_name,id,name,image);
                 arr_list.add(model);
             }
         } catch (Exception e) {

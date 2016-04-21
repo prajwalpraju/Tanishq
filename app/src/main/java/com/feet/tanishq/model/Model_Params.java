@@ -19,6 +19,12 @@ public class Model_Params implements Serializable {
 
     }
 
+    public Model_Params(HashMap<String,String> coll_map,HashMap<String,String> jewel_map){
+        this.coll_map=coll_map;
+        this.jewel_map=jewel_map;
+
+    }
+
     public HashMap<String, String> getColl_map() {
         return coll_map;
     }
