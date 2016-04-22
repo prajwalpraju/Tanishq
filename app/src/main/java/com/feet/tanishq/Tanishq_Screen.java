@@ -126,8 +126,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         bt_clear=(Button) findViewById(R.id.bt_clear);
         bt_done=(Button) findViewById(R.id.bt_done);
 
-        bt_clear.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        bt_done.setTypeface(AsifUtils.getRaleWay_Thin(this));
+        bt_clear.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        bt_done.setTypeface(AsifUtils.getRaleWay_Medium(this));
 
 
         rv_cat_item=(RecyclerView) findViewById(R.id.rv_cat_item);
@@ -213,7 +213,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         });
 
         UserDetails user=new UserDetails(getApplicationContext());
-        tv_welcome_user.setText(user.getUserName());
+        tv_welcome_user.setText("Welcome "+user.getUserName());
 
         gotoAllCollectionFragment();
         setUpFrameUI();
@@ -265,14 +265,38 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
              public void onReceive(Context context, Intent intent) {
                 int type=intent.getIntExtra("type", 0);
 //                int position=intent.getIntExtra("position",0);
-                Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
+
                 if (type==0) {
+                    Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
                     deleteFilterRecycler(model_category);
-                } else {
+                } else if(type==1){
+                    Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
                     addFilterRecycler(model_category);
+                }else if (type==2){
+                    Model_Filter filter= (Model_Filter) intent.getSerializableExtra("model");
+                    removeItemfromCategory(filter);
                 }
             }
         };
+
+    private synchronized void removeItemfromCategory(Model_Filter filter) {
+        String cat_id= filter.getCat_id();
+        String item_id=filter.getItem_id();
+
+        if(arr_list.size()>0){
+            for (int i=0;i<arr_list.size();i++){
+                Model_Category model=arr_list.get(i);
+                if(cat_id.matches(model.getCat_id())&&item_id.matches(model.getId())){
+                    model.setIsSelected(false);
+                    break;
+                }
+            }
+        }
+        catAdapter.notifyDataSetChanged();
+        new UpdateCategforyAsync(cat_id,item_id,"0").execute();
+    }
+
+
     @Override
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(FilterRecyclerBroadcast);
@@ -446,6 +470,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
 
     ArrayList<Model_Category> arr_list=new ArrayList<Model_Category>();
+    RecyclerView.Adapter catAdapter;
 
     class SetUpFrameFilters extends AsyncTask<Void,Void,Void>{
 
@@ -470,9 +495,9 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            RecyclerView.Adapter adapter=new Category_Adapter(Tanishq_Screen.this,arr_list);
-            rv_cat_item.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+            catAdapter=new Category_Adapter(Tanishq_Screen.this,arr_list);
+            rv_cat_item.setAdapter(catAdapter);
+            catAdapter.notifyDataSetChanged();
             switch (cat_id){
                 case "1":
                     tv_item_name.setText("CATEGORY");

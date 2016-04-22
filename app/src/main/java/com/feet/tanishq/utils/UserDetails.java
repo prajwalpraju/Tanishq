@@ -23,6 +23,15 @@ public class UserDetails {
         userPref.edit().clear().commit();
     }
 
+    public void setUserTitle(String userTitle){
+        editor.putString("title",userTitle);
+        editor.commit();
+    }
+
+    public String getUserTitle(){
+        return userPref.getString("title","");
+    }
+
     public void setUserName(String username){
         editor.putString("username",username);
         editor.commit();

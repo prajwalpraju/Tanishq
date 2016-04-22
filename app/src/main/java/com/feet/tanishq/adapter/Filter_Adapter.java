@@ -61,12 +61,15 @@ public class Filter_Adapter extends RecyclerView.Adapter<Filter_Adapter.MyViewHo
 
         @Override
         public void onClick(View v) {
-                arr_list.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-                notifyDataSetChanged();
-//            Intent intent=new Intent("filter");
-//            intent.putExtra("type",0);
-//            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            Model_Filter model=arr_list.get(getAdapterPosition());
+            Intent intent=new Intent("filter");
+            intent.putExtra("type",2);
+            intent.putExtra("model",model);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+            arr_list.remove(getAdapterPosition());
+            notifyItemRemoved(getAdapterPosition());
+            notifyDataSetChanged();
         }
     }
 

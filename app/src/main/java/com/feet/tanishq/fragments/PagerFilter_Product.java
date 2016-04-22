@@ -82,9 +82,6 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
             arr_filter = (ArrayList<Model_TopFilter>) getArguments().getSerializable(MODEL_PRO);
         }
 
-        Log.d("ttt", "onCreate: arr_product="+arr_product.size());
-        Log.d("ttt", "onCreate: arr_filter="+arr_filter.size());
-
     }
 
     private void setUpPagerView() {

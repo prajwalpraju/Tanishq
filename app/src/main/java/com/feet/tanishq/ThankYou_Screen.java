@@ -23,12 +23,12 @@ public class ThankYou_Screen extends AppCompatActivity {
         tv_forllog=(TextView) findViewById(R.id.tv_for_log);
         tv_username=(TextView) findViewById(R.id.tv_username);
 
-        tv_thankyou.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        tv_forllog.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        tv_username.setTypeface(AsifUtils.getRaleWay_Thin(this));
+        tv_thankyou.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        tv_forllog.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        tv_username.setTypeface(AsifUtils.getRaleWay_Medium(this));
 
         UserDetails user=new UserDetails(getApplicationContext());
-        tv_username.setText(user.getUserName());
+        tv_username.setText(user.getUserTitle()+". "+user.getUserName());
 
         new Handler().postDelayed(new Runnable() {
             @Override

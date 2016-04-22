@@ -81,12 +81,12 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         bt_submit=(Button)findViewById(R.id.bt_submit);
         bt_submit_otp=(Button)findViewById(R.id.bt_submit_otp);
 
-        tv_welcome.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        et_username.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        et_mobile.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        et_otp.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        bt_submit.setTypeface(AsifUtils.getRaleWay_Thin(this));
-        bt_submit_otp.setTypeface(AsifUtils.getRaleWay_Thin(this));
+        tv_welcome.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        et_username.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        et_mobile.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        et_otp.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        bt_submit.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        bt_submit_otp.setTypeface(AsifUtils.getRaleWay_Medium(this));
 
         bt_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,6 +215,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                 JSONObject jArrObj=jArrUser.getJSONObject(i);
                 UserDetails user=new UserDetails(this);
                 user.setUserId(jArrObj.getString("id"));
+                user.setUserTitle(jArrObj.getString("title"));
                 user.setUserName(jArrObj.getString("username"));
                 user.setMobileNumber(jArrObj.getString("mobile"));
 //                Log.d(TAG, "parseUserAndCategoryInsertDb: UserId-"+jArrObj.getString("id"));
