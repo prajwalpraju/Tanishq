@@ -6,17 +6,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,11 +30,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.feet.tanishq.adapter.All_Collection_Adapter;
 import com.feet.tanishq.adapter.Category_Adapter;
 import com.feet.tanishq.adapter.Filter_Adapter;
-import com.feet.tanishq.adapter.Product_Adapter;
-import com.feet.tanishq.adapter.Sub_Collection_Adapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
 import com.feet.tanishq.fragments.Filter_Products;
@@ -56,16 +47,11 @@ import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
-import com.feet.tanishq.utils.DividerItemDecoration;
-import com.feet.tanishq.utils.SimpleGestureFilter;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 
-import java.sql.SQLDataException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTaskCompleteListener,Response.ErrorListener,AdapterCallback{
 
@@ -205,6 +191,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         fl_fragment=(FrameLayout) findViewById(R.id.fl_fragment);
 
 
+        iv_collection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoAllCollectionFragment();
+            }
+        });
         iv_wish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -577,8 +569,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     }
     public void gotoAllCollectionFragment(){
-        All_Collection all_collectionFrag=All_Collection.newInstance();
-        addFragment(all_collectionFrag,false, Const.FRAG_All_COLL);
+            All_Collection all_collectionFrag=All_Collection.newInstance();
+            addFragment(all_collectionFrag,false, Const.FRAG_All_COLL);
     }
     public void gotoWishListFragment(){
         Wish_List wish_list=Wish_List.newInstance();
@@ -598,8 +590,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     public void gotoCompareFragment(){
 
     }
-    public void gotoPagerFilterProductFragment(ArrayList<Model_Product> arr_list,ArrayList<Model_TopFilter> arr_top){
-        PagerFilter_Product pagerFilter_product=PagerFilter_Product.newInstance(arr_list,arr_top);
+    public void gotoPagerFilterProductFragment(int adapterPosition, ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top){
+        PagerFilter_Product pagerFilter_product=PagerFilter_Product.newInstance(adapterPosition,arr_list,arr_top);
         addFragment(pagerFilter_product,false,Const.FRAG_PAGERFILTER);
 
     }
@@ -616,8 +608,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
             gotoSub_CollectionFragment(cat_id,cat_name);
     }
     @Override
-    public void onMethodCallbackArr(ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top) {
-        gotoPagerFilterProductFragment(arr_list, arr_top);
+    public void onMethodCallbackArr(int adapterPosition, ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top) {
+        gotoPagerFilterProductFragment(adapterPosition,arr_list, arr_top);
     }
     @Override
     public void onMethodCallFilterProduct(Model_Params model_params) {

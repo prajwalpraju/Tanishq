@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +31,12 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String MODEL = "model";
     private static final String MODEL_PRO = "model_pro";
+    private static final String PRO_POSITION = "position";
 
     // TODO: Rename and change types of parameters
     ArrayList<Model_Product> arr_product;
     ArrayList<Model_TopFilter> arr_filter;
+    int current_poistion=0;
 
 
     public PagerFilter_Product() {
@@ -58,9 +59,10 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 //        return fragment;
 //    }
 
-    public static PagerFilter_Product newInstance(ArrayList<Model_Product> arr_list,ArrayList<Model_TopFilter> arr_top){
+    public static PagerFilter_Product newInstance(int adapterPosition, ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top){
         PagerFilter_Product fragment = new PagerFilter_Product();
         Bundle args = new Bundle();
+        args.putInt(PRO_POSITION,adapterPosition);
         args.putSerializable(MODEL,arr_list);
         args.putSerializable(MODEL_PRO,arr_top);
         fragment.setArguments(args);
@@ -80,6 +82,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         if (getArguments() != null) {
             arr_product = (ArrayList<Model_Product>) getArguments().getSerializable(MODEL);
             arr_filter = (ArrayList<Model_TopFilter>) getArguments().getSerializable(MODEL_PRO);
+            current_poistion=getArguments().getInt(PRO_POSITION);
         }
 
     }
@@ -108,9 +111,10 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
         viewPagerAdapter=new ViewPagerAdapter(getFragmentManager(),arr_product);
         vp_product.setAdapter(viewPagerAdapter);
+        vp_product.setCurrentItem(current_poistion);
         vp_product.addOnPageChangeListener(this);
         if (arr_product.size()>0){
-            setUpText(arr_product.get(0));
+            setUpText(arr_product.get(current_poistion));
         }
     }
 
@@ -146,8 +150,43 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
         setUpPagerView();
 
+        iv_wish_pro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (arr_product.size()>0) {
+                    Model_Product model_product=arr_product.get(current_poistion);
+                    if (model_product.isInWish()){
+                        model_product.setInWish(false);
+                        iv_wish_pro.setBackgroundResource(R.color.tanishq_light_gold);
+                    }else {
+                        model_product.setInWish(true);
+                        iv_wish_pro.setBackgroundResource(R.color.green_fungus);
+                    }
+                }
+
+            }
+        });
+
+        iv_compare_pro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (arr_product.size()>0){
+                        Model_Product model_product=arr_product.get(current_poistion);
+                        if (model_product.isInCompare()){
+                            model_product.setInCompare(false);
+                            iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
+                        }else {
+                            model_product.setInCompare(true);
+                            iv_compare_pro.setBackgroundResource(R.color.green_fungus);
+                        }
+                    }
+            }
+        });
+
         return view;
     }
+
 
     private void setUpText(Model_Product model_product){
 
@@ -163,6 +202,21 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     @Override
     public void onPageSelected(int position) {
         Model_Product model_product=arr_product.get(position);
+
+        current_poistion=position;
+
+        if (model_product.isInWish()) {
+            iv_wish_pro.setBackgroundResource(R.color.green_fungus);
+        } else {
+            iv_wish_pro.setBackgroundResource(R.color.tanishq_light_gold);
+        }
+
+        if(model_product.isInCompare()){
+            iv_compare_pro.setBackgroundResource(R.color.green_fungus);
+        }else {
+            iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
+        }
+
         setUpText(model_product);
 
     }

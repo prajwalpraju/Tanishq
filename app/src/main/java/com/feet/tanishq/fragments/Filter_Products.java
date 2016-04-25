@@ -300,7 +300,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
                 String discount_price= obj.getString("discount_price");
                 String discount_percent=obj.getString("discount_percent");
                 String product_url=obj.getString("product_url");
-                Model_Product model_product=new Model_Product(product_image,product_title,product_price,discount_price,discount_percent,product_url);
+                Model_Product model_product=new Model_Product(product_image,product_title,product_price,discount_price,discount_percent,product_url,false,false);
                 arr_list.add(model_product);
             }
              next_page=jResObj.getInt("next_page");

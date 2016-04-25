@@ -60,6 +60,12 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:id="@+id/iv_wish_pro" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/tanishq_gold"
+                        />
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -67,6 +73,14 @@
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp"
                         android:id="@+id/iv_compare_pro" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/tanishq_gold"
+                        />
+
+
                 </LinearLayout>
 
 
@@ -86,7 +100,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Not Applicable"
                     android:id="@+id/tv_header_pager"
                     android:textSize="30sp"
                     android:singleLine="true"
@@ -95,7 +109,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Not Applicable"
                     android:layout_marginTop="40dp"
                     android:textSize="20sp"
                     android:singleLine="true"
@@ -105,7 +119,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Not Applicable"
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
                     android:singleLine="true"
@@ -115,7 +129,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Not Applicable"
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
                     android:singleLine="true"
@@ -125,7 +139,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Not Applicable"
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
                     android:textColor="@color/tanishq_gold"
@@ -134,7 +148,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Not Applicable"
                     android:layout_marginTop="20dp"
                     android:textSize="20sp"
                     android:singleLine="true"

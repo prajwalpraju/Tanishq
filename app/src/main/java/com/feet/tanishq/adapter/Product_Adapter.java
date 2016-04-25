@@ -89,7 +89,7 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
         @Override
         public void onClick(View v) {
 //            onItemClickListener.onItemClick(v,getAdapterPosition());
-            adapterCallback.onMethodCallbackArr(arr_list,arr_top);
+            adapterCallback.onMethodCallbackArr(getAdapterPosition(),arr_list,arr_top);
         }
     }
 }

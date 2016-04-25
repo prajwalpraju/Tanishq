@@ -7,8 +7,9 @@ import java.io.Serializable;
  */
 public class Model_Product implements Serializable{
     String product_image,product_title,product_price,discount_price,discount_percent,product_url;
+    boolean inWish,inCompare;
 
-    public Model_Product(String product_image,String product_title,String product_price,String discount_price,String discount_percent,String product_url){
+    public Model_Product(String product_image,String product_title,String product_price,String discount_price,String discount_percent,String product_url,boolean inWish,boolean inCompare){
 
         this.product_image=product_image;
         this.product_title=product_title;
@@ -16,7 +17,25 @@ public class Model_Product implements Serializable{
         this.discount_price=discount_price;
         this.discount_percent=discount_percent;
         this.product_url=product_url;
+        this.inWish=inWish;
+        this.inCompare=inCompare;
 
+    }
+
+    public boolean isInWish() {
+        return inWish;
+    }
+
+    public void setInWish(boolean inWish) {
+        this.inWish = inWish;
+    }
+
+    public boolean isInCompare() {
+        return inCompare;
+    }
+
+    public void setInCompare(boolean inCompare) {
+        this.inCompare = inCompare;
     }
 
     public String getProduct_image() {
