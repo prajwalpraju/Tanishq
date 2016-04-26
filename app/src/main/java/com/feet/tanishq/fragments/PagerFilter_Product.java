@@ -1,20 +1,28 @@
 package com.feet.tanishq.fragments;
 
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.adapter.FilterTop_Adapter;
 import com.feet.tanishq.adapter.ViewPagerAdapter;
+import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.model.Model_Product;
 import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
@@ -118,6 +126,13 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         }
     }
 
+//    SQLiteDatabase db;
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -158,10 +173,12 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
                     Model_Product model_product=arr_product.get(current_poistion);
                     if (model_product.isInWish()){
                         model_product.setInWish(false);
+                        deleteFromWish(model_product.getProduct_title());
                         iv_wish_pro.setBackgroundResource(R.color.tanishq_light_gold);
                     }else {
                         model_product.setInWish(true);
                         iv_wish_pro.setBackgroundResource(R.color.green_fungus);
+                        insertIntoWishList(model_product);
                     }
                 }
 
@@ -186,6 +203,53 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
         return view;
     }
+
+    private long getWishCount() {
+        long count = 0;
+        try {
+            Tanishq_Screen.db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            count = DatabaseUtils.queryNumEntries(Tanishq_Screen.db, DataBaseHandler.TABLE_WISHLIST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Tanishq_Screen.db.close();
+        }
+
+        return (int) count;
+    }
+
+    private synchronized void insertIntoWishList(Model_Product model_product){
+
+        try {
+            Tanishq_Screen.db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            ContentValues values=new ContentValues();
+            values.put("product_image",model_product.getProduct_image());
+            values.put("product_title",model_product.getProduct_title());
+            values.put("product_price",model_product.getProduct_price());
+            values.put("discount_price",model_product.getDiscount_price());
+            values.put("discount_percent",model_product.getDiscount_percent());
+            values.put("product_url",model_product.getProduct_url());
+            Tanishq_Screen.db.insert(DataBaseHandler.TABLE_WISHLIST, null, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Tanishq_Screen.db.close();
+        }
+
+    }
+
+    private synchronized void deleteFromWish(String product_title){
+        try {
+            Tanishq_Screen.db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            Tanishq_Screen.db.delete(DataBaseHandler.TABLE_WISHLIST,"product_title = ?",new String[]{product_title});
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Tanishq_Screen.db.close();
+        }
+    }
+
+
 
 
     private void setUpText(Model_Product model_product){

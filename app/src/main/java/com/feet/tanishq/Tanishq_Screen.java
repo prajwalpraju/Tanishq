@@ -59,7 +59,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     LinearLayout ll_display,ll_filter,ll_icon,ll_recycler,ll_selected_filters;
     ImageView iv_toggle,iv_collection,iv_wish,iv_compare,iv_help,iv_toggle_filter,iv_collection_icon,
             iv_category_icon,iv_material_icon,iv_occasion_icon;
-    TextView tv_welcome_user,tv_logout,tv_item_name;
+    TextView tv_welcome_user,tv_logout,tv_item_name,tv_wish_count,tv_compare_count;
     FrameLayout fl_fragment;
     Button bt_clear,bt_done;
 
@@ -71,6 +71,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     ArrayList<Model_Filter> arr_filter=new ArrayList<Model_Filter>();
     public static Activity activity;
+    public static SQLiteDatabase db;
 
 
     @Override
@@ -103,10 +104,14 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         tv_welcome_user=(TextView) findViewById(R.id.tv_welcome_user);
         tv_logout=(TextView) findViewById(R.id.tv_logout);
         tv_item_name=(TextView) findViewById(R.id.tv_item_name);
+        tv_wish_count=(TextView) findViewById(R.id.tv_wish_count);
+        tv_compare_count=(TextView) findViewById(R.id.tv_compare_count);
 
         tv_welcome_user.setTypeface(AsifUtils.getRaleWay_SemiBold(this));
         tv_logout.setTypeface(AsifUtils.getRaleWay_SemiBold(this));
         tv_item_name.setTypeface(AsifUtils.getRaleWay_Bold(this));
+        tv_wish_count.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        tv_compare_count.setTypeface(AsifUtils.getRaleWay_Medium(this));
 
 
         bt_clear=(Button) findViewById(R.id.bt_clear);
@@ -425,7 +430,6 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     }
 
-    SQLiteDatabase db;
     private void getValuesFromDb(String id){
 
         arr_list.clear();
