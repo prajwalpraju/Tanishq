@@ -133,7 +133,7 @@ public class All_Collection extends Fragment implements AsyncTaskCompleteListene
         gridLayoutManager=new GridLayoutManager(getActivity(),3);
         rv_collection.setHasFixedSize(true);
         rv_collection.setLayoutManager(gridLayoutManager);
-        rv_collection.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
+//        rv_collection.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
         rv_collection.addItemDecoration(new SpacesItemDecoration(30));
 
         return view;

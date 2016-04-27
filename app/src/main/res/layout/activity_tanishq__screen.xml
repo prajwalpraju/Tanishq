@@ -110,6 +110,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_gravity="right"
                                 android:gravity="center"
+                                android:visibility="gone"
                                 android:text="2"/>
 
                           </FrameLayout>
@@ -135,6 +136,7 @@
                                 android:layout_marginLeft="5dp"
                                 android:layout_marginTop="5dp"
                                 android:layout_gravity="right"
+                                android:visibility="gone"
                                 android:gravity="center"
                                 android:text="2"/>
 

@@ -19,6 +19,7 @@
     <string name="all_collection">All COLLECTIONS</string>
     <string name="wish_list">WISH LIST</string>
     <string name="divyam">DIVYAM</string>
+    <string name="no_wishlist">No favourities yet?\nStart saving them right away!\n(Go to Collections)</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

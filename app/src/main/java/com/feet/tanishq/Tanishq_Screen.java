@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -71,7 +72,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     ArrayList<Model_Filter> arr_filter=new ArrayList<Model_Filter>();
     public static Activity activity;
-    public static SQLiteDatabase db;
+     SQLiteDatabase db;
 
 
     @Override
@@ -210,11 +211,15 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         });
 
         UserDetails user=new UserDetails(getApplicationContext());
-        tv_welcome_user.setText("Welcome "+user.getUserName());
+        tv_welcome_user.setText("Welcome " + user.getUserName());
 
         gotoAllCollectionFragment();
         setUpFrameUI();
         resetCategory();
+        Intent intent=new Intent("filter");
+        intent.putExtra("type", 3);
+        intent.putExtra("notify", 1);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
 
     }
 
@@ -263,19 +268,63 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 int type=intent.getIntExtra("type", 0);
 //                int position=intent.getIntExtra("position",0);
 
-                if (type==0) {
-                    Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
-                    deleteFilterRecycler(model_category);
-                } else if(type==1){
-                    Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
-                    addFilterRecycler(model_category);
-                }else if (type==2){
-                    Model_Filter filter= (Model_Filter) intent.getSerializableExtra("model");
-                    removeItemfromCategory(filter);
+                switch (type){
+                    case 0:
+                        Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
+                        deleteFilterRecycler(model_category);
+                        break;
+                    case 1:
+                        Model_Category model_category2= (Model_Category) intent.getSerializableExtra("model");
+                        addFilterRecycler(model_category2);
+                        break;
+                    case 2:
+                        Model_Filter filter= (Model_Filter) intent.getSerializableExtra("model");
+                        removeItemfromCategory(filter);
+                        break;
+                    case 3:
+                        //for wish and compare counter
+                        int notify=intent.getIntExtra("notify",1);
+
+                        if (notify==1) {
+                            //wish counter
+                            if(getWishCount()>0){
+                                tv_wish_count.setVisibility(View.VISIBLE);
+                                tv_wish_count.setText(""+getWishCount());
+                            }else{
+                                tv_wish_count.setVisibility(View.GONE);
+                            }
+                        } else if(notify==2){
+                            //compare counter
+                        }
+                        break;
                 }
+
+//                if (type==0) {
+//                    Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
+//                    deleteFilterRecycler(model_category);
+//                } else if(type==1){
+//                    Model_Category model_category= (Model_Category) intent.getSerializableExtra("model");
+//                    addFilterRecycler(model_category);
+//                }else if (type==2){
+//                    Model_Filter filter= (Model_Filter) intent.getSerializableExtra("model");
+//                    removeItemfromCategory(filter);
+//                }
             }
         };
 
+    private long getWishCount() {
+        long count = 0;
+        try {
+            db = openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            count = DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_WISHLIST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return (int) count;
+    }
     private synchronized void removeItemfromCategory(Model_Filter filter) {
         String cat_id= filter.getCat_id();
         String item_id=filter.getItem_id();

@@ -2,13 +2,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_without_border"
     tools:context="com.feet.tanishq.fragments.Wish_List">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/tanishq_gold"
-        android:text="@string/wish_list" />
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_header_wish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/tanishq_gold"
+            android:text="@string/wish_list" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_wish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:layout_marginTop="5dp"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_nowish"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/et_border_gold"
+            android:padding="100dp">
+
+            <TextView
+                android:id="@+id/tv_nowish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:textColor="@color/tanishq_gold"
+                android:text="@string/no_wishlist"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
 
 </FrameLayout>
