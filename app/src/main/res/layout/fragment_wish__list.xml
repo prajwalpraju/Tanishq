@@ -44,13 +44,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/et_border_gold"
-            android:padding="100dp">
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
+            android:paddingTop="80dp"
+            android:paddingBottom="80dp"
+            >
 
             <TextView
                 android:id="@+id/tv_nowish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="25sp"
+                android:textSize="16sp"
+                android:lineSpacingExtra="2dp"
                 android:gravity="center"
                 android:textColor="@color/tanishq_gold"
                 android:text="@string/no_wishlist"/>

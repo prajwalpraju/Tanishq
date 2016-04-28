@@ -115,9 +115,9 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
         for (String value:arr_str){
             if (arr_product.size()>0){
-                String value_wish=arr_product.get(0).getProduct_title();
+                String value_wish=arr_product.get(current_poistion).getProduct_title();
                 if(value.matches(value_wish)){
-                    arr_product.get(0).setInWish(true);
+                    arr_product.get(current_poistion).setInWish(true);
                     getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

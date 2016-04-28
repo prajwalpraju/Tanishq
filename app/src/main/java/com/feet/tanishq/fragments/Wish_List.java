@@ -97,8 +97,13 @@ public class Wish_List extends Fragment {
                 } while (cs.moveToNext());
             }else {
                 //visible other
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        rl_nowish.setVisibility(View.VISIBLE);
+                    }
+                });
 
-                rl_nowish.setVisibility(View.VISIBLE);
             }
         } catch (Exception e) {
             e.printStackTrace();
