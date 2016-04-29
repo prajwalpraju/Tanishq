@@ -14,12 +14,15 @@
     <string name="done">Done</string>
     <string name="clear_all">Clear All</string>
     <string name="collection">COLLECTION</string>
+    <string name="not_applicable">Not Applicable</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="all_collection">All COLLECTIONS</string>
     <string name="wish_list">WISH LIST</string>
+    <string name="compare">COMPARE</string>
     <string name="divyam">DIVYAM</string>
     <string name="no_wishlist">No favourities yet?\nStart saving them right away!\n(Go to Collections)</string>
+    <string name="no_compare">Compare all your favourite \npieces at one place</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

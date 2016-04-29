@@ -7,6 +7,7 @@ public class Const {
 	public static final String URL="url";
 	public static final String FRAG_All_COLL="all_collection";
 	public static final String FRAG_WISH_LIST="wish_list";
+	public static final String FRAG_COMPARE_LIST="compare";
 	public static final String FRAG_SUB_COLL="sub_collection";
 	public static final String FRAG_FILTER="filter_product";
 	public static final String FRAG_PAGERFILTER="pager_filter_product";

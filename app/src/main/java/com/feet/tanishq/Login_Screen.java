@@ -127,6 +127,8 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             db.delete(DataBaseHandler.TABLE_CATEGORY, null, null);
             db.execSQL(DataBaseHandler.CREATE_WISHLIST_TABLE);
             db.delete(DataBaseHandler.TABLE_WISHLIST, null, null);
+            db.execSQL(DataBaseHandler.CREATE_COMPARE_TABLE);
+            db.delete(DataBaseHandler.TABLE_COMPARE, null, null);
         } catch (SQLException e) {
             e.printStackTrace();
         }

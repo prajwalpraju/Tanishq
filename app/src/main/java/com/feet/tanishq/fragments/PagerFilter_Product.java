@@ -99,33 +99,39 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         }
 
     }
-        ArrayList<String> arr_str=new ArrayList<String>();
+        ArrayList<String> arr_wish=new ArrayList<String>();
+        ArrayList<String> arr_compare=new ArrayList<String>();
     private void checkForWishSelect() {
         //valid from wish table and update it in arr_list
-        SQLiteDatabase db;
-        db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME,Context.MODE_PRIVATE,null);
-        Cursor cs=db.rawQuery("select product_title from wishlist",null);
-        if(cs.moveToFirst()){
-            do {
-               String product_title=cs.getString(cs.getColumnIndex("product_title"));
-                arr_str.add(product_title);
-            } while (cs.moveToNext());
+        try {
+            db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME,Context.MODE_PRIVATE,null);
+            Cursor cs=db.rawQuery("select product_title from wishlist",null);
+            if(cs.moveToFirst()){
+                do {
+                   String product_title=cs.getString(cs.getColumnIndex("product_title"));
+                    arr_wish.add(product_title);
+                } while (cs.moveToNext());
 
-        }
+            }
 
-        for (String value:arr_str){
-            if (arr_product.size()>0){
-                String value_wish=arr_product.get(current_poistion).getProduct_title();
-                if(value.matches(value_wish)){
-                    arr_product.get(current_poistion).setInWish(true);
-                    getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                iv_wish_pro.setBackgroundResource(R.color.green_fungus);
-                            }
-                        });
+            for (String value:arr_wish){
+                if (arr_product.size()>0){
+                    String value_wish=arr_product.get(current_poistion).getProduct_title();
+                    if(value.matches(value_wish)){
+                        arr_product.get(current_poistion).setInWish(true);
+                        getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    iv_wish_pro.setBackgroundResource(R.color.green_fungus);
+                                }
+                            });
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
         }
 
 //        for(String value:arr_str){
@@ -148,6 +154,39 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 //
 //        }
 
+    }
+
+    private void checkInCompareTable(){
+        try {
+            db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME,Context.MODE_PRIVATE,null);
+            Cursor cs=db.rawQuery("select product_title from compare",null);
+            if(cs.moveToFirst()){
+                do {
+                    String product_title=cs.getString(cs.getColumnIndex("product_title"));
+                    arr_compare.add(product_title);
+                } while (cs.moveToNext());
+
+            }
+
+            for (String value:arr_compare){
+                if (arr_product.size()>0){
+                    String value_compare=arr_product.get(current_poistion).getProduct_title();
+                    if(value.matches(value_compare)){
+                        arr_product.get(current_poistion).setInCompare(true);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                iv_compare_pro.setBackgroundResource(R.color.green_fungus);
+                            }
+                        });
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
     }
 
     private void setUpPagerView() {
@@ -232,8 +271,8 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
                     if (model_product.isInWish()){
                         model_product.setInWish(false);
-                        deleteFromWish(model_product.getProduct_title());
                         iv_wish_pro.setBackgroundResource(R.color.tanishq_light_gold);
+                        deleteFromWish(model_product.getProduct_title());
                     }else {
                         model_product.setInWish(true);
                         iv_wish_pro.setBackgroundResource(R.color.green_fungus);
@@ -256,9 +295,11 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
                         if (model_product.isInCompare()){
                             model_product.setInCompare(false);
                             iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
+                            deleteFromCompare(model_product.getProduct_title());
                         }else {
                             model_product.setInCompare(true);
                             iv_compare_pro.setBackgroundResource(R.color.green_fungus);
+                            insertIntoCompare(model_product);
                         }
                         LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
                     }
@@ -267,6 +308,9 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
         return view;
     }
+
+
+
     ProgressDialog dialog;
     private void start(){
         try {
@@ -300,6 +344,9 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
             if (getWishCount()>0) {
                 checkForWishSelect();
             }
+            if (getCompareCount()>0) {
+                checkInCompareTable();
+            }
             return null;
         }
 
@@ -317,6 +364,20 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         try {
             db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
             count = DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_WISHLIST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return (int) count;
+    }
+
+    private long getCompareCount(){
+        long count = 0;
+        try {
+            db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            count = DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_COMPARE);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -357,6 +418,35 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         }
     }
 
+    private synchronized void deleteFromCompare(String product_title) {
+        try {
+            db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            db.delete(DataBaseHandler.TABLE_COMPARE, "product_title = ?", new String[]{product_title});
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+    }
+
+    private synchronized void insertIntoCompare(Model_Product model_product){
+        try {
+            db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            ContentValues values=new ContentValues();
+            values.put("product_image",model_product.getProduct_image());
+            values.put("product_title",model_product.getProduct_title());
+            values.put("product_price",model_product.getProduct_price());
+            values.put("discount_price",model_product.getDiscount_price());
+            values.put("discount_percent",model_product.getDiscount_percent());
+            values.put("product_url",model_product.getProduct_url());
+            db.insert(DataBaseHandler.TABLE_COMPARE, null, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+    }
+
 
 
 
@@ -377,6 +467,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
         current_poistion=position;
         checkForWishArr(model_product);
+        checkForCompareArr(model_product);
 
         if (model_product.isInWish()) {
             iv_wish_pro.setBackgroundResource(R.color.green_fungus);
@@ -396,7 +487,17 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     private synchronized void checkForWishArr(Model_Product model_product){
         String title=model_product.getProduct_title();
-        for (String value:arr_str){
+        for (String value:arr_wish){
+            if(value.matches(title)){
+                model_product.setInWish(true);
+                break;
+            }
+        }
+    }
+
+    private synchronized void checkForCompareArr(Model_Product model_product){
+        String title=model_product.getProduct_title();
+        for (String value:arr_compare){
             if(value.matches(title)){
                 model_product.setInWish(true);
                 break;

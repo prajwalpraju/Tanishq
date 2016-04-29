@@ -35,6 +35,7 @@ import com.feet.tanishq.adapter.Category_Adapter;
 import com.feet.tanishq.adapter.Filter_Adapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
+import com.feet.tanishq.fragments.Compare_List;
 import com.feet.tanishq.fragments.Filter_Products;
 import com.feet.tanishq.fragments.PagerFilter_Product;
 import com.feet.tanishq.fragments.Sub_Collection;
@@ -209,6 +210,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 gotoWishListFragment();
             }
         });
+        iv_compare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoCompareFragment();
+            }
+        });
 
         UserDetails user=new UserDetails(getApplicationContext());
         tv_welcome_user.setText("Welcome " + user.getUserName());
@@ -216,11 +223,24 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         gotoAllCollectionFragment();
         setUpFrameUI();
         resetCategory();
+       checkForWish();
+        checkForCompare();
+
+
+    }
+
+    private void checkForWish(){
         Intent intent=new Intent("filter");
         intent.putExtra("type", 3);
         intent.putExtra("notify", 1);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
 
+    private void checkForCompare(){
+        Intent intent=new Intent("filter");
+        intent.putExtra("type", 3);
+        intent.putExtra("notify", 2);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 
     private void setUpFilterProducts() {
@@ -295,6 +315,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                             }
                         } else if(notify==2){
                             //compare counter
+                            if(getCompareCount()>0){
+                                tv_compare_count.setVisibility(View.VISIBLE);
+                                tv_compare_count.setText(""+getCompareCount());
+                            }else{
+                                tv_compare_count.setVisibility(View.GONE);
+                            }
                         }
                         break;
                 }
@@ -317,6 +343,19 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         try {
             db = openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
             count = DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_WISHLIST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return (int) count;
+    }
+    private long getCompareCount() {
+        long count = 0;
+        try {
+            db = openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            count = DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_COMPARE);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -641,6 +680,9 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         addFragment(filter_products,false,Const.FRAG_FILTER);
     }
     public void gotoCompareFragment(){
+
+        Compare_List compare_list=Compare_List.newInstance();
+        addFragment(compare_list,false,Const.FRAG_COMPARE_LIST);
 
     }
     public void gotoPagerFilterProductFragment(int adapterPosition, ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top){

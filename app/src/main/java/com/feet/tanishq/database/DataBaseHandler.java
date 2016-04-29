@@ -13,6 +13,7 @@ public class DataBaseHandler {
     public static String DATABASE_NAME="Tanishq.db";
     public static String TABLE_CATEGORY="category";
     public static String TABLE_WISHLIST="wishlist";
+    public static String TABLE_COMPARE="compare";
 
 
     public static String CREATE_CATEGORY_TABLE="create table if not exists "+TABLE_CATEGORY+" (id integer primary key," +
@@ -23,6 +24,14 @@ public class DataBaseHandler {
             "selected varchar)";
 
     public static  String CREATE_WISHLIST_TABLE="create table if not exists "+TABLE_WISHLIST+" (id integer primary key," +
+            "product_image varchar," +
+            "product_title varchar," +
+            "product_price varchar," +
+            "discount_price varchar," +
+            "discount_percent varchar," +
+            "product_url varchar)";
+
+    public static  String CREATE_COMPARE_TABLE="create table if not exists "+TABLE_COMPARE+" (id integer primary key," +
             "product_image varchar," +
             "product_title varchar," +
             "product_price varchar," +

@@ -1,0 +1,66 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.feet.tanishq.fragments.Compare_List">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_header_compare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/tanishq_gold"
+            android:text="@string/compare" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_compare"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:layout_marginTop="5dp"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_nocompare"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/et_border_gold"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
+            android:paddingTop="80dp"
+            android:paddingBottom="80dp"
+            >
+
+            <TextView
+                android:id="@+id/tv_nocompare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:lineSpacingExtra="2dp"
+                android:gravity="center"
+                android:textColor="@color/tanishq_gold"
+                android:text="@string/no_compare"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>
