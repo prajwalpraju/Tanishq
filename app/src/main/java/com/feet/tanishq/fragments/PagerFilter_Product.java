@@ -10,6 +10,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -84,7 +87,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     RecyclerView rv_filter_pager;
     ViewPager vp_product;
-    ImageView iv_wish_pro,iv_compare_pro;
+    ImageView iv_wish_pro,iv_compare_pro,iv_back,iv_next;
     TextView tv_header_pager,tv_pro_name,tv_pro_price,tv_pro_material,tv_pro_category,tv_pro_collection;
     LinearLayoutManager layoutManager;
     ViewPagerAdapter viewPagerAdapter;
@@ -218,6 +221,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         if (arr_product.size()>0){
             setUpText(arr_product.get(current_poistion));
         }
+        visibleArrowButtons();
     }
 
     SQLiteDatabase db;
@@ -242,6 +246,8 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
         iv_wish_pro=(ImageView) view.findViewById(R.id.iv_wish_pro);
         iv_compare_pro=(ImageView) view.findViewById(R.id.iv_compare_pro);
+        iv_back=(ImageView) view.findViewById(R.id.iv_back);
+        iv_next=(ImageView) view.findViewById(R.id.iv_next);
 
         tv_header_pager=(TextView) view.findViewById(R.id.tv_header_pager);
         tv_pro_name=(TextView) view.findViewById(R.id.tv_pro_name);
@@ -263,17 +269,17 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
             @Override
             public void onClick(View v) {
 
-                if (arr_product.size()>0) {
-                    Model_Product model_product=arr_product.get(current_poistion);
-                    Intent intent=new Intent("filter");
-                    intent.putExtra("type",3);
+                if (arr_product.size() > 0) {
+                    Model_Product model_product = arr_product.get(current_poistion);
+                    Intent intent = new Intent("filter");
+                    intent.putExtra("type", 3);
                     intent.putExtra("notify", 1);
 
-                    if (model_product.isInWish()){
+                    if (model_product.isInWish()) {
                         model_product.setInWish(false);
                         iv_wish_pro.setBackgroundResource(R.color.tanishq_light_gold);
                         deleteFromWish(model_product.getProduct_title());
-                    }else {
+                    } else {
                         model_product.setInWish(true);
                         iv_wish_pro.setBackgroundResource(R.color.green_fungus);
                         insertIntoWishList(model_product);
@@ -287,26 +293,60 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         iv_compare_pro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if (arr_product.size()>0){
-                        Model_Product model_product=arr_product.get(current_poistion);
-                        Intent intent=new Intent("filter");
-                        intent.putExtra("type",3);
-                        intent.putExtra("notify", 2);
-                        if (model_product.isInCompare()){
-                            model_product.setInCompare(false);
-                            iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
-                            deleteFromCompare(model_product.getProduct_title());
-                        }else {
-                            model_product.setInCompare(true);
-                            iv_compare_pro.setBackgroundResource(R.color.green_fungus);
-                            insertIntoCompare(model_product);
-                        }
-                        LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                if (arr_product.size() > 0) {
+                    Model_Product model_product = arr_product.get(current_poistion);
+                    Intent intent = new Intent("filter");
+                    intent.putExtra("type", 3);
+                    intent.putExtra("notify", 2);
+                    if (model_product.isInCompare()) {
+                        model_product.setInCompare(false);
+                        iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
+                        deleteFromCompare(model_product.getProduct_title());
+                    } else {
+                        model_product.setInCompare(true);
+                        iv_compare_pro.setBackgroundResource(R.color.green_fungus);
+                        insertIntoCompare(model_product);
                     }
+                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                }
             }
         });
 
+
         return view;
+    }
+
+    private void visibleArrowButtons(){
+        Log.d("ttt", "visibleArrowButtons: "+current_poistion);
+        if (current_poistion!=0) {
+            iv_back.setVisibility(View.VISIBLE);
+        }
+
+        if (current_poistion!=arr_product.size()-1) {
+            iv_next.setVisibility(View.VISIBLE);
+        }
+//            Animation fade_in= AnimationUtils.loadAnimation(getContext(),R.anim.fade_in);
+//            iv_back.setAnimation(fade_in);
+//            iv_next.setAnimation(fade_in);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideArrowButtons();
+            }
+        }, 1000);
+
+    }
+    private void hideArrowButtons(){
+        Animation fade_out= AnimationUtils.loadAnimation(getContext(),R.anim.fade_out);
+        if (current_poistion!=0) {
+            iv_back.setAnimation(fade_out);
+        }
+        if (current_poistion!=arr_product.size()-1) {
+            iv_next.setAnimation(fade_out);
+        }
+        iv_back.setVisibility(View.GONE);
+        iv_next.setVisibility(View.GONE);
+
     }
 
 
@@ -463,9 +503,11 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     @Override
     public void onPageSelected(int position) {
+
         Model_Product model_product=arr_product.get(position);
 
         current_poistion=position;
+        visibleArrowButtons();
         checkForWishArr(model_product);
         checkForCompareArr(model_product);
 
@@ -482,6 +524,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         }
 
         setUpText(model_product);
+
 
     }
 

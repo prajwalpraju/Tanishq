@@ -93,6 +93,7 @@ public abstract class CustomAppCompactActivity extends AppCompatActivity impleme
 
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction ftrans=fragmentManager.beginTransaction();
+        ftrans.setCustomAnimations(R.anim.pull_in_right,R.anim.push_out_left);
         if (addToBackStack){
             ftrans.addToBackStack(tag);
         }
