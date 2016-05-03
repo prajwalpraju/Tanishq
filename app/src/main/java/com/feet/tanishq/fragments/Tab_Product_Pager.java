@@ -3,6 +3,7 @@ package com.feet.tanishq.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
 import com.feet.tanishq.model.Model_Product;
+import com.feet.tanishq.utils.NetworkImageViews;
 import com.feet.tanishq.utils.Singleton_volley;
 
 /**
@@ -33,18 +35,25 @@ public class Tab_Product_Pager extends Fragment {
         super.onCreate(savedInstanceState);
         imageLoader= Singleton_volley.getInstance().getImageLoader();
     }
-    NetworkImageView nv_pro_pager;
+    NetworkImageViews nv_pro_pager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.product_image,container,false);
-        nv_pro_pager=(NetworkImageView) view.findViewById(R.id.nv_pro_pager);
+        nv_pro_pager=(NetworkImageViews) view.findViewById(R.id.nv_pro_pager);
         try {
             nv_pro_pager.setImageUrl(model_product.getProduct_image(),imageLoader);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        nv_pro_pager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("ttt", "onClick: ");
+                nv_pro_pager.bringToFront();
+            }
+        });
         return view;
     }
 }

@@ -317,7 +317,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     }
 
     private void visibleArrowButtons(){
-        Log.d("ttt", "visibleArrowButtons: "+current_poistion);
+//        Log.d("ttt", "visibleArrowButtons: "+current_poistion);
         if (current_poistion!=0) {
             iv_back.setVisibility(View.VISIBLE);
         }
