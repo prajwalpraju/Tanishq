@@ -21,7 +21,7 @@ public class Const {
     public static final String LOGOUT=STORE_API+"signout?";
     public static final String ALL_COLLECTIONS=STORE_API+"tanishqcollections?";
 	public static final String COLLECTION_CATEGORY=STORE_API+"tanishqcollectioncategories?";
-	public static final String PRODUCT_LIST=STORE_API+"tanishqproductslist?";
+	public static final String PRODUCT_LIST=STORE_API+"tanishqproductslist2?";
 
 
 	public class Params{
