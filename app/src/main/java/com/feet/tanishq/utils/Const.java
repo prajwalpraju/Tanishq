@@ -23,6 +23,20 @@ public class Const {
 	public static final String COLLECTION_CATEGORY=STORE_API+"tanishqcollectioncategories?";
 	public static final String PRODUCT_LIST=STORE_API+"tanishqproductslist2?";
 
+	public class Resolution{
+		public static final double MDPI=1;
+		public static final double HDPI= 1.5;
+		public static final double XHDPI=2;
+		public static final double XXHPDI=3;
+		public static final double XXXHDPI=4;
+
+		public static final String MDPI_TXT="mdpi";
+		public static final String HDPI_TXT="hdpi";
+		public static final String XHDPI_TXT="xhdpi";
+		public static final String XXHPDI_TXT="xxhdpi";
+		public static final String XXXHDPI_TXT="xxxhdpi";
+	}
+
 
 	public class Params{
 		public static final String ID="id";

@@ -56,6 +56,15 @@ public class UserDetails {
         return  userPref.getString("id","");
     };
 
+    public void setUserDevice(String device){
+        editor.putString("device",device);
+        editor.commit();
+    };
+
+    public String getUserDevice(){
+        return  userPref.getString("device","");
+    };
+
 
 
 }

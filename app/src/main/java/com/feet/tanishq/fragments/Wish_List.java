@@ -85,13 +85,23 @@ public class Wish_List extends Fragment {
             Cursor cs=db.rawQuery("select * from wishlist",null);
             if (cs.moveToFirst()){
                 do {
+                    String device_image=cs.getString(cs.getColumnIndex("device_image"));
+
                     String product_image=cs.getString(cs.getColumnIndex("product_image"));
                     String product_title=cs.getString(cs.getColumnIndex("product_title"));
                     String product_price=cs.getString(cs.getColumnIndex("product_price"));
                     String discount_price=cs.getString(cs.getColumnIndex("discount_price"));
                     String discount_percent=cs.getString(cs.getColumnIndex("discount_percent"));
+
+                    String description=cs.getString(cs.getColumnIndex("description"));
+                    String collection=cs.getString(cs.getColumnIndex("discount_price"));
+                    String material=cs.getString(cs.getColumnIndex("discount_percent"));
                     String product_url=cs.getString(cs.getColumnIndex("product_url"));
-                    Model_Product model_product=new Model_Product(product_image,product_title,product_price,discount_price,discount_percent,product_url,false,false);
+
+                    String category=cs.getString(cs.getColumnIndex("product_url"));
+
+                    Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
+                            description,collection,material,category,product_url,false,false);
                     arr_list.add(model_product);
 
                 } while (cs.moveToNext());

@@ -15,6 +15,7 @@
     <string name="clear_all">Clear All</string>
     <string name="collection">COLLECTION</string>
     <string name="not_applicable">Not Applicable</string>
+    <string name="rs">\u20B9</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="all_collection">All COLLECTIONS</string>

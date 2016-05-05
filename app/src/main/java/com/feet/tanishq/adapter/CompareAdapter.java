@@ -47,7 +47,11 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyHolder
     public void onBindViewHolder(MyHolderView holder, int position) {
         Model_Product model=arr_list.get(holder.getAdapterPosition());
         holder.tv_com_title.setText(model.getProduct_title());
-        holder.tv_com_price.setText(model.getProduct_price());
+        holder.tv_com_price.setText(context.getResources().getString(R.string.rs)+" "+model.getProduct_price());
+        holder.tv_com_name.setText(model.getDescription());
+        holder.tv_com_material.setText(model.getMaterial());
+        holder.tv_com_category.setText(model.getCategory());
+        holder.tv_com_collection.setText(model.getCollection());
         try {
             holder.nv_compare.setImageUrl(model.getProduct_image(),imageLoader);
         } catch (Exception e) {

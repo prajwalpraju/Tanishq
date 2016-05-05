@@ -42,18 +42,18 @@ public class Tab_Product_Pager extends Fragment {
         View view=inflater.inflate(R.layout.product_image,container,false);
         nv_pro_pager=(NetworkImageViews) view.findViewById(R.id.nv_pro_pager);
         try {
-            nv_pro_pager.setImageUrl(model_product.getProduct_image(),imageLoader);
+            nv_pro_pager.setImageUrl(model_product.getDevice_image(),imageLoader);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        nv_pro_pager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("ttt", "onClick: ");
-                nv_pro_pager.bringToFront();
-            }
-        });
+//        nv_pro_pager.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("ttt", "onClick: ");
+//                nv_pro_pager.bringToFront();
+//            }
+//        });
         return view;
     }
 }

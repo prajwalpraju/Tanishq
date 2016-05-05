@@ -24,19 +24,29 @@ public class DataBaseHandler {
             "selected varchar)";
 
     public static  String CREATE_WISHLIST_TABLE="create table if not exists "+TABLE_WISHLIST+" (id integer primary key," +
+            "device_image varchar," +
             "product_image varchar," +
             "product_title varchar," +
             "product_price varchar," +
             "discount_price varchar," +
             "discount_percent varchar," +
+            "description varchar," +
+            "collection varchar," +
+            "material varchar," +
+            "category varchar," +
             "product_url varchar)";
 
     public static  String CREATE_COMPARE_TABLE="create table if not exists "+TABLE_COMPARE+" (id integer primary key," +
+            "device_image varchar," +
             "product_image varchar," +
             "product_title varchar," +
             "product_price varchar," +
             "discount_price varchar," +
             "discount_percent varchar," +
+            "description varchar," +
+            "collection varchar," +
+            "material varchar," +
+            "category varchar," +
             "product_url varchar)";
 
 }

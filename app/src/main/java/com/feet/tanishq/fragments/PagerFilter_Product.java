@@ -197,22 +197,22 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         RecyclerView.Adapter adapter=new FilterTop_Adapter(getContext(),arr_filter);
         rv_filter_pager.setAdapter(adapter);
 
-        for (Model_TopFilter filter:arr_filter){
-            switch (filter.getCat_id()){
-                case "1":
-                    tv_pro_category.setText(filter.getName());
-                    tv_header_pager.setText(filter.getName());
-                    break;
-                case "2":
-                    tv_pro_collection.setText(filter.getName());
-                    break;
-                case "3":
-                    tv_pro_material.setText(filter.getName());
-                    break;
-                case "4":
-                    break;
-            }
-        }
+//        for (Model_TopFilter filter:arr_filter){
+//            switch (filter.getCat_id()){
+//                case "1":
+//                    tv_pro_category.setText(filter.getName());
+//                    tv_header_pager.setText(filter.getName());
+//                    break;
+//                case "2":
+//                    tv_pro_collection.setText(filter.getName());
+//                    break;
+//                case "3":
+//                    tv_pro_material.setText(filter.getName());
+//                    break;
+//                case "4":
+//                    break;
+//            }
+//        }
 
         viewPagerAdapter=new ViewPagerAdapter(getFragmentManager(),arr_product);
         vp_product.setAdapter(viewPagerAdapter);
@@ -432,11 +432,18 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         try {
             db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
             ContentValues values=new ContentValues();
+            values.put("device_image",model_product.getDevice_image());
             values.put("product_image",model_product.getProduct_image());
             values.put("product_title",model_product.getProduct_title());
             values.put("product_price",model_product.getProduct_price());
             values.put("discount_price",model_product.getDiscount_price());
             values.put("discount_percent",model_product.getDiscount_percent());
+
+            values.put("description",model_product.getDescription());
+            values.put("collection",model_product.getCollection());
+            values.put("material",model_product.getMaterial());
+            values.put("category",model_product.getCategory());
+
             values.put("product_url",model_product.getProduct_url());
             db.insert(DataBaseHandler.TABLE_WISHLIST, null, values);
         } catch (Exception e) {
@@ -473,11 +480,19 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         try {
             db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
             ContentValues values=new ContentValues();
+
+            values.put("device_image",model_product.getDevice_image());
             values.put("product_image",model_product.getProduct_image());
             values.put("product_title",model_product.getProduct_title());
             values.put("product_price",model_product.getProduct_price());
             values.put("discount_price",model_product.getDiscount_price());
             values.put("discount_percent",model_product.getDiscount_percent());
+
+            values.put("description",model_product.getDescription());
+            values.put("collection",model_product.getCollection());
+            values.put("material",model_product.getMaterial());
+            values.put("category",model_product.getCategory());
+
             values.put("product_url",model_product.getProduct_url());
             db.insert(DataBaseHandler.TABLE_COMPARE, null, values);
         } catch (Exception e) {
@@ -493,8 +508,11 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     private void setUpText(Model_Product model_product){
 
         tv_pro_name.setText(model_product.getProduct_title());
-        tv_pro_price.setText("Rs. "+model_product.getProduct_price());
-
+        tv_pro_price.setText(getResources().getString(R.string.rs)+" "+model_product.getProduct_price());
+        tv_pro_material.setText(model_product.getMaterial());
+        tv_pro_collection.setText(model_product.getCollection());
+        tv_pro_category.setText(model_product.getCategory());
+        tv_header_pager.setText(model_product.getCategory());
 
     }
     @Override
@@ -528,6 +546,12 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     }
 
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+
     private synchronized void checkForWishArr(Model_Product model_product){
         String title=model_product.getProduct_title();
         for (String value:arr_wish){
@@ -548,9 +572,4 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         }
     }
 
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
 }

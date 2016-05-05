@@ -44,6 +44,7 @@ import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -109,7 +110,8 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         return fragment;
 
     }
-
+    UserDetails userDetails;
+    String device_resolution;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,11 +122,20 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
             model= (Model_Params) getArguments().getSerializable("model");
         }
 
+
         requestQueue= Volley.newRequestQueue(getContext());
 
 
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        userDetails=new UserDetails(getContext());
+        device_resolution=userDetails.getUserDevice();
+    }
+
     ArrayList<Model_TopFilter> arr_TopFilter=new ArrayList<Model_TopFilter>();
     private void setUpTopFilter() {
         if (model.getColl_map()!=null&&model.getColl_map().get("cat_id")!=null){
@@ -294,13 +305,20 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
             int size=jArrPro.length();
             for (int i=0;i<size;i++){
                 JSONObject obj=jArrPro.getJSONObject(i);
+                String device_image=getDeviceImage(obj);
                 String product_image=obj.getString("product_image");
                 String product_title= obj.getString("product_title");
                 String product_price= obj.getString("product_price");
                 String discount_price= obj.getString("discount_price");
                 String discount_percent=obj.getString("discount_percent");
                 String product_url=obj.getString("product_url");
-                Model_Product model_product=new Model_Product(product_image,product_title,product_price,discount_price,discount_percent,product_url,false,false);
+
+                String description= obj.getString("description");
+                String Collection= obj.getString("Collection");
+                String Material=obj.getString("Material");
+                String category=obj.getString("category");
+                Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
+                        description,Collection,Material,category,product_url,false,false);
                 arr_list.add(model_product);
             }
              next_page=jResObj.getInt("next_page");
@@ -309,6 +327,34 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getDeviceImage(JSONObject obj) {
+        String image="";
+        try {
+            JSONObject jobj=obj.getJSONObject("0");
+            switch (device_resolution){
+                case Const.Resolution.MDPI_TXT:
+                    image=jobj.getString(Const.Resolution.MDPI_TXT);
+                    break;
+                case Const.Resolution.HDPI_TXT:
+                    image=jobj.getString(Const.Resolution.HDPI_TXT);
+                    break;
+                case Const.Resolution.XHDPI_TXT:
+                    image=jobj.getString(Const.Resolution.XHDPI_TXT);
+                    break;
+                case Const.Resolution.XXHPDI_TXT:
+                    image=jobj.getString(Const.Resolution.XXHPDI_TXT);
+                    break;
+                case Const.Resolution.XXXHDPI_TXT:
+                    image=jobj.getString(Const.Resolution.XXXHDPI_TXT);
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return image;
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
+import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.UserDetails;
 
 
@@ -50,6 +51,7 @@ public class Splash_Screen extends AppCompatActivity implements AsyncTaskComplet
 
     class SplashAsync extends AsyncTask<Void,Void,Void>{
 
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -71,8 +73,12 @@ public class Splash_Screen extends AppCompatActivity implements AsyncTaskComplet
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            String res=getDeviceResolution();
+
             UserDetails user=new UserDetails(getApplicationContext());
-            Log.d("ddd", "user_id pref: "+user.getUserId());
+            user.setUserDevice(res);
+            Log.d("ddd", "user_id pref: " + user.getUserId());
             if (user.getUserId().isEmpty()||user.getUserId()==null){
                 Intent intent=new Intent(getApplicationContext(),Login_Screen.class);
                 startActivity(intent);
@@ -86,5 +92,25 @@ public class Splash_Screen extends AppCompatActivity implements AsyncTaskComplet
             }
 
         }
+    }
+
+    private String getDeviceResolution() {
+        String res_str="hdpi";
+        double res=getResources().getDisplayMetrics().density;
+
+        if(res==Const.Resolution.MDPI){
+            res_str=Const.Resolution.MDPI_TXT;
+        }else if(res==Const.Resolution.HDPI){
+            res_str=Const.Resolution.HDPI_TXT;
+        }else if(res==Const.Resolution.XHDPI){
+            res_str=Const.Resolution.XHDPI_TXT;
+        }else if(res==Const.Resolution.XXHPDI){
+            res_str=Const.Resolution.XXHPDI_TXT;
+        }else if(res==Const.Resolution.XXXHDPI){
+            res_str=Const.Resolution.XXXHDPI_TXT;
+        }
+        Log.d("ttt", "getDeviceResolution: "+res_str+"  res="+res);
+
+        return res_str;
     }
 }

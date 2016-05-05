@@ -6,20 +6,68 @@ import java.io.Serializable;
  * Created by asif on 15-04-2016.
  */
 public class Model_Product implements Serializable{
-    String product_image,product_title,product_price,discount_price,discount_percent,product_url;
+    String device_image,product_image,product_title,product_price,discount_price,discount_percent,product_url,description,collection,material,category;
     boolean inWish,inCompare;
 
-    public Model_Product(String product_image,String product_title,String product_price,String discount_price,String discount_percent,String product_url,boolean inWish,boolean inCompare){
+    public Model_Product(String device_image,String product_image,String product_title,String product_price,String discount_price,String discount_percent,
+                         String description,String collection,String material,String category,String product_url,boolean inWish,boolean inCompare){
 
+        this.device_image=device_image;
         this.product_image=product_image;
         this.product_title=product_title;
         this.product_price=product_price;
         this.discount_price=discount_price;
         this.discount_percent=discount_percent;
+
+        this.description=description;
+        this.collection=collection;
+        this.material=material;
+        this.category=category;
         this.product_url=product_url;
+
         this.inWish=inWish;
         this.inCompare=inCompare;
 
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCollection() {
+        return collection;
+    }
+
+    public void setCollection(String collection) {
+        this.collection = collection;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDevice_image() {
+        return device_image;
+    }
+
+    public void setDevice_image(String device_image) {
+        this.device_image = device_image;
     }
 
     public boolean isInWish() {
