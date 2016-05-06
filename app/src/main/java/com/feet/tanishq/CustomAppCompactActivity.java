@@ -98,7 +98,14 @@ public abstract class CustomAppCompactActivity extends AppCompatActivity impleme
             ftrans.addToBackStack(tag);
         }
         ftrans.replace(R.id.fl_fragment, fragment, tag);
+//        if (fragment.isAdded()) {
+//            ftrans.show(fragment);
+//        } else {
+//            ftrans.addToBackStack(tag);
+//            ftrans.replace(R.id.fl_fragment, fragment, tag);
+//        }
         ftrans.commitAllowingStateLoss();
+
     }
 
     public void removeAllFragment(Fragment replaceFragment,boolean addToBackStack, String tag) {

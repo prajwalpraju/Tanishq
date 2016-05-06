@@ -37,6 +37,7 @@ import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
 import com.feet.tanishq.fragments.Compare_List;
 import com.feet.tanishq.fragments.Filter_Products;
+import com.feet.tanishq.fragments.Help_Fragment;
 import com.feet.tanishq.fragments.PagerFilter_Product;
 import com.feet.tanishq.fragments.Sub_Collection;
 import com.feet.tanishq.fragments.Wish_List;
@@ -214,6 +215,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
             @Override
             public void onClick(View v) {
                 gotoCompareFragment();
+            }
+        });
+        iv_help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoHelpFragment();
             }
         });
 
@@ -657,7 +664,9 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         }
     }
 
-    public void gotoTrendingFragment(){
+    public void gotoHelpFragment(){
+        Help_Fragment help_fragment=Help_Fragment.newInstance();
+        addFragment(help_fragment,false, Const.FRAG_HELP);
 
     }
     public void gotoAllCollectionFragment(){

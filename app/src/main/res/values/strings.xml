@@ -13,6 +13,8 @@
     <string name="logout">LOGOUT</string>
     <string name="done">Done</string>
     <string name="clear_all">Clear All</string>
+    <string name="feedback">Feedback</string>
+    <string name="userman">User Manual</string>
     <string name="collection">COLLECTION</string>
     <string name="not_applicable">Not Applicable</string>
     <string name="rs">\u20B9</string>

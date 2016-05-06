@@ -1,0 +1,40 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.Help_Fragment">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+
+        <Button
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="@string/feedback"
+            android:padding="10dp"
+            android:textSize="19sp"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:background="@drawable/bt_dark_gold"
+            android:textColor="@color/tanishq_gold"
+            android:id="@+id/bt_feed" />
+
+        <Button
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:text="@string/userman"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:padding="10dp"
+            android:textSize="19sp"
+            android:background="@drawable/bt_dark_gold"
+            android:textColor="@color/tanishq_gold"
+            android:id="@+id/bt_userman" />
+    </LinearLayout>
+</FrameLayout>
