@@ -50,7 +50,7 @@
         <activity
             android:name=".Login_Screen"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity android:name=".ThankYou_Screen" />
         <activity android:name=".Tanishq_Screen"></activity>
     </application>

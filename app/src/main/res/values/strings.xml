@@ -2,7 +2,7 @@
     <string name="app_name">Tanishq</string>
     <string name="title_activity_login__screen">Login_Screen</string>
     <string name="welcome">Welcome to the \nTanishq Virtual Catalogue</string>
-    <string name="username">USERNAME</string>
+    <string name="username">USER NAME</string>
     <string name="mobile_number">MOBILE NUMBER</string>
     <string name="submit">SUBMIT</string>
     <string name="enter_otp">ENTER OTP</string>

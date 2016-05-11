@@ -1,6 +1,7 @@
 package com.feet.tanishq;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,10 +12,13 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +59,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
     Button bt_submit,bt_submit_otp;
     String TAG="Login_Screen";
     LinearLayout ll_login,ll_otp;
+    RelativeLayout rl_main;
 
     RequestQueue requestQueue;
     Validator validator;
@@ -72,6 +77,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         validator=new Validator(this);
         validator.setValidationListener(this);
 
+        rl_main=(RelativeLayout) findViewById(R.id.rl_main);
         ll_login=(LinearLayout)findViewById(R.id.ll_login);
         ll_otp=(LinearLayout)findViewById(R.id.ll_otp);
         tv_welcome=(TextView)findViewById(R.id.tv_welcome);
@@ -94,7 +100,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                 validator.validate();
             }
 
-            
+
         });
         bt_submit_otp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +110,15 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter Received OTP!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        rl_main.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rl_main.getWindowToken(),0);
+                return false;
             }
         });
 

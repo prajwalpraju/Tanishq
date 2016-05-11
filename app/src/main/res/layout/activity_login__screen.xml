@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/main_bg"
+    android:id="@+id/rl_main"
     tools:context="com.feet.tanishq.Login_Screen">
 
     <LinearLayout
@@ -16,6 +17,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
             android:src="@drawable/tanishq_unit_login_page"
             android:id="@+id/iv_logo2" />
 
@@ -32,6 +35,7 @@
                 android:text="@string/welcome"
                 android:textSize="16sp"
                 android:letterSpacing="1.2"
+                android:lineSpacingMultiplier="1.2"
                 android:gravity="center"
                 android:textColor="@color/tanishq_gold"
                 android:layout_marginTop="20dp"
@@ -39,25 +43,25 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:inputType="textPersonName"
                 android:hint="@string/username"
                 android:textColorHint="@color/tanishq_gold"
-                android:gravity="center"
                 android:padding="5dp"
                 android:background="@drawable/et_border_gold"
                 android:textSize="16sp"
+                android:gravity="center"
                 android:textColor="@color/tanishq_gold"
                 android:layout_marginTop="20dp"
                 android:id="@+id/et_username" />
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:inputType="phone"
                 android:hint="@string/mobile_number"
-                android:textColorHint="@color/tanishq_gold"
                 android:gravity="center"
+                android:textColorHint="@color/tanishq_gold"
                 android:padding="5dp"
                 android:background="@drawable/et_border_gold"
                 android:textSize="16sp"
@@ -67,7 +71,7 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:text="@string/submit"
                 android:textSize="14sp"
                 android:layout_marginLeft="40dp"
@@ -91,7 +95,7 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:inputType="number"
                 android:hint="@string/enter_otp"
                 android:textColorHint="@color/tanishq_gold"
@@ -105,7 +109,7 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:text="@string/submit"
                 android:textSize="14sp"
                 android:layout_marginLeft="40dp"
