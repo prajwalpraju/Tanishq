@@ -114,6 +114,7 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
             Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
+        AsifUtils.start(getContext());
 
         UserDetails user=new UserDetails(getContext());
         HashMap<String,String> map=new HashMap<String,String>();
@@ -198,6 +199,7 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
                 if (AsifUtils.validateResponse(getContext(),response)){
                     new ParseSubCollectionResponse(response).execute();
                 }
+                AsifUtils.stop();
 
                 break;
         }
@@ -205,6 +207,7 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        AsifUtils.stop();
         AsifUtils.validateResponse(getContext(), error.getMessage());
 
     }

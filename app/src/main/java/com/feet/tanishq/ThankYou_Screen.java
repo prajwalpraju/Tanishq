@@ -33,11 +33,9 @@ public class ThankYou_Screen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(),"Activity is Finished!",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(getApplicationContext(),Tanishq_Screen.class);
                 startActivity(intent);
                 finish();
-                Log.d("ddd", "run: ");
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             }
         },2000);

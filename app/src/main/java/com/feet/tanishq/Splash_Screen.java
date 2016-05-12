@@ -27,13 +27,8 @@ public class Splash_Screen extends AppCompatActivity implements AsyncTaskComplet
         setContentView(R.layout.activity_splash__screen);
 
         iv_logo=(ImageView) findViewById(R.id.iv_logo);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-                Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), android.support.design.R.anim.abc_fade_in);
-                iv_logo.setAnimation(anim);
-//            }
-//        }, 2000);
+        Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        iv_logo.setAnimation(anim);
         new SplashAsync().execute();
     }
 
@@ -63,7 +58,7 @@ public class Splash_Screen extends AppCompatActivity implements AsyncTaskComplet
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(2000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

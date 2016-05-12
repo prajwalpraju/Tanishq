@@ -98,6 +98,9 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             @Override
             public void onClick(View v) {
                 validator.validate();
+//                Intent intent=new Intent(getApplicationContext(),ThankYou_Screen.class);
+//                startActivity(intent);
+//                finish();
             }
 
 
@@ -166,6 +169,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
             return;
         }
+        AsifUtils.start(this);
         UserDetails user=new UserDetails(getApplicationContext());
         HashMap<String,String> params=new HashMap<String,String>();
         params.put(Const.URL,Const.OTP_VERIFY);
@@ -182,6 +186,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             Toast.makeText(getApplicationContext(),getResources().getString(R.string.no_internet),Toast.LENGTH_SHORT).show();
             return;
         }
+        AsifUtils.start(this);
 
         HashMap<String,String> params=new HashMap<String,String>();
         params.put(Const.URL,Const.USER_LOGIN);
@@ -214,7 +219,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(getApplicationContext(),"otp verify success",Toast.LENGTH_SHORT).show();
+            AsifUtils.stop();
             Intent intent=new Intent(getApplicationContext(),ThankYou_Screen.class);
             startActivity(intent);
             finish();
@@ -297,6 +302,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                     ll_otp.setVisibility(View.VISIBLE);
                     ll_login.setVisibility(View.GONE);
                 }
+                AsifUtils.stop();
                 break;
 
             case Const.ServiceCode.OTP_VERIFY:
@@ -320,6 +326,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        AsifUtils.stop();
         AsifUtils.validateResponse(this, error.getMessage());
 
     }

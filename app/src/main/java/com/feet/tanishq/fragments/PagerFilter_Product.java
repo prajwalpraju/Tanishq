@@ -351,31 +351,13 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
 
 
-    ProgressDialog dialog;
-    private void start(){
-        try {
-            dialog=new ProgressDialog(getContext());
-            dialog.setMessage("please wait");
-            dialog.setIndeterminate(false);
-            dialog.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void stop(){
-        try {
-            dialog.dismiss();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     class CheckForWish extends AsyncTask<Void,Void,Void>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            start();
+            AsifUtils.start(getContext());
         }
 
         @Override
@@ -395,7 +377,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
             super.onPostExecute(aVoid);
 
             setUpPagerView();
-            stop();
+            AsifUtils.stop();
         }
     }
 

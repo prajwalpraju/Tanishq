@@ -180,6 +180,31 @@ public class AsifUtils {
 	//
 	// }
 
+	static ProgressDialog dialog;
+	public static void start(Context context){
+		try {
+
+			dialog=new ProgressDialog(context);
+			if (dialog.isShowing()) {
+				stop();
+			}
+			dialog.setMessage("Please Wait...");
+			dialog.setIndeterminate(true);
+			dialog.setCancelable(false);
+			dialog.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void stop(){
+		try {
+			dialog.dismiss();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static boolean validateResponse(Context context,String response){
 		boolean validate=false;
 		try {

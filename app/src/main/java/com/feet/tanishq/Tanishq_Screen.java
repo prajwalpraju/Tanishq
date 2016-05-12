@@ -61,7 +61,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     LinearLayout ll_display,ll_filter,ll_icon,ll_recycler,ll_selected_filters;
     ImageView iv_toggle,iv_collection,iv_wish,iv_compare,iv_help,iv_toggle_filter,iv_collection_icon,
-            iv_category_icon,iv_material_icon,iv_occasion_icon;
+            iv_category_icon,iv_material_icon,iv_occasion_icon,iv_logo3;
     TextView tv_welcome_user,tv_logout,tv_item_name,tv_wish_count,tv_compare_count;
     FrameLayout fl_fragment;
     Button bt_clear,bt_done;
@@ -92,6 +92,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         ll_recycler=(LinearLayout) findViewById(R.id.ll_recycler);
         ll_selected_filters=(LinearLayout) findViewById(R.id.ll_selected_filters);
 
+        iv_logo3=(ImageView) findViewById(R.id.iv_logo3);
         iv_toggle=(ImageView) findViewById(R.id.iv_toggle);
         iv_collection=(ImageView) findViewById(R.id.iv_collection);
         iv_wish=(ImageView) findViewById(R.id.iv_wish);
@@ -148,6 +149,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
             }
         });
 
+        iv_logo3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoAllCollectionFragment();
+            }
+        });
         iv_toggle_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -626,6 +633,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
            return;
        }
+
+        AsifUtils.start(this);
         UserDetails user=new UserDetails(this);
         HashMap<String,String> params=new HashMap<String,String>();
         params.put(Const.URL,Const.LOGOUT);
@@ -725,6 +734,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     public void onTaskCompleted(String response, int serviceCode) {
         switch (serviceCode){
             case Const.ServiceCode.LOGOUT:
+                AsifUtils.stop();
                 if (AsifUtils.validateResponse(getApplicationContext(),response)){
                     new UserDetails(this).clearUserPreference();
                     Intent intent=new Intent(getApplicationContext(),Login_Screen.class);
@@ -740,6 +750,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        AsifUtils.stop();
         AsifUtils.validateResponse(this, error.getMessage());
 
     }
