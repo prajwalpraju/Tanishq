@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.os.Bundle;
@@ -195,11 +196,17 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         bt_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeSlideWithAnim();
                if(arr_filter.size()>0){
-                   closeSlideWithAnim();
-                   setUpFilterProducts();
+                   new Handler().postDelayed(new Runnable() {
+                       @Override
+                       public void run() {
+                           setUpFilterProducts();
+                       }
+                   },500);
 
                }
+
             }
         });
 

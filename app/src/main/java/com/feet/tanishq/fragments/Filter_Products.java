@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -187,6 +188,8 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
     RecyclerView rv_filter,rv_filter_product;
     LinearLayoutManager gridLayoutManager;
     LinearLayoutManager layoutManager;
+    RelativeLayout rl_nowish;
+    TextView tv_nowish;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -200,11 +203,14 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         rv_filter.setLayoutManager(layoutManager);
         rv_filter.setItemAnimator(new SlideInRightAnimator(new OvershootInterpolator(1f)));
 
+        rl_nowish=(RelativeLayout) view.findViewById(R.id.rl_nowish);
+        tv_nowish=(TextView) view.findViewById(R.id.tv_nowish);
+        tv_nowish.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+
         rv_filter_product=(RecyclerView)view.findViewById(R.id.rv_filter_product);
         gridLayoutManager=new GridLayoutManager(getActivity(),3);
         rv_filter_product.setHasFixedSize(true);
         rv_filter_product.setLayoutManager(gridLayoutManager);
-//        rv_filter_product.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
         rv_filter_product.addItemDecoration(new SpacesItemDecoration(30));
 
         rv_filter_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -283,6 +289,12 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
                 count++;
                 madapter=new Product_Adapter(getContext(),arr_list,arr_TopFilter);
                 rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
+                if (arr_list.size()>0) {
+                    rl_nowish.setVisibility(View.GONE);
+                } else {
+                    rl_nowish.setVisibility(View.VISIBLE);
+                    tv_nowish.setText(getResources().getString(R.string.no_list));
+                }
             }
 
             madapter.notifyDataSetChanged();
@@ -362,7 +374,15 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         switch (serviceCode){
             case Const.ServiceCode.PRODUCT_LIST:
                 if (AsifUtils.validateResponse(getContext(),response)){
+                    rl_nowish.setVisibility(View.GONE);
                     new ParseProductListResponse(response).execute();
+                }else {
+                    rl_nowish.setVisibility(View.VISIBLE);
+                    try {
+                        tv_nowish.setText(new JSONObject(response).getString("message"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 break;

@@ -218,6 +218,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         vp_product.setAdapter(viewPagerAdapter);
         vp_product.setCurrentItem(current_poistion);
         vp_product.addOnPageChangeListener(this);
+        viewPagerAdapter.notifyDataSetChanged();
         if (arr_product.size()>0){
             setUpText(arr_product.get(current_poistion));
         }
@@ -522,7 +523,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         }else {
             iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
         }
-
+//        viewPagerAdapter.notifyDataSetChanged();
         setUpText(model_product);
 
 

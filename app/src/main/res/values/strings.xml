@@ -26,6 +26,7 @@
     <string name="divyam">DIVYAM</string>
     <string name="no_wishlist">No favourities yet?\nStart saving them right away!\n(Go to Collections)</string>
     <string name="no_compare">Compare all your favourite \npieces at one place</string>
+    <string name="no_list">No Product for this Category !</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -127,6 +129,9 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
     RecyclerView rv_subcollection;
     GridLayoutManager gridLayoutManager;
     TextView tv_header_subcoll;
+    RelativeLayout rl_nowish;
+    TextView tv_nowish;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,14 +139,17 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_sub__collection, container, false);
         tv_header_subcoll=(TextView) view.findViewById(R.id.tv_header_subcoll);
-        tv_header_subcoll.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
+        rl_nowish=(RelativeLayout) view.findViewById(R.id.rl_nowish);
+        tv_nowish=(TextView) view.findViewById(R.id.tv_nowish);
 
         tv_header_subcoll.setText(cat_name);
+        tv_nowish.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_header_subcoll.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
+
         rv_subcollection=(RecyclerView) view.findViewById(R.id.rv_subcollection);
         gridLayoutManager=new GridLayoutManager(getActivity(),3);
         rv_subcollection.setHasFixedSize(true);
         rv_subcollection.setLayoutManager(gridLayoutManager);
-//        rv_subcollection.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
         rv_subcollection.addItemDecoration(new SpacesItemDecoration(30));
         return view;
     }
@@ -197,7 +205,15 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
         switch (serviceCode){
             case Const.ServiceCode.COLLECTION_CATEGORY:
                 if (AsifUtils.validateResponse(getContext(),response)){
+                    rl_nowish.setVisibility(View.GONE);
                     new ParseSubCollectionResponse(response).execute();
+                }else {
+                    rl_nowish.setVisibility(View.VISIBLE);
+                    try {
+                        tv_nowish.setText(new JSONObject(response).getString("message"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 AsifUtils.stop();
 
@@ -209,6 +225,8 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
     public void onErrorResponse(VolleyError error) {
         AsifUtils.stop();
         AsifUtils.validateResponse(getContext(), error.getMessage());
+
+
 
     }
 }

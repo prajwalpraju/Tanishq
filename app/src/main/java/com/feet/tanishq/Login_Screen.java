@@ -253,11 +253,10 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                 JSONObject cat_obj=jArrCategory.getJSONObject(i);
                 String id=cat_obj.getString("id");
                 String name=cat_obj.getString("name");
-                insertIntoCatTable("1","Category",id,name,"0");
+                insertIntoCatTable("1", "Category", id, name, "0");
             }
             JSONArray jArrCollection=jobj_filter.getJSONArray("Collection");
             int col_size=jArrCollection.length();
-//            Log.d(TAG, "parseUserAndCategoryInsertDb: col_size="+col_size);
             for (int i=0;i<col_size;i++){
                 JSONObject col_obj=jArrCollection.getJSONObject(i);
                 String id=col_obj.getString("id");
@@ -266,7 +265,6 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             }
             JSONArray jArrMaterial=jobj_filter.getJSONArray("Material");
             int mat_size=jArrMaterial.length();
-//            Log.d(TAG, "parseUserAndCategoryInsertDb: mat_size="+mat_size);
             for (int i=0;i<mat_size;i++){
                 JSONObject mat_obj=jArrMaterial.getJSONObject(i);
                 String id=mat_obj.getString("id");
@@ -275,12 +273,20 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             }
             JSONArray jArrOccasion=jobj_filter.getJSONArray("Occasion");
             int occ_size=jArrOccasion.length();
-//            Log.d(TAG, "parseUserAndCategoryInsertDb: occ_size="+occ_size);
             for (int i=0;i<occ_size;i++){
                 JSONObject occ_obj=jArrOccasion.getJSONObject(i);
                 String id=occ_obj.getString("id");
                 String name=occ_obj.getString("name");
                 insertIntoCatTable("4","Occasion",id,name,"0");
+            }
+
+            JSONArray jArrPrice=jobj_filter.getJSONArray("pricebar");
+            int pricebar_size=jArrPrice.length();
+            for (int i=0;i<pricebar_size;i++){
+                JSONObject occ_obj2=jArrPrice.getJSONObject(i);
+                String id=occ_obj2.getString("id");
+                String name=occ_obj2.getString("name");
+                insertIntoCatTable("5","pricebar",id,name,"0");
             }
 
         } catch (Exception e) {
