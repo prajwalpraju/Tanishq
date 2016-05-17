@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.FeedBack">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/feedback_cap"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="20sp"
+            android:layout_marginLeft="40dp"
+            android:id="@+id/tv_feed" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        >
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subject"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="19sp"
+            android:id="@+id/tv_subject" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bt_border_gold"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="19sp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:imeOptions="actionNext"
+            android:id="@+id/et_subject" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/message"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="19sp"
+            android:id="@+id/tv_message" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bt_border_gold"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="19sp"
+            android:padding="10dp"
+            android:gravity="top"
+            android:maxLines="4"
+            android:imeOptions="actionDone"
+            android:id="@+id/et_message" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/send"
+                android:layout_marginRight="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:background="@drawable/bt_dark_gold"
+                android:textColor="@color/tanishq_gold"
+                android:textSize="19sp"
+                android:id="@+id/bt_send" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:layout_marginLeft="5dp"
+                android:padding="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:background="@drawable/bt_dark_gold"
+                android:textColor="@color/tanishq_gold"
+                android:textSize="19sp"
+                android:id="@+id/bt_cancel" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

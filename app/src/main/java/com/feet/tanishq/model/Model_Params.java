@@ -8,14 +8,15 @@ import java.util.Map;
  * Created by asif on 15-04-2016.
  */
 public class Model_Params implements Serializable {
-    HashMap<String,String> coll_map,jewel_map,occas_map,mat_map;
+    HashMap<String,String> coll_map,jewel_map,occas_map,mat_map,price_map;
 
-    public Model_Params(HashMap<String,String> coll_map,HashMap<String,String> jewel_map,HashMap<String,String> occas_map,HashMap<String,String> mat_map){
+    public Model_Params(HashMap<String,String> coll_map,HashMap<String,String> jewel_map,HashMap<String,String> occas_map,HashMap<String,String> mat_map,HashMap<String,String> price_map){
 
         this.coll_map=coll_map;
         this.jewel_map=jewel_map;
         this.occas_map=occas_map;
         this.mat_map=mat_map;
+        this.price_map=price_map;
 
     }
 
@@ -23,6 +24,14 @@ public class Model_Params implements Serializable {
         this.coll_map=coll_map;
         this.jewel_map=jewel_map;
 
+    }
+
+    public HashMap<String, String> getPrice_map() {
+        return price_map;
+    }
+
+    public void setPrice_map(HashMap<String, String> price_map) {
+        this.price_map = price_map;
     }
 
     public HashMap<String, String> getColl_map() {

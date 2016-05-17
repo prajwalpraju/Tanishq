@@ -155,6 +155,10 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
             Model_TopFilter mat=new Model_TopFilter(model.getMat_map().get("cat_id"),model.getMat_map().get("id"),model.getMat_map().get("name"));
             arr_TopFilter.add(mat);
         }
+        if (model.getPrice_map()!=null&&model.getPrice_map().get("cat_id")!=null){
+            Model_TopFilter price=new Model_TopFilter(model.getPrice_map().get("cat_id"),model.getPrice_map().get("id"),model.getPrice_map().get("name"));
+            arr_TopFilter.add(price);
+        }
 
         RecyclerView.Adapter adapter=new FilterTop_Adapter(getContext(),arr_TopFilter);
         rv_filter.setAdapter(adapter);
@@ -166,6 +170,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         String jewellery=model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null?model.getJewel_map().get("id"):"";
         String occasion=model.getOccas_map()!=null&&model.getOccas_map().get("id")!=null?model.getOccas_map().get("id"):"";
         String material=model.getMat_map()!=null&&model.getMat_map().get("id")!=null?model.getMat_map().get("id"):"";
+        String pricebar=model.getPrice_map()!=null&&model.getPrice_map().get("id")!=null?model.getPrice_map().get("id"):"";
 
         if (!AsifUtils.isNetworkAvailable(getActivity())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
@@ -180,6 +185,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         map.put(Const.Params.JEWELLERY, jewellery);
         map.put(Const.Params.OCCASSION, occasion);
         map.put(Const.Params.MATERIAL, material);
+        map.put(Const.Params.PRICEBAR, pricebar);
         map.put(Const.Params.PAGENO, ""+next_page);
         requestQueue.add(new VolleyHttpRequest(Request.Method.GET,map,Const.ServiceCode.PRODUCT_LIST,this,this));
     }

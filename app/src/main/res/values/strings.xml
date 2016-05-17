@@ -18,6 +18,12 @@
     <string name="collection">COLLECTION</string>
     <string name="not_applicable">Not Applicable</string>
     <string name="rs">\u20B9</string>
+    <string name="subject">SUBJECT</string>
+    <string name="message">MESSAGE</string>
+    <string name="send">SEND</string>
+    <string name="cancel">CANCEL</string>
+    <string name="feedback_cap">FEEDBACK</string>
+    <string name="help">HELP</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="all_collection">All COLLECTIONS</string>

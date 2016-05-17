@@ -11,6 +11,7 @@ public class Const {
 	public static final String FRAG_SUB_COLL="sub_collection";
 	public static final String FRAG_FILTER="filter_product";
 	public static final String FRAG_HELP="help";
+	public static final String FRAG_FEEDBACK="feedback";
 	public static final String FRAG_PAGERFILTER="pager_filter_product";
 
 	public static final String BASEAUTH_USERNAME="tanishqapiroot";
@@ -48,6 +49,7 @@ public class Const {
 		public static final String JEWELLERY="jewellery";
 		public static final String MATERIAL="material";
 		public static final String OCCASSION="occassion";
+		public static final String PRICEBAR="pricebar";
 		public static final String PAGENO="pageno";
 	}
 

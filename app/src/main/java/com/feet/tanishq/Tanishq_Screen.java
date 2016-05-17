@@ -37,6 +37,7 @@ import com.feet.tanishq.adapter.Filter_Adapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.fragments.All_Collection;
 import com.feet.tanishq.fragments.Compare_List;
+import com.feet.tanishq.fragments.FeedBack;
 import com.feet.tanishq.fragments.Filter_Products;
 import com.feet.tanishq.fragments.Help_Fragment;
 import com.feet.tanishq.fragments.PagerFilter_Product;
@@ -62,7 +63,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     LinearLayout ll_display,ll_filter,ll_icon,ll_recycler,ll_selected_filters;
     ImageView iv_toggle,iv_collection,iv_wish,iv_compare,iv_help,iv_toggle_filter,iv_collection_icon,
-            iv_category_icon,iv_material_icon,iv_occasion_icon,iv_logo3;
+            iv_category_icon,iv_material_icon,iv_occasion_icon,iv_logo3,iv_price_icon;
     TextView tv_welcome_user,tv_logout,tv_item_name,tv_wish_count,tv_compare_count;
     FrameLayout fl_fragment;
     Button bt_clear,bt_done;
@@ -105,6 +106,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         iv_category_icon=(ImageView) findViewById(R.id.iv_category_icon);
         iv_material_icon=(ImageView) findViewById(R.id.iv_material_icon);
         iv_occasion_icon=(ImageView) findViewById(R.id.iv_occasion_icon);
+        iv_price_icon=(ImageView) findViewById(R.id.iv_price_icon);
 
         tv_welcome_user=(TextView) findViewById(R.id.tv_welcome_user);
         tv_logout=(TextView) findViewById(R.id.tv_logout);
@@ -269,6 +271,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         HashMap<String,String> coll_map=new HashMap<String,String>();//zuhur,iva..
         HashMap<String,String> mat_map=new HashMap<String,String>();//gold,diamond..
         HashMap<String,String> occas_map=new HashMap<String,String>();//anniversary,valetine..
+        HashMap<String,String> price_map=new HashMap<String,String>();//price..
 
         for(Model_Filter model:arr_filter){
             switch (model.getCat_id()){
@@ -296,10 +299,16 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                     occas_map.put("name",model.getItem_name());
                     Log.d("ttt", "setUpFilterProducts: " + occas_map);
                     break;
+                case "5":
+                    price_map.put("cat_id",model.getCat_id());
+                    price_map.put("id",model.getItem_id());
+                    price_map.put("name",model.getItem_name());
+                    Log.d("ttt", "setUpFilterProducts: " + price_map);
+                    break;
             }
         }
 
-        Model_Params model_params=new Model_Params(coll_map,jewel_map,occas_map,mat_map);
+        Model_Params model_params=new Model_Params(coll_map,jewel_map,occas_map,mat_map,price_map);
         gotoFilterProductFragment(model_params);
     }
 
@@ -486,6 +495,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
         iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
         iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+        iv_price_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
         tv_item_name.setText("CATEGORY");
         new SetUpFrameFilters("1").execute();
 
@@ -497,6 +507,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                     iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
                     iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
                     iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_price_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
 
 
                 }
@@ -510,6 +521,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                     iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
                     iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
                     iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_price_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
 
                 }
             });
@@ -522,6 +534,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                     iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
                     iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
                     iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_price_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
 
                 }
             });
@@ -534,6 +547,19 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                     iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
                     iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
                     iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
+                    iv_price_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                }
+            });
+
+        iv_price_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new SetUpFrameFilters("5").execute();
+                    iv_category_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_collection_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_material_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_occasion_icon.setBackgroundColor(getResources().getColor(R.color.black_iconlay));
+                    iv_price_icon.setBackgroundColor(getResources().getColor(R.color.black_recyclelay));
                 }
             });
 
@@ -716,12 +742,27 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     }
     public void gotoFeedBackFragment(){
+        FeedBack feedBack=FeedBack.newInstance();
+        addFragment(feedBack,false,Const.FRAG_FEEDBACK);
+    }
+    public void gotoUserManualFragment(){
 
     }
-    public void gotoUserFragment(){
+
+
+    @Override
+    public void onMethodCallback(int type) {
+        switch (type){
+            case 1:
+                gotoFeedBackFragment();
+                break;
+            case 2:
+//                gotoUserManualFragment();
+                break;
+
+        }
 
     }
-
 
     @Override
     public void onMethodCallback(String cat_id,String cat_name) {

@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.feet.tanishq.R;
+import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.utils.AsifUtils;
 
 public class Help_Fragment extends Fragment {
@@ -24,7 +26,9 @@ public class Help_Fragment extends Fragment {
         return help_fragment;
     }
 
+    TextView tv_help;
     Button bt_feed,bt_userman;
+    AdapterCallback adapterCallback;
 
 
 
@@ -33,22 +37,24 @@ public class Help_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_help, container, false);
+        tv_help=(TextView) view.findViewById(R.id.tv_help);
         bt_feed=(Button) view.findViewById(R.id.bt_feed);
         bt_userman=(Button) view.findViewById(R.id.bt_userman);
         bt_feed.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         bt_userman.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
-
+        tv_help.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
+        this.adapterCallback= (AdapterCallback) getContext();
         bt_feed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                adapterCallback.onMethodCallback(1);
             }
         });
 
         bt_userman.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                adapterCallback.onMethodCallback(2);
             }
         });
 

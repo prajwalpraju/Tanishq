@@ -1,9 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragments.Help_Fragment">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help"
+        android:textColor="@color/tanishq_gold"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/tv_help" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -38,5 +48,7 @@
             android:background="@drawable/bt_dark_gold"
             android:textColor="@color/tanishq_gold"
             android:id="@+id/bt_userman" />
+
     </LinearLayout>
-</FrameLayout>
+
+</LinearLayout>
