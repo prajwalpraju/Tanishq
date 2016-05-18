@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center"
 
         >
         <TextView
@@ -16,7 +17,6 @@
             android:text="@string/feedback_cap"
             android:textColor="@color/tanishq_gold"
             android:textSize="20sp"
-            android:layout_marginLeft="40dp"
             android:id="@+id/tv_feed" />
 
     </LinearLayout>

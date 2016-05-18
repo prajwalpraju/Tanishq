@@ -42,6 +42,7 @@ import com.feet.tanishq.fragments.Filter_Products;
 import com.feet.tanishq.fragments.Help_Fragment;
 import com.feet.tanishq.fragments.PagerFilter_Product;
 import com.feet.tanishq.fragments.Sub_Collection;
+import com.feet.tanishq.fragments.User_Manual;
 import com.feet.tanishq.fragments.Wish_List;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_Category;
@@ -746,7 +747,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         addFragment(feedBack,false,Const.FRAG_FEEDBACK);
     }
     public void gotoUserManualFragment(){
-
+        User_Manual user_manual=User_Manual.newInstance();
+        addFragment(user_manual,false,Const.FRAG_USERMAN);
     }
 
 
@@ -757,7 +759,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 gotoFeedBackFragment();
                 break;
             case 2:
-//                gotoUserManualFragment();
+                gotoUserManualFragment();
                 break;
 
         }

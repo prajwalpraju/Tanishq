@@ -56,7 +56,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
     @Length(min = 10,max = 15,message = "Please Enter at least 10 digits number")
             @Order(2)
     EditText et_mobile;
-    Button bt_submit,bt_submit_otp;
+    Button bt_submit,bt_submit_otp,bt_resend_otp;
     String TAG="Login_Screen";
     LinearLayout ll_login,ll_otp;
     RelativeLayout rl_main;
@@ -86,6 +86,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         et_otp=(EditText) findViewById(R.id.et_otp);
         bt_submit=(Button)findViewById(R.id.bt_submit);
         bt_submit_otp=(Button)findViewById(R.id.bt_submit_otp);
+        bt_resend_otp=(Button)findViewById(R.id.bt_resend_otp);
 
         tv_welcome.setTypeface(AsifUtils.getRaleWay_Medium(this));
         et_username.setTypeface(AsifUtils.getRaleWay_Medium(this));
@@ -93,6 +94,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         et_otp.setTypeface(AsifUtils.getRaleWay_Medium(this));
         bt_submit.setTypeface(AsifUtils.getRaleWay_Medium(this));
         bt_submit_otp.setTypeface(AsifUtils.getRaleWay_Medium(this));
+        bt_resend_otp.setTypeface(AsifUtils.getRaleWay_Medium(this));
 
         bt_submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +115,13 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter Received OTP!", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        bt_resend_otp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                validator.validate();
             }
         });
 

@@ -12,6 +12,7 @@ public class Const {
 	public static final String FRAG_FILTER="filter_product";
 	public static final String FRAG_HELP="help";
 	public static final String FRAG_FEEDBACK="feedback";
+	public static final String FRAG_USERMAN="user_manual";
 	public static final String FRAG_PAGERFILTER="pager_filter_product";
 
 	public static final String BASEAUTH_USERNAME="tanishqapiroot";
