@@ -12,6 +12,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -680,12 +682,25 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
 
 
+
+
     @Override
     public void onBackPressed() {
         if (ll_filter.getVisibility()==View.VISIBLE){
             closeSlideWithAnim();
         }else {
-            gotoAllCollectionFragment();
+//            FragmentManager fragmentManager=getSupportFragmentManager();
+//                for(int entry = 0; entry < fragmentManager.getBackStackEntryCount(); entry++){
+//                    Log.i("ttt", "Found fragment: " + fragmentManager.getBackStackEntryAt(entry).getName());
+//                }
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0||getSupportFragmentManager().getBackStackEntryCount() == 1) {
+               this.finish();
+                Log.d("ttt", "onBackPressed:11 "+getSupportFragmentManager().getBackStackEntryCount());
+            } else {
+               getSupportFragmentManager().popBackStack();
+                Log.d("ttt", "onBackPressed:22 " + getSupportFragmentManager().getBackStackEntryCount());
+            }
+
         }
 
     }
@@ -706,60 +721,85 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
             }
         }
     }
+//    public boolean checkFragAvail(String tag){
+//        boolean hasFrag=true;
+//        for(int entry = 0; entry < getSupportFragmentManager().getBackStackEntryCount(); entry++){
+//            Log.i("ttt", "Found fragment: " + getSupportFragmentManager().getBackStackEntryAt(entry).getName());
+//            if (tag.matches(getSupportFragmentManager().getBackStackEntryAt(entry).getName())) {
+//                hasFrag=false;
+//                break;
+//            }
+//        }
+//        return hasFrag;
+//    }
 
     public void gotoHelpFragment(){
         Help_Fragment help_fragment=Help_Fragment.newInstance();
-        addFragment(help_fragment,false, Const.FRAG_HELP);
+//        addFragment(help_fragment,checkFragAvail(Const.FRAG_HELP), Const.FRAG_HELP);
+        addFragment(help_fragment,true, Const.FRAG_HELP);
 
     }
     public void gotoAllCollectionFragment(){
             All_Collection all_collectionFrag=All_Collection.newInstance();
-            addFragment(all_collectionFrag,false, Const.FRAG_All_COLL);
+//            addFragment(all_collectionFrag,checkFragAvail(Const.FRAG_All_COLL), Const.FRAG_All_COLL);
+        clearBackStack();
+        addFragment(all_collectionFrag, true, Const.FRAG_All_COLL);
+
     }
     public void gotoWishListFragment(){
         Wish_List wish_list=Wish_List.newInstance();
-        addFragment(wish_list,false, Const.FRAG_WISH_LIST);
+//        addFragment(wish_list,checkFragAvail(Const.FRAG_WISH_LIST), Const.FRAG_WISH_LIST);
+        addFragment(wish_list,true, Const.FRAG_WISH_LIST);
     }
 
     public void gotoSub_CollectionFragment(String cat_id,String cat_name){
         Sub_Collection sub_collection=Sub_Collection.newInstance(cat_id,cat_name);
-        addFragment(sub_collection,false,Const.FRAG_SUB_COLL);
+//        addFragment(sub_collection,checkFragAvail(Const.FRAG_SUB_COLL),Const.FRAG_SUB_COLL);
+        addFragment(sub_collection,true,Const.FRAG_SUB_COLL);
 
     }
 
     public void gotoFilterProductFragment(Model_Params params){
         Filter_Products filter_products=Filter_Products.newInstance(params);
-        addFragment(filter_products,false,Const.FRAG_FILTER);
+//        addFragment(filter_products,checkFragAvail(Const.FRAG_FILTER),Const.FRAG_FILTER);
+        addFragment(filter_products,true,Const.FRAG_FILTER);
     }
     public void gotoCompareFragment(){
 
         Compare_List compare_list=Compare_List.newInstance();
-        addFragment(compare_list,false,Const.FRAG_COMPARE_LIST);
+//        addFragment(compare_list,checkFragAvail(Const.FRAG_COMPARE_LIST),Const.FRAG_COMPARE_LIST);
+        addFragment(compare_list,true,Const.FRAG_COMPARE_LIST);
 
     }
     public void gotoPagerFilterProductFragment(int adapterPosition, ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top){
         PagerFilter_Product pagerFilter_product=PagerFilter_Product.newInstance(adapterPosition,arr_list,arr_top);
-        addFragment(pagerFilter_product,false,Const.FRAG_PAGERFILTER);
+//        addFragment(pagerFilter_product,checkFragAvail(Const.FRAG_PAGERFILTER),Const.FRAG_PAGERFILTER);
+        addFragment(pagerFilter_product,true,Const.FRAG_PAGERFILTER);
 
     }
     public void gotoFeedBackFragment(){
         FeedBack feedBack=FeedBack.newInstance();
-        addFragment(feedBack,false,Const.FRAG_FEEDBACK);
+//        addFragment(feedBack,checkFragAvail(Const.FRAG_FEEDBACK),Const.FRAG_FEEDBACK);
+        addFragment(feedBack,true,Const.FRAG_FEEDBACK);
     }
     public void gotoUserManualFragment(){
         User_Manual user_manual=User_Manual.newInstance();
-        addFragment(user_manual,false,Const.FRAG_USERMAN);
+//        addFragment(user_manual,checkFragAvail(Const.FRAG_USERMAN),Const.FRAG_USERMAN);
+        addFragment(user_manual,true,Const.FRAG_USERMAN);
     }
 
 
     @Override
     public void onMethodCallback(int type) {
-        switch (type){
+        switch (type) {
             case 1:
                 gotoFeedBackFragment();
                 break;
             case 2:
                 gotoUserManualFragment();
+                break;
+            case 3:
+                gotoAllCollectionFragment();
                 break;
 
         }

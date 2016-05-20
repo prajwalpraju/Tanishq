@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.feet.tanishq.R;
 import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.adapter.FilterTop_Adapter;
+import com.feet.tanishq.adapter.Filter_topPager_Adapter;
 import com.feet.tanishq.adapter.ViewPagerAdapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.model.Model_Product;
@@ -194,7 +195,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     private void setUpPagerView() {
 
-        RecyclerView.Adapter adapter=new FilterTop_Adapter(getContext(),arr_filter);
+        RecyclerView.Adapter adapter=new Filter_topPager_Adapter(getContext(),arr_filter);
         rv_filter_pager.setAdapter(adapter);
 
 //        for (Model_TopFilter filter:arr_filter){

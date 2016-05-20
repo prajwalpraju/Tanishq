@@ -73,8 +73,15 @@ public class Wish_List extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         new GetFromWishList().execute();
     }
+
     SQLiteDatabase db;
     ArrayList<Model_Product> arr_list=new ArrayList<Model_Product>();
     WishAdapter adapter;

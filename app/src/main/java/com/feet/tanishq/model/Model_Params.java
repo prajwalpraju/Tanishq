@@ -65,4 +65,26 @@ public class Model_Params implements Serializable {
     public void setMat_map(HashMap<String, String> mat_map) {
         this.mat_map = mat_map;
     }
+
+
+    public void removeCollmap(){
+        coll_map.clear();
+    }
+
+    public void removeJewelmap(){
+        jewel_map.clear();
+    }
+
+    public void removeOccas_map(){
+        occas_map.clear();
+    }
+
+
+    public void removeMat_map(){
+        mat_map.clear();
+    }
+
+    public void removePrice_map(){
+        price_map.clear();
+    }
 }

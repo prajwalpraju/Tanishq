@@ -53,7 +53,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyHolder
         holder.tv_com_category.setText(model.getCategory());
         holder.tv_com_collection.setText(model.getCollection());
         try {
-            holder.nv_compare.setImageUrl(model.getProduct_image(),imageLoader);
+            holder.nv_compare.setImageUrl(model.getDevice_image(),imageLoader);
         } catch (Exception e) {
             e.printStackTrace();
         }

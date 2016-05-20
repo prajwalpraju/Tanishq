@@ -28,9 +28,10 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.adapter.FilterTop_Adapter;
 import com.feet.tanishq.adapter.Product_Adapter;
-import com.feet.tanishq.interfaces.OnItemClickListener;
+import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_Filter;
 import com.feet.tanishq.model.Model_Params;
 import com.feet.tanishq.model.Model_Product;
@@ -113,6 +114,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
     }
     UserDetails userDetails;
     String device_resolution;
+    AdapterCallback adapterCallback;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +124,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
 
             model= (Model_Params) getArguments().getSerializable("model");
         }
-
+        adapterCallback= (AdapterCallback) getContext();
 
         requestQueue= Volley.newRequestQueue(getContext());
 
@@ -135,10 +137,20 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         super.onResume();
         userDetails=new UserDetails(getContext());
         device_resolution=userDetails.getUserDevice();
+        if (model!=null){
+            setUpTopFilter();
+            count=0;
+            arr_list.clear();
+            next_page=1;
+            total_pages=2;
+            callFilterApi();
+        }
     }
+    RecyclerView.Adapter filterTop_adapter;
 
     ArrayList<Model_TopFilter> arr_TopFilter=new ArrayList<Model_TopFilter>();
     private void setUpTopFilter() {
+        arr_TopFilter.clear();
         if (model.getColl_map()!=null&&model.getColl_map().get("cat_id")!=null){
             Model_TopFilter coll=new Model_TopFilter(model.getColl_map().get("cat_id"),model.getColl_map().get("id"),model.getColl_map().get("name"));
             arr_TopFilter.add(coll);
@@ -160,11 +172,12 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
             arr_TopFilter.add(price);
         }
 
-        RecyclerView.Adapter adapter=new FilterTop_Adapter(getContext(),arr_TopFilter);
-        rv_filter.setAdapter(adapter);
+        filterTop_adapter=new FilterTop_Adapter(getContext(),arr_TopFilter,Filter_Products.this);
+        rv_filter.setAdapter(filterTop_adapter);
     }
 
     private void callFilterApi() {
+        Log.d("ttt", "callFilterApi:er ");
 
         String cat_id=model.getColl_map()!=null&&model.getColl_map().get("id")!=null?model.getColl_map().get("id"):"";
         String jewellery=model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null?model.getJewel_map().get("id"):"";
@@ -245,10 +258,7 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
 
 
 
-        if (model!=null){
-            setUpTopFilter();
-            callFilterApi();
-        }
+
 
 
         return view;
@@ -270,6 +280,58 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
 
     Product_Adapter madapter;
     int count=0;
+
+
+    public void onItemClick(View view, int position) {
+        int size=arr_TopFilter.size();
+        if (size>1) {
+            Model_TopFilter model_topFilter = arr_TopFilter.get(position);
+            if (model_topFilter.getId().matches(model.getColl_map().get("id"))){
+                model.removeCollmap();
+            }else if(model_topFilter.getId().matches(model.getJewel_map().get("id"))){
+                model.removeJewelmap();
+            }else if(model_topFilter.getId().matches(model.getMat_map().get("id"))){
+                model.removeMat_map();
+            }else if(model_topFilter.getId().matches(model.getOccas_map().get("id"))){
+                model.removeOccas_map();
+            }else if(model_topFilter.getId().matches(model.getPrice_map().get("id"))){
+                model.removePrice_map();
+            }
+            arr_TopFilter.remove(position);
+            filterTop_adapter.notifyDataSetChanged();
+            next_page=1;
+            total_pages=2;
+            callFilterApiNotify();
+        }else{
+            adapterCallback.onMethodCallback(3);//all collections
+        }
+
+    }
+
+    private void callFilterApiNotify() {
+            String cat_id=model.getColl_map()!=null&&model.getColl_map().get("id")!=null?model.getColl_map().get("id"):"";
+            String jewellery=model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null?model.getJewel_map().get("id"):"";
+            String occasion=model.getOccas_map()!=null&&model.getOccas_map().get("id")!=null?model.getOccas_map().get("id"):"";
+            String material=model.getMat_map()!=null&&model.getMat_map().get("id")!=null?model.getMat_map().get("id"):"";
+            String pricebar=model.getPrice_map()!=null&&model.getPrice_map().get("id")!=null?model.getPrice_map().get("id"):"";
+
+            if (!AsifUtils.isNetworkAvailable(getActivity())) {
+                Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            UserDetails user=new UserDetails(getContext());
+            HashMap<String,String> map=new HashMap<String,String>();
+            map.put(Const.URL,Const.PRODUCT_LIST);
+            map.put(Const.Params.ID, user.getUserId());
+            map.put(Const.Params.COLLECTIONID, cat_id);
+            map.put(Const.Params.JEWELLERY, jewellery);
+            map.put(Const.Params.OCCASSION, occasion);
+            map.put(Const.Params.MATERIAL, material);
+            map.put(Const.Params.PRICEBAR, pricebar);
+            map.put(Const.Params.PAGENO, ""+next_page);
+            requestQueue.add(new VolleyHttpRequest(Request.Method.GET,map,Const.ServiceCode.PRODUCT_LIST_NOTIFY,this,this));
+    }
 
     class ParseProductListResponse extends AsyncTask<Void,Void,Void>{
         String response;
@@ -391,6 +453,22 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
                     }
                 }
 
+                break;
+
+            case Const.ServiceCode.PRODUCT_LIST_NOTIFY:
+                if (AsifUtils.validateResponse(getContext(),response)) {
+                    rl_nowish.setVisibility(View.GONE);
+                    arr_list.clear();
+                    madapter.notifyDataSetChanged();
+                    new ParseProductListResponse(response).execute();
+                }else {
+                    rl_nowish.setVisibility(View.VISIBLE);
+                    try {
+                        tv_nowish.setText(new JSONObject(response).getString("message"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
                 break;
         }
     }

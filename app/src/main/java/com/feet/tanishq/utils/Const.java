@@ -61,5 +61,6 @@ public class Const {
         public static final int ALL_COLLECTIONS=4;
         public static final int COLLECTION_CATEGORY=5;
         public static final int PRODUCT_LIST=6;
+        public static final int PRODUCT_LIST_NOTIFY=7;
     }
 }

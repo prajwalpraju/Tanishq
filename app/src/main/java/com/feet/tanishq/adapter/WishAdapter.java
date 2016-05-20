@@ -49,7 +49,7 @@ public class WishAdapter extends RecyclerView.Adapter<WishAdapter.MyHolder>{
         Model_Product model=arr_list.get(holder.getAdapterPosition());
         holder.tv_product_name.setText(model.getProduct_title());
         try {
-            holder.nv_product.setImageUrl(model.getProduct_image(),imageLoader);
+            holder.nv_product.setImageUrl(model.getDevice_image(),imageLoader);
         } catch (Exception e) {
             e.printStackTrace();
         }

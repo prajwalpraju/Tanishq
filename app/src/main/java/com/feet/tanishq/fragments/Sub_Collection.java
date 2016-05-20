@@ -103,12 +103,18 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
 
         requestQueue= Volley.newRequestQueue(getContext());
 
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         if (!cat_id.isEmpty()&&cat_id!=null) {
             callSubCategoryApi();
         } else {
             Toast.makeText(getContext(),"No category value",Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void callSubCategoryApi(){
@@ -185,6 +191,7 @@ public class Sub_Collection extends Fragment implements AsyncTaskCompleteListene
 
     private void parseResponse(String response){
         try {
+            arr_list.clear();
             JSONObject jObj=new JSONObject(response);
             JSONArray jArr=jObj.getJSONArray("response");
             int size=jArr.length();

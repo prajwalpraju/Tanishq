@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.android.volley.Response;
@@ -93,18 +94,12 @@ public abstract class CustomAppCompactActivity extends AppCompatActivity impleme
 
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction ftrans=fragmentManager.beginTransaction();
-        ftrans.setCustomAnimations(R.anim.pull_in_right,R.anim.push_out_left);
+        ftrans.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
         if (addToBackStack){
             ftrans.addToBackStack(tag);
         }
         ftrans.replace(R.id.fl_fragment, fragment, tag);
-//        if (fragment.isAdded()) {
-//            ftrans.show(fragment);
-//        } else {
-//            ftrans.addToBackStack(tag);
-//            ftrans.replace(R.id.fl_fragment, fragment, tag);
-//        }
-        ftrans.commitAllowingStateLoss();
+        ftrans.commit();
 
     }
 

@@ -100,6 +100,12 @@ public class All_Collection extends Fragment implements AsyncTaskCompleteListene
         }
 
         requestQueue= Volley.newRequestQueue(getContext());
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         callProductListApi();
     }
 
@@ -214,6 +220,7 @@ public class All_Collection extends Fragment implements AsyncTaskCompleteListene
 
     private void parseResponse(String response){
         try {
+            arr_list.clear();
             JSONObject jObj=new JSONObject(response);
             JSONArray jArr=jObj.getJSONArray("response");
             int size=jArr.length();
