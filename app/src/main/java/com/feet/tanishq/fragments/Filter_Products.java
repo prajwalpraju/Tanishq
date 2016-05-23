@@ -286,16 +286,31 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         int size=arr_TopFilter.size();
         if (size>1) {
             Model_TopFilter model_topFilter = arr_TopFilter.get(position);
-            if (model_topFilter.getId().matches(model.getColl_map().get("id"))){
-                model.removeCollmap();
-            }else if(model_topFilter.getId().matches(model.getJewel_map().get("id"))){
-                model.removeJewelmap();
-            }else if(model_topFilter.getId().matches(model.getMat_map().get("id"))){
-                model.removeMat_map();
-            }else if(model_topFilter.getId().matches(model.getOccas_map().get("id"))){
-                model.removeOccas_map();
-            }else if(model_topFilter.getId().matches(model.getPrice_map().get("id"))){
-                model.removePrice_map();
+
+            if (model.getColl_map()!=null&&model.getColl_map().get("id")!=null) {
+                if (model_topFilter.getId().matches(model.getColl_map().get("id"))){
+                    model.removeCollmap();
+                }
+            }
+            if (model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null) {
+                if(model_topFilter.getId().matches(model.getJewel_map().get("id"))){
+                        model.removeJewelmap();
+                    }
+            }
+            if (model.getMat_map()!=null&&model.getMat_map().get("id")!=null) {
+                if(model_topFilter.getId().matches(model.getMat_map().get("id"))){
+                        model.removeMat_map();
+                    }
+            }
+            if (model.getOccas_map()!=null&&model.getOccas_map().get("id")!=null) {
+                if(model_topFilter.getId().matches(model.getOccas_map().get("id"))){
+                        model.removeOccas_map();
+                    }
+            }
+            if (model.getPrice_map()!=null&&model.getPrice_map().get("id")!=null) {
+                if(model_topFilter.getId().matches(model.getPrice_map().get("id"))){
+                        model.removePrice_map();
+                    }
             }
             arr_TopFilter.remove(position);
             filterTop_adapter.notifyDataSetChanged();
