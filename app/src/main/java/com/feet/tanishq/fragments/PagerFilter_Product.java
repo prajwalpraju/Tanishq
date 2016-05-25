@@ -333,7 +333,11 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                hideArrowButtons();
+                try {
+                    hideArrowButtons();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }, 1000);
 
@@ -505,7 +509,6 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     @Override
     public void onPageSelected(int position) {
-
         Model_Product model_product=arr_product.get(position);
 
         current_poistion=position;
