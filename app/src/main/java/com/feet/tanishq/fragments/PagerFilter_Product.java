@@ -279,7 +279,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
                     if (model_product.isInWish()) {
                         model_product.setInWish(false);
-                        iv_wish_pro.setBackgroundResource(R.color.tanishq_light_gold);
+                        iv_wish_pro.setBackgroundResource(R.color.tanishq_gold);
                         deleteFromWish(model_product.getProduct_title());
                     } else {
                         model_product.setInWish(true);
@@ -302,7 +302,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
                     intent.putExtra("notify", 2);
                     if (model_product.isInCompare()) {
                         model_product.setInCompare(false);
-                        iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
+                        iv_compare_pro.setBackgroundResource(R.color.tanishq_gold);
                         deleteFromCompare(model_product.getProduct_title());
                     } else {
                         model_product.setInCompare(true);
@@ -519,13 +519,13 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         if (model_product.isInWish()) {
             iv_wish_pro.setBackgroundResource(R.color.green_fungus);
         } else {
-            iv_wish_pro.setBackgroundResource(R.color.tanishq_light_gold);
+            iv_wish_pro.setBackgroundResource(R.color.tanishq_gold);
         }
 
         if(model_product.isInCompare()){
             iv_compare_pro.setBackgroundResource(R.color.green_fungus);
         }else {
-            iv_compare_pro.setBackgroundResource(R.color.tanishq_light_gold);
+            iv_compare_pro.setBackgroundResource(R.color.tanishq_gold);
         }
 //        viewPagerAdapter.notifyDataSetChanged();
         setUpText(model_product);

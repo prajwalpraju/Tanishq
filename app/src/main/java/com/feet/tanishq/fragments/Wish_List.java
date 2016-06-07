@@ -1,17 +1,23 @@
 package com.feet.tanishq.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -82,7 +88,6 @@ public class Wish_List extends Fragment {
         new GetFromWishList().execute();
     }
 
-    SQLiteDatabase db;
     ArrayList<Model_Product> arr_list=new ArrayList<Model_Product>();
     WishAdapter adapter;
 
@@ -135,6 +140,7 @@ public class Wish_List extends Fragment {
     RelativeLayout rl_nowish;
     TextView tv_header_wish,tv_nowish;
     GridLayoutManager gridLayoutManager;
+    ImageView iv_mail,iv_delete;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -145,13 +151,116 @@ public class Wish_List extends Fragment {
         rl_nowish=(RelativeLayout) view.findViewById(R.id.rl_nowish);
         tv_header_wish=(TextView) view.findViewById(R.id.tv_header_wish);
         tv_nowish=(TextView) view.findViewById(R.id.tv_nowish);
+
+        iv_mail=(ImageView) view.findViewById(R.id.iv_mail);
+        iv_delete=(ImageView) view.findViewById(R.id.iv_delete);
+
+
         tv_header_wish.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_nowish.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         gridLayoutManager=new GridLayoutManager(getActivity(),3);
         rv_wish.setHasFixedSize(true);
         rv_wish.setLayoutManager(gridLayoutManager);
         rv_wish.addItemDecoration(new SpacesItemDecoration(30));
+
+        iv_mail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getCountWishList()>0) {
+                    AlertDialog diaBox = AskOption();
+                    diaBox.show();
+                }
+
+            }
+        });
         return view;
+    }
+    SQLiteDatabase db;
+
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getContext())
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Remove All?")
+                .setIcon(R.drawable.delete)
+                .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        new DeleteAllWishList().execute();
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
+
+    public long getCountWishList(){
+        long count =0;
+        try {
+            db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            count=DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_WISHLIST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return count;
+
+
+    }
+    public void deleteAllWishList(){
+        try {
+            db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            db.delete(DataBaseHandler.TABLE_WISHLIST,null,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+    }
+
+    class DeleteAllWishList extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            deleteAllWishList();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            arr_list.clear();
+            adapter.notifyDataSetChanged();
+            Intent intent=new Intent("filter");
+            intent.putExtra("type", 3);
+            intent.putExtra("notify", 1);
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+            rl_nowish.setVisibility(View.VISIBLE);
+        }
     }
 
 

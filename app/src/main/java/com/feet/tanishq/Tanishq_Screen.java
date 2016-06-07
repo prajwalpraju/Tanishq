@@ -645,6 +645,9 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 case "4":
                     tv_item_name.setText("OCCASION");
                     break;
+                case "5":
+                    tv_item_name.setText("PRICE");
+                    break;
             }
         }
     }

@@ -21,6 +21,13 @@
             android:textColor="@color/tanishq_gold"
             android:text="@string/compare" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_delete"
+            android:src="@drawable/delete"
+            android:layout_gravity="right" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_compare"
             android:layout_width="match_parent"

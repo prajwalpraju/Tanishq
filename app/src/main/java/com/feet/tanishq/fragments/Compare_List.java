@@ -2,17 +2,23 @@ package com.feet.tanishq.fragments;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -92,6 +98,7 @@ public class Compare_List extends Fragment {
     TextView tv_header_compare,tv_nocompare;
 //    GridLayoutManager gridLayoutManager;
     LinearLayoutManager linearLayoutManager;
+    ImageView iv_delete;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -101,14 +108,53 @@ public class Compare_List extends Fragment {
         rl_nocompare=(RelativeLayout) view.findViewById(R.id.rl_nocompare);
         tv_header_compare=(TextView) view.findViewById(R.id.tv_header_compare);
         tv_nocompare=(TextView) view.findViewById(R.id.tv_nocompare);
+        iv_delete=(ImageView) view.findViewById(R.id.iv_delete);
         tv_header_compare.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_nocompare.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
 //        rv_compare.setHasFixedSize(true);
         rv_compare.setLayoutManager(linearLayoutManager);
         rv_compare.addItemDecoration(new SpacesItemDecoration(30));
+        iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (getCountCompareList()>0) {
+                    AlertDialog diaBox = AskOption();
+                    diaBox.show();
+                }
+
+            }
+        });
 
         return view;
+
+    }
+
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getContext())
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Remove All?")
+                .setIcon(R.drawable.delete)
+                .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                            new DeleteAllCompareList().execute();
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
 
     }
 
@@ -156,6 +202,56 @@ public class Compare_List extends Fragment {
             db.close();
         }
 
+    }
+
+    public long getCountCompareList(){
+        long count =0;
+
+        try {
+            db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            count= DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_COMPARE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+        return count;
+    }
+    public void deleteAllCompareList(){
+        try {
+            db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
+            db.delete(DataBaseHandler.TABLE_COMPARE,null,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+    }
+
+    class DeleteAllCompareList extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            deleteAllCompareList();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            arr_list.clear();
+            adapter.notifyDataSetChanged();
+            Intent intent=new Intent("filter");
+            intent.putExtra("type", 3);
+            intent.putExtra("notify", 2);
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+            rl_nocompare.setVisibility(View.VISIBLE);
+        }
     }
 
     class GetFromCompareList extends AsyncTask<Void,Void,Void> {
