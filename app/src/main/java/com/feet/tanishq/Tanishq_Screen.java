@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -16,6 +17,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -194,7 +196,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         tv_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callLogoutApi();
+                AlertDialog diaBox = AskOption();
+                diaBox.show();
             }
         });
 
@@ -705,6 +708,34 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
             }
 
         }
+
+    }
+
+
+    private AlertDialog AskOption()
+    {
+        AlertDialog myQuittingDialogBox =new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Logout")
+                .setMessage("Are you sure want to Logout?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        callLogoutApi();
+                        dialog.dismiss();
+                    }
+
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
 
     }
 

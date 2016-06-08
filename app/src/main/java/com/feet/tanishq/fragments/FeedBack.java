@@ -3,15 +3,30 @@ package com.feet.tanishq.fragments;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
 import com.feet.tanishq.utils.AsifUtils;
+import com.feet.tanishq.utils.AsyncTaskCompleteListener;
+import com.feet.tanishq.utils.Const;
+import com.feet.tanishq.utils.UserDetails;
+import com.feet.tanishq.utils.VolleyHttpRequest;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +34,7 @@ import com.feet.tanishq.utils.AsifUtils;
  * {@link FeedBack.OnFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class FeedBack extends Fragment {
+public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Response.ErrorListener {
 
 
     public FeedBack() {
@@ -34,7 +49,11 @@ public class FeedBack extends Fragment {
 
     TextView tv_feed,tv_subject,tv_message;
     Button bt_send,bt_cancel;
-    EditText et_subject,et_message;
+    EditText et_message;
+    AppCompatSpinner sp_subject;
+    String array[] = { "Automobile", "Food", "Computers", "Education","Personal", "Travel" };
+    ArrayAdapter<String> adapterDrop;
+    RequestQueue requestQueue;
 
 
     @Override
@@ -50,8 +69,8 @@ public class FeedBack extends Fragment {
         bt_send=(Button) view.findViewById(R.id.bt_send);
         bt_cancel=(Button) view.findViewById(R.id.bt_cancel);
 
-        et_subject=(EditText) view.findViewById(R.id.et_subject);
         et_message=(EditText) view.findViewById(R.id.et_message);
+        sp_subject=(AppCompatSpinner) view.findViewById(R.id.sp_subject);
 
         tv_feed.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_subject.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
@@ -60,13 +79,83 @@ public class FeedBack extends Fragment {
         bt_send.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         bt_cancel.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
-        et_subject.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         et_message.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
+        adapterDrop = new ArrayAdapter<String>(getContext(),R.layout.drop_text, array);
+        adapterDrop.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        sp_subject.setAdapter(adapterDrop);
+        requestQueue= Volley.newRequestQueue(getContext());
+
+//        sp_subject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getContext(), "" + array[position], Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+////                Toast.makeText(getContext(), "Please select subject" , Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
+        bt_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateFeedBack()) {
+                    callFeedBackApi();
+                }
+            }
+        });
 
         return view;
+    }
+
+    public void callFeedBackApi(){
+        if (!AsifUtils.isNetworkAvailable(getActivity())) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        AsifUtils.start(getContext());
+
+        UserDetails user=new UserDetails(getContext());
+        HashMap<String,String> map=new HashMap<String,String>();
+        map.put(Const.URL,Const.FEEDBACK);
+        map.put(Const.Params.ID, user.getUserId());
+        map.put(Const.Params.MOBILE, user.getMobileNumber());
+        map.put(Const.Params.SUBJECT, sp_subject.getSelectedItem().toString());
+        map.put(Const.Params.FEEDBACK, et_message.getText().toString().trim());
+        requestQueue.add(new VolleyHttpRequest(Request.Method.POST,map,Const.ServiceCode.FEEDBACK,this,this));
+    }
+
+
+    public boolean validateFeedBack(){
+        boolean isval=false;
+        if (sp_subject.getSelectedItem()==null){
+            Toast.makeText(getContext(),"Please select subject",Toast.LENGTH_SHORT).show();
+        }else if(et_message.getText().toString().trim().length()==0){
+            Toast.makeText(getContext(),"Please enter message",Toast.LENGTH_SHORT).show();
+        }else{
+            isval=true;
+        }
+        return isval;
+    }
+
+    @Override
+    public void onTaskCompleted(String response, int serviceCode) {
+        switch (serviceCode){
+            case Const.ServiceCode.FEEDBACK:
+                AsifUtils.validateResponse(getContext(),response);
+                break;
+        }
+        AsifUtils.stop();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        AsifUtils.stop();
+        AsifUtils.validateResponse(getContext(), error.getMessage());
     }
 
     // TODO: Rename method, update argument and hook method into UI event

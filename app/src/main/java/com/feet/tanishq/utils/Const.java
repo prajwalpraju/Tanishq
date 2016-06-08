@@ -25,6 +25,7 @@ public class Const {
     public static final String ALL_COLLECTIONS=STORE_API+"tanishqcollections?";
 	public static final String COLLECTION_CATEGORY=STORE_API+"tanishqcollectioncategories?";
 	public static final String PRODUCT_LIST=STORE_API+"tanishqproductslist2?";
+	public static final String FEEDBACK=STORE_API+"tanishquserfeedback?";
 
 	public class Resolution{
 		public static final double MDPI=1;
@@ -52,6 +53,9 @@ public class Const {
 		public static final String OCCASSION="occassion";
 		public static final String PRICEBAR="pricebar";
 		public static final String PAGENO="pageno";
+		public static final String FEEDBACK="feedback";
+		public static final String SUBJECT="subject";
+		public static final String EMAILID="emailid";
 	}
 
     public class ServiceCode{
@@ -62,5 +66,6 @@ public class Const {
         public static final int COLLECTION_CATEGORY=5;
         public static final int PRODUCT_LIST=6;
         public static final int PRODUCT_LIST_NOTIFY=7;
+        public static final int FEEDBACK=8;
     }
 }
