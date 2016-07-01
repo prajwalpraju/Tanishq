@@ -89,7 +89,7 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     RecyclerView rv_filter_pager;
     ViewPager vp_product;
     ImageView iv_wish_pro,iv_compare_pro,iv_back,iv_next;
-    TextView tv_header_pager,tv_pro_name,tv_pro_price,tv_pro_material,tv_pro_category,tv_pro_collection;
+    TextView tv_header_pager,tv_pro_name,tv_pro_price,tv_pro_material,tv_pro_category,tv_pro_collection,tv_pro_weight,tc_pro_kara,tv_pro_descp;
     LinearLayoutManager layoutManager;
     ViewPagerAdapter viewPagerAdapter;
 
@@ -258,12 +258,20 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         tv_pro_category=(TextView) view.findViewById(R.id.tv_pro_category);
         tv_pro_collection=(TextView) view.findViewById(R.id.tv_pro_collection);
 
+        tv_pro_descp=(TextView) view.findViewById(R.id.tv_pro_descp);
+        tc_pro_kara=(TextView) view.findViewById(R.id.tc_pro_kara);
+        tv_pro_weight=(TextView) view.findViewById(R.id.tv_pro_weight);
+
         tv_header_pager.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_pro_name.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         tv_pro_price.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         tv_pro_material.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         tv_pro_category.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         tv_pro_collection.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+
+        tv_pro_descp.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tc_pro_kara.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_pro_weight.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
         new CheckForWish().execute();
 
@@ -495,12 +503,16 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     private void setUpText(Model_Product model_product){
 
-        tv_pro_name.setText(model_product.getProduct_title());
-        tv_pro_price.setText(getResources().getString(R.string.rs)+" "+model_product.getProduct_price());
-        tv_pro_material.setText(model_product.getMaterial());
-        tv_pro_collection.setText(model_product.getCollection());
-        tv_pro_category.setText(model_product.getCategory());
+        tv_pro_name.setText("SKU - "+model_product.getProduct_title());
+        tv_pro_price.setText("Price - "+getResources().getString(R.string.rs)+" "+model_product.getProduct_price());
+        tv_pro_material.setText("Material - "+model_product.getMaterial());
+        tv_pro_collection.setText("Collection - "+model_product.getCollection());
+        tv_pro_category.setText("Category - "+model_product.getCategory());
         tv_header_pager.setText(model_product.getCategory());
+
+        tv_pro_descp.setText("Description - "+model_product.getDescription());
+        tc_pro_kara.setText("Gold kartage - "+model_product.getGold_karatage());
+        tv_pro_weight.setText("Weight - "+model_product.getWeight());
 
     }
     @Override

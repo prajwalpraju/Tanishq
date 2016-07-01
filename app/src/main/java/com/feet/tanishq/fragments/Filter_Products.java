@@ -412,8 +412,11 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
                 String Collection= obj.getString("Collection");
                 String Material=obj.getString("Material");
                 String category=obj.getString("category");
+
+                String gold_karatage=obj.getString("Gold kartage");
+                String weight=obj.getString("weight");
                 Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
-                        description,Collection,Material,category,product_url,false,false);
+                        description,Collection,Material,category,product_url,false,false,gold_karatage,weight);
                 arr_list.add(model_product);
             }
              next_page=jResObj.getInt("next_page");

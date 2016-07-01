@@ -12,6 +12,7 @@ public class Const {
 	public static final String FRAG_FILTER="filter_product";
 	public static final String FRAG_HELP="help";
 	public static final String FRAG_FEEDBACK="feedback";
+	public static final String FRAG_MAIL="mail";
 	public static final String FRAG_USERMAN="user_manual";
 	public static final String FRAG_PAGERFILTER="pager_filter_product";
 
@@ -26,6 +27,7 @@ public class Const {
 	public static final String COLLECTION_CATEGORY=STORE_API+"tanishqcollectioncategories?";
 	public static final String PRODUCT_LIST=STORE_API+"tanishqproductslist2?";
 	public static final String FEEDBACK=STORE_API+"tanishquserfeedback?";
+	public static final String MAIL_INFO=STORE_API+"tanishqsavecustomerinfo?";
 
 	public class Resolution{
 		public static final double MDPI=1;
@@ -56,6 +58,7 @@ public class Const {
 		public static final String FEEDBACK="feedback";
 		public static final String SUBJECT="subject";
 		public static final String EMAILID="emailid";
+		public static final String WISHLIST="wishlist";
 	}
 
     public class ServiceCode{
@@ -67,5 +70,6 @@ public class Const {
         public static final int PRODUCT_LIST=6;
         public static final int PRODUCT_LIST_NOTIFY=7;
         public static final int FEEDBACK=8;
+        public static final int MAIL_INFO=9;
     }
 }

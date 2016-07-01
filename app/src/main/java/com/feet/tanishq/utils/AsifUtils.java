@@ -205,6 +205,10 @@ public class AsifUtils {
 		}
 	}
 
+	public final static boolean isValidEmail(CharSequence target) {
+		return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+	}
+
 	public static boolean validateResponse(Context context,String response){
 		boolean validate=false;
 		try {

@@ -6,11 +6,11 @@ import java.io.Serializable;
  * Created by asif on 15-04-2016.
  */
 public class Model_Product implements Serializable{
-    String device_image,product_image,product_title,product_price,discount_price,discount_percent,product_url,description,collection,material,category;
+    String device_image,product_image,product_title,product_price,discount_price,discount_percent,product_url,description,collection,material,category,gold_karatage, weight;
     boolean inWish,inCompare;
 
     public Model_Product(String device_image,String product_image,String product_title,String product_price,String discount_price,String discount_percent,
-                         String description,String collection,String material,String category,String product_url,boolean inWish,boolean inCompare){
+                         String description,String collection,String material,String category,String product_url,boolean inWish,boolean inCompare,String gold_karatage,String weight){
 
         this.device_image=device_image;
         this.product_image=product_image;
@@ -25,9 +25,29 @@ public class Model_Product implements Serializable{
         this.category=category;
         this.product_url=product_url;
 
+        this.gold_karatage=gold_karatage;
+        this.weight=weight;
+
         this.inWish=inWish;
         this.inCompare=inCompare;
 
+    }
+
+
+    public String getGold_karatage() {
+        return gold_karatage;
+    }
+
+    public void setGold_karatage(String gold_karatage) {
+        this.gold_karatage = gold_karatage;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 
     public String getDescription() {

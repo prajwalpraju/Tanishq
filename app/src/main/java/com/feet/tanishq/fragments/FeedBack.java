@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
+import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
@@ -47,13 +48,11 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
         return help_fragment;
     }
 
-    TextView tv_feed,tv_subject,tv_message;
+    TextView tv_feed,tv_subject,tv_message,tv_email,tv_name;
     Button bt_send,bt_cancel;
-    EditText et_message;
-    AppCompatSpinner sp_subject;
-    String array[] = { "Automobile", "Food", "Computers", "Education","Personal", "Travel" };
-    ArrayAdapter<String> adapterDrop;
+    EditText et_message,et_subject,et_email,et_name;
     RequestQueue requestQueue;
+    AdapterCallback adapterCallback;
 
 
     @Override
@@ -65,39 +64,34 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
         tv_feed=(TextView) view.findViewById(R.id.tv_feed);
         tv_subject=(TextView) view.findViewById(R.id.tv_subject);
         tv_message=(TextView) view.findViewById(R.id.tv_message);
+        tv_email=(TextView) view.findViewById(R.id.tv_email);
+        tv_name=(TextView) view.findViewById(R.id.tv_name);
+
+        this.adapterCallback= (AdapterCallback) getContext();
+        requestQueue= Volley.newRequestQueue(getContext());
 
         bt_send=(Button) view.findViewById(R.id.bt_send);
         bt_cancel=(Button) view.findViewById(R.id.bt_cancel);
 
         et_message=(EditText) view.findViewById(R.id.et_message);
-        sp_subject=(AppCompatSpinner) view.findViewById(R.id.sp_subject);
+        et_subject=(EditText) view.findViewById(R.id.et_subject);
+        et_email=(EditText) view.findViewById(R.id.et_email);
+        et_name=(EditText) view.findViewById(R.id.et_name);
 
         tv_feed.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_subject.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         tv_message.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_email.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        tv_name.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
         bt_send.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         bt_cancel.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
         et_message.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        et_email.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
+        et_name.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
-        adapterDrop = new ArrayAdapter<String>(getContext(),R.layout.drop_text, array);
-        adapterDrop.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        sp_subject.setAdapter(adapterDrop);
-        requestQueue= Volley.newRequestQueue(getContext());
-
-//        sp_subject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getContext(), "" + array[position], Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-////                Toast.makeText(getContext(), "Please select subject" , Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
 
         bt_send.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +103,10 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
             }
         });
 
+
         return view;
     }
+
 
     public void callFeedBackApi(){
         if (!AsifUtils.isNetworkAvailable(getActivity())) {
@@ -123,8 +119,10 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
         HashMap<String,String> map=new HashMap<String,String>();
         map.put(Const.URL,Const.FEEDBACK);
         map.put(Const.Params.ID, user.getUserId());
-        map.put(Const.Params.MOBILE, user.getMobileNumber());
-        map.put(Const.Params.SUBJECT, sp_subject.getSelectedItem().toString());
+//        map.put(Const.Params.MOBILE, user.getMobileNumber());
+        map.put(Const.Params.SUBJECT, et_subject.getText().toString().trim());
+        map.put(Const.Params.EMAILID, et_email.getText().toString().trim());
+        map.put(Const.Params.USERNAME, et_name.getText().toString().trim());
         map.put(Const.Params.FEEDBACK, et_message.getText().toString().trim());
         requestQueue.add(new VolleyHttpRequest(Request.Method.POST,map,Const.ServiceCode.FEEDBACK,this,this));
     }
@@ -132,9 +130,17 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
 
     public boolean validateFeedBack(){
         boolean isval=false;
-        if (sp_subject.getSelectedItem()==null){
-            Toast.makeText(getContext(),"Please select subject",Toast.LENGTH_SHORT).show();
-        }else if(et_message.getText().toString().trim().length()==0){
+        String sub=et_subject.getText().toString().trim();
+        String msg=et_message.getText().toString().trim();
+        String email=et_email.getText().toString().trim();
+        String name=et_email.getText().toString().trim();
+        if (name.length()==0&&name.isEmpty()){
+            Toast.makeText(getContext(),"Please enter user name",Toast.LENGTH_SHORT).show();
+        }else if(!AsifUtils.isValidEmail(email)){
+            Toast.makeText(getContext(),"Please enter valid email id",Toast.LENGTH_SHORT).show();
+        }else if (sub.length()==0&&sub.isEmpty()){
+            Toast.makeText(getContext(),"Please enter subject",Toast.LENGTH_SHORT).show();
+        }else if(msg.length()==0&&msg.isEmpty()){
             Toast.makeText(getContext(),"Please enter message",Toast.LENGTH_SHORT).show();
         }else{
             isval=true;
@@ -146,7 +152,10 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
     public void onTaskCompleted(String response, int serviceCode) {
         switch (serviceCode){
             case Const.ServiceCode.FEEDBACK:
-                AsifUtils.validateResponse(getContext(),response);
+               if (AsifUtils.validateResponse(getContext(),response)){
+                   adapterCallback.onMethodCallback(3);
+               }
+
                 break;
         }
         AsifUtils.stop();

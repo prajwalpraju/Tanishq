@@ -44,6 +44,7 @@ import com.feet.tanishq.fragments.Compare_List;
 import com.feet.tanishq.fragments.FeedBack;
 import com.feet.tanishq.fragments.Filter_Products;
 import com.feet.tanishq.fragments.Help_Fragment;
+import com.feet.tanishq.fragments.Mail_WishList;
 import com.feet.tanishq.fragments.PagerFilter_Product;
 import com.feet.tanishq.fragments.Sub_Collection;
 import com.feet.tanishq.fragments.User_Manual;
@@ -816,6 +817,12 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 //        addFragment(feedBack,checkFragAvail(Const.FRAG_FEEDBACK),Const.FRAG_FEEDBACK);
         addFragment(feedBack,true,Const.FRAG_FEEDBACK);
     }
+
+    public void gotoMailWishFragment(){
+        Mail_WishList mail_wishList=Mail_WishList.newInstance();
+//        addFragment(feedBack,checkFragAvail(Const.FRAG_FEEDBACK),Const.FRAG_FEEDBACK);
+        addFragment(mail_wishList,true,Const.FRAG_MAIL);
+    }
     public void gotoUserManualFragment(){
         User_Manual user_manual=User_Manual.newInstance();
 //        addFragment(user_manual,checkFragAvail(Const.FRAG_USERMAN),Const.FRAG_USERMAN);
@@ -834,6 +841,9 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                 break;
             case 3:
                 gotoAllCollectionFragment();
+                break;
+            case 4:
+                gotoMailWishFragment();
                 break;
 
         }
@@ -858,7 +868,6 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     public void onTaskCompleted(String response, int serviceCode) {
         switch (serviceCode){
             case Const.ServiceCode.LOGOUT:
-                AsifUtils.stop();
                 if (AsifUtils.validateResponse(getApplicationContext(),response)){
                     new UserDetails(this).clearUserPreference();
                     Intent intent=new Intent(getApplicationContext(),Login_Screen.class);

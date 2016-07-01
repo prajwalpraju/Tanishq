@@ -182,7 +182,7 @@ public class Compare_List extends Fragment {
                     String product_url=cs.getString(cs.getColumnIndex("product_url"));
 
                     Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
-                            description,collection,material,category,product_url,false,false);
+                            description,collection,material,category,product_url,false,false,"","");
                     arr_list.add(model_product);
 
                 } while (cs.moveToNext());

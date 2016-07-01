@@ -3,6 +3,8 @@
     <string name="title_activity_login__screen">Login_Screen</string>
     <string name="welcome">Welcome to the \nTanishq Virtual Catalogue</string>
     <string name="username">USER NAME</string>
+    <string name="user_name">USER NAME</string>
+    <string name="title">TITLE</string>
     <string name="mobile_number">MOBILE NUMBER</string>
     <string name="submit">SUBMIT</string>
     <string name="enter_otp">ENTER OTP</string>
@@ -20,10 +22,12 @@
     <string name="not_applicable">Not Applicable</string>
     <string name="rs">\u20B9</string>
     <string name="subject">SUBJECT</string>
+    <string name="email">EMAIL</string>
     <string name="message">MESSAGE</string>
     <string name="send">SEND</string>
     <string name="cancel">CANCEL</string>
     <string name="feedback_cap">FEEDBACK</string>
+    <string name="mail_wish">MAIL_WISHLIST</string>
     <string name="help">HELP</string>
     <string name="user_manual">USER MANUAL</string>
 

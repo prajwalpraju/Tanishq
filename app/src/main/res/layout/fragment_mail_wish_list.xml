@@ -1,9 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".fragments.FeedBack">
+    tools:context="com.feet.tanishq.fragments.Mail_WishList">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,10 +14,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/feedback_cap"
+            android:text="@string/mail_wish"
             android:textColor="@color/tanishq_gold"
             android:textSize="20sp"
-            android:id="@+id/tv_feed" />
+            android:id="@+id/tv_mail" />
 
     </LinearLayout>
 
@@ -40,10 +40,41 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.2"
                 android:orientation="vertical"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/tanishq_gold"
+                    android:textSize="19sp"
+                    android:id="@+id/tv_title" />
+
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/sp_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/tanishq_gold"
+                    android:background="@drawable/bt_border_gold"
+                    android:textSize="19sp"
+                    android:padding="5dp"
+                    android:layout_marginTop="10dp"
+                    android:singleLine="true">
+
+                </android.support.v7.widget.AppCompatSpinner>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,37 +99,6 @@
                 </EditText>
 
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/email"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/tanishq_gold"
-                    android:textSize="19sp"
-                    android:id="@+id/tv_email" />
-
-
-                <EditText
-                    android:id="@+id/et_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:textColor="@color/tanishq_gold"
-                    android:background="@drawable/bt_border_gold"
-                    android:textSize="19sp"
-                    android:padding="10dp"
-                    android:layout_marginTop="10dp"
-                    android:singleLine="true">
-
-                </EditText>
-
-            </LinearLayout>
         </LinearLayout>
 
 
@@ -108,49 +108,50 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/subject"
+            android:text="@string/mobile_number"
             android:layout_marginTop="20dp"
             android:textColor="@color/tanishq_gold"
             android:textSize="19sp"
-            android:id="@+id/tv_subject" />
+            android:id="@+id/tv_mobile" />
 
 
-            <EditText
-                android:id="@+id/et_subject"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:textColor="@color/tanishq_gold"
-                android:background="@drawable/bt_border_gold"
-                android:textSize="19sp"
-                android:padding="10dp"
-                android:layout_marginTop="10dp"
-                android:singleLine="true">
+        <EditText
+            android:id="@+id/et_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textColor="@color/tanishq_gold"
+            android:background="@drawable/bt_border_gold"
+            android:textSize="19sp"
+            android:padding="10dp"
+            android:inputType="phone"
+            android:layout_marginTop="10dp"
+            android:singleLine="true">
 
-            </EditText>
+        </EditText>
 
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/message"
+            android:text="@string/email"
             android:layout_marginTop="10dp"
             android:textColor="@color/tanishq_gold"
             android:textSize="19sp"
-            android:id="@+id/tv_message" />
+            android:id="@+id/tv_email" />
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bt_border_gold"
             android:textColor="@color/tanishq_gold"
             android:textSize="19sp"
             android:padding="10dp"
             android:gravity="top"
-            android:maxLines="4"
+            android:singleLine="true"
             android:imeOptions="actionDone"
-            android:id="@+id/et_message" />
+            android:id="@+id/et_email" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -190,4 +191,5 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+
+</FrameLayout>

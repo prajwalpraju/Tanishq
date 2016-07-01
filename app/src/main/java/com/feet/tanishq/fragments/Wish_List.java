@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.feet.tanishq.R;
 import com.feet.tanishq.adapter.WishAdapter;
 import com.feet.tanishq.database.DataBaseHandler;
+import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_Product;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.SpacesItemDecoration;
@@ -113,7 +114,7 @@ public class Wish_List extends Fragment {
                     String category=cs.getString(cs.getColumnIndex("product_url"));
 
                     Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
-                            description,collection,material,category,product_url,false,false);
+                            description,collection,material,category,product_url,false,false,"","");
                     arr_list.add(model_product);
 
                 } while (cs.moveToNext());
@@ -141,6 +142,7 @@ public class Wish_List extends Fragment {
     TextView tv_header_wish,tv_nowish;
     GridLayoutManager gridLayoutManager;
     ImageView iv_mail,iv_delete;
+    AdapterCallback adapterCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -155,6 +157,7 @@ public class Wish_List extends Fragment {
         iv_mail=(ImageView) view.findViewById(R.id.iv_mail);
         iv_delete=(ImageView) view.findViewById(R.id.iv_delete);
 
+        this.adapterCallback= (AdapterCallback) getContext();
 
         tv_header_wish.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_nowish.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
@@ -166,7 +169,9 @@ public class Wish_List extends Fragment {
         iv_mail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(getCountWishList()>0){
+                    adapterCallback.onMethodCallback(4);
+                }
             }
         });
 
