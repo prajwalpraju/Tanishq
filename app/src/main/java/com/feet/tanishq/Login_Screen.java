@@ -240,13 +240,13 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
     private void parseUserAndCategoryInsertDb(String response){
 
         try {
+            UserDetails user=new UserDetails(this);
             JSONObject jobj=new JSONObject(response);
             JSONObject jobj_response=jobj.getJSONObject("response");
             JSONArray jArrUser=jobj_response.getJSONArray("userinfo");
 //            Log.d(TAG, "parseUserAndCategoryInsertDb: jArrUser="+jArrUser.length());
             for (int i=0;i<jArrUser.length();i++){
                 JSONObject jArrObj=jArrUser.getJSONObject(i);
-                UserDetails user=new UserDetails(this);
                 user.setUserId(jArrObj.getString("id"));
                 user.setUserTitle(jArrObj.getString("title"));
                 user.setUserName(jArrObj.getString("username"));
@@ -298,6 +298,9 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                 insertIntoCatTable("5","pricebar",id,name,"0");
             }
 
+            String url=jobj_response.getString("appdemoyoutubelink");
+            user.setDemoUrl(url);
+            Log.d(TAG, "parseUserAndCategoryInsertDb: "+url);
         } catch (Exception e) {
             Log.e(TAG, "exception: "+Log.getStackTraceString(e) );
         }

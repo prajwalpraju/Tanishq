@@ -65,6 +65,15 @@ public class UserDetails {
         return  userPref.getString("device","");
     };
 
+    public void setDemoUrl(String url){
+        editor.putString("url",url);
+        editor.commit();
+    };
+
+    public String getDemoUrl(){
+        return  userPref.getString("url","");
+    };
+
 
 
 }
