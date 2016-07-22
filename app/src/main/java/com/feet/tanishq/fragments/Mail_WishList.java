@@ -118,8 +118,10 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
             }
         });
 
-        adapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, titleArr);
+        adapter = new ArrayAdapter<String>(getContext(),R.layout.drop_text, titleArr);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp_title.setAdapter(adapter);
+
 
         addToString();
 
@@ -203,6 +205,7 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
     }
 
     public void callMailInfoApi(){
+        String name=sp_title.getSelectedItem()+"."+et_name.getText().toString().trim();
         if (!AsifUtils.isNetworkAvailable(getActivity())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
@@ -216,7 +219,7 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
         map.put(Const.Params.MOBILE, et_mobile.getText().toString().trim());
         map.put(Const.Params.WISHLIST, wish_id);
         map.put(Const.Params.EMAILID, et_email.getText().toString().trim());
-        map.put(Const.Params.USERNAME, et_name.getText().toString().trim());
+        map.put(Const.Params.USERNAME, name);
         requestQueue.add(new VolleyHttpRequest(Request.Method.POST, map, Const.ServiceCode.MAIL_INFO, this, this));
     }
 

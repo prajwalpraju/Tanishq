@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
@@ -49,15 +51,32 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         Model_Product model=arr_list.get(position);
         holder.tv_product_name.setText(model.getProduct_title());
 
         try {
+
+            imageLoader.get(model.getDevice_image(), new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    holder.pg.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    holder.pg.setVisibility(View.GONE);
+                }
+            });
             holder.nv_product.setImageUrl(model.getDevice_image(), imageLoader);
+            holder.pg.setVisibility(View.VISIBLE);
+
         } catch (Exception e) {
             e.printStackTrace();
+            holder.pg.setVisibility(View.GONE);
         }
+
+
 
     }
 
@@ -75,11 +94,13 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
         CardView card;
         NetworkImageView nv_product;
         TextView tv_product_name;
+        ProgressBar pg;
 
         public MyViewHolder(View view) {
             super(view);
 
             card=(CardView) view.findViewById(R.id.card);
+            pg=(ProgressBar) view.findViewById(R.id.pg);
             nv_product=(NetworkImageView) view.findViewById(R.id.nv_product);
             tv_product_name=(TextView) view.findViewById(R.id.tv_product_name);
             tv_product_name.setTypeface(AsifUtils.getRaleWay_SemiBold(context));

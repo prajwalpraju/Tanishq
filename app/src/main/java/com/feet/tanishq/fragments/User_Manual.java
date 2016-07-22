@@ -1,15 +1,23 @@
 package com.feet.tanishq.fragments;
 
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.feet.tanishq.R;
 import com.feet.tanishq.utils.AsifUtils;
+import com.feet.tanishq.utils.UserDetails;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +73,7 @@ public class User_Manual extends Fragment {
 
 
     TextView tv_userman,tv_userman_header;
+//    VideoView vv_tanishq;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,9 +82,46 @@ public class User_Manual extends Fragment {
         View view=inflater.inflate(R.layout.fragment_user__manual, container, false);
         tv_userman=(TextView) view.findViewById(R.id.tv_userman);
         tv_userman_header=(TextView) view.findViewById(R.id.tv_userman_header);
+//        vv_tanishq=(VideoView) view.findViewById(R.id.vv_tanishq);
+
         tv_userman.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         tv_userman_header.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
+
+
+
+        tv_userman_header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                watchYoutubeVideo();
+            }
+        });
+
+//        try {
+//            MediaController mediaController = new MediaController(getActivity());
+//            mediaController.setAnchorView(vv_tanishq);
+//            Uri video = Uri.parse(url);
+//            vv_tanishq.setMediaController(mediaController);
+//            vv_tanishq.setVideoURI(video);
+//            vv_tanishq.start();
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//            Toast.makeText(getActivity(), "Error connecting", Toast.LENGTH_SHORT).show();
+//        }
+
         return view;
+    }
+
+    public void watchYoutubeVideo(){
+        UserDetails details=new UserDetails(getContext());
+        String url=details.getDemoUrl();
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + "byXHv3NsOmg"));
+            startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(url));
+            startActivity(intent);
+        }
     }
 
 }

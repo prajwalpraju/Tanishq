@@ -1,6 +1,7 @@
 package com.feet.tanishq.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.feet.tanishq.R;
+import com.feet.tanishq.YouTuber;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.utils.AsifUtils;
 
@@ -54,7 +56,10 @@ public class Help_Fragment extends Fragment {
         bt_userman.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapterCallback.onMethodCallback(2);
+
+                Intent intent=new Intent(getActivity(), YouTuber.class);
+                startActivity(intent);
+//                adapterCallback.onMethodCallback(2);
             }
         });
 

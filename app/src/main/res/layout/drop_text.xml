@@ -8,5 +8,6 @@
     android:ellipsize="marquee"
     android:textSize="19sp"
     android:typeface="sans"
+    android:gravity="center"
     android:textColor="@color/tanishq_gold"
     android:textAlignment="inherit"/>

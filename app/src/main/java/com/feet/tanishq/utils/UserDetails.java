@@ -74,6 +74,15 @@ public class UserDetails {
         return  userPref.getString("url","");
     };
 
+    public void setVideo_idUrl(String video_id){
+        editor.putString("video_id",video_id);
+        editor.commit();
+    };
+
+    public String getVideo_idUrl(){
+        return  userPref.getString("video_id","");
+    };
+
 
 
 }
