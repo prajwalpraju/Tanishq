@@ -302,7 +302,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             String video_id=jobj_response.getString("appdemoyoutubeid");
             user.setDemoUrl(url);
             user.setVideo_idUrl(video_id);
-            Log.d(TAG, "parseUserAndCategoryInsertDb: "+url);
+//            Log.d(TAG, "parseUserAndCategoryInsertDb: "+url);
         } catch (Exception e) {
             Log.e(TAG, "exception: "+Log.getStackTraceString(e) );
         }
@@ -315,7 +315,6 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
             case Const.ServiceCode.USERLOGIN:
                 if (AsifUtils.validateResponse(getApplicationContext(),response)) {
 //                    Log.d(TAG, "onTaskCompleted: response success");
-                    Toast.makeText(getApplicationContext(),"success",Toast.LENGTH_SHORT).show();
                     UserDetails user=new UserDetails(getApplicationContext());
                     user.setUserName(et_username.getText().toString().trim());
                     user.setMobileNumber(et_mobile.getText().toString().trim());
@@ -327,7 +326,6 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
 
             case Const.ServiceCode.OTP_VERIFY:
                 if (AsifUtils.validateResponse(getApplicationContext(),response)){
-                    Log.d(TAG, "onTaskCompleted: otp verify success=="+response);
                     new ParseResponseFromOtp(response).execute();
                 }
                 break;

@@ -37,11 +37,11 @@ public class VolleyHttpRequest extends Request<String> {
 		super(method, params.get(Const.URL), errorListener);
 		this.method=method;
 		this.url = params.get(Const.URL);
-		if (AppLog.isDebug) {
-			for (String key : params.keySet()) {
-				AppLog.Log(TAG, key + "  < === >  " + params.get(key));
-			}
-		}
+//		if (AppLog.isDebug) {
+//			for (String key : params.keySet()) {
+//				AppLog.Log(TAG, key + "  < === >  " + params.get(key));
+//			}
+//		}
 		params.remove(Const.URL);
 		setRetryPolicy(new DefaultRetryPolicy(600000,
 				DefaultRetryPolicy.DEFAULT_MAX_RETRIES,

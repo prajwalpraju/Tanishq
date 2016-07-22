@@ -212,7 +212,7 @@ public class AsifUtils {
 	public static boolean validateResponse(Context context,String response){
 		boolean validate=false;
 		try {
-			Log.d("response", "validateResponse: "+response);
+//			Log.d("response", "validateResponse: "+response);
 			int status=new JSONObject(response).getInt("status");
 
 			Toast.makeText(context,new JSONObject(response).getString("message"),Toast.LENGTH_SHORT).show();
@@ -240,7 +240,7 @@ public class AsifUtils {
 
 			}
 
-			Log.d("response", "validateResponse: "+status+" val="+validate);
+//			Log.d("response", "validateResponse: "+status+" val="+validate);
 		} catch (Exception e) {
 //			e.printStackTrace();
 			Log.e("eee", "validateResponse: "+Log.getStackTraceString(e) );
