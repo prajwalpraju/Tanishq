@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.feet.tanishq.R;
 import com.feet.tanishq.Tanishq_Screen;
@@ -279,23 +280,31 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
             @Override
             public void onClick(View v) {
 
-                if (arr_product.size() > 0) {
-                    Model_Product model_product = arr_product.get(current_poistion);
-                    Intent intent = new Intent("filter");
-                    intent.putExtra("type", 3);
-                    intent.putExtra("notify", 1);
 
-                    if (model_product.isInWish()) {
-                        model_product.setInWish(false);
-                        iv_wish_pro.setBackgroundResource(R.color.tanishq_gold);
-                        deleteFromWish(model_product.getProduct_title());
-                    } else {
-                        model_product.setInWish(true);
-                        iv_wish_pro.setBackgroundResource(R.color.green_fungus);
-                        insertIntoWishList(model_product);
+                    if (arr_product.size() > 0) {
+                        Model_Product model_product = arr_product.get(current_poistion);
+                        Intent intent = new Intent("filter");
+                        intent.putExtra("type", 3);
+                        intent.putExtra("notify", 1);
+
+                        if (model_product.isInWish()) {
+                            model_product.setInWish(false);
+                            iv_wish_pro.setBackgroundResource(R.color.tanishq_gold);
+                            deleteFromWish(model_product.getProduct_title());
+                            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                        } else {
+                            if (getWishCount()<5) {
+                                model_product.setInWish(true);
+                                iv_wish_pro.setBackgroundResource(R.color.green_fungus);
+                                insertIntoWishList(model_product);
+                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                            }else{
+                                Toast.makeText(getContext(),"You have exceeded the maximum limit of 5 products in your wishlist",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
                     }
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-                }
+
 
             }
         });
@@ -303,28 +312,37 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
         iv_compare_pro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (arr_product.size() > 0) {
-                    Model_Product model_product = arr_product.get(current_poistion);
-                    Intent intent = new Intent("filter");
-                    intent.putExtra("type", 3);
-                    intent.putExtra("notify", 2);
-                    if (model_product.isInCompare()) {
-                        model_product.setInCompare(false);
-                        iv_compare_pro.setBackgroundResource(R.color.tanishq_gold);
-                        deleteFromCompare(model_product.getProduct_title());
-                    } else {
-                        model_product.setInCompare(true);
-                        iv_compare_pro.setBackgroundResource(R.color.green_fungus);
-                        insertIntoCompare(model_product);
+
+                    if (arr_product.size() > 0) {
+                        Model_Product model_product = arr_product.get(current_poistion);
+                        Intent intent = new Intent("filter");
+                        intent.putExtra("type", 3);
+                        intent.putExtra("notify", 2);
+                        if (model_product.isInCompare()) {
+                            model_product.setInCompare(false);
+                            iv_compare_pro.setBackgroundResource(R.color.tanishq_gold);
+                            deleteFromCompare(model_product.getProduct_title());
+                            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                        } else {
+                            if (getCompareCount()<4) {
+                                model_product.setInCompare(true);
+                                iv_compare_pro.setBackgroundResource(R.color.green_fungus);
+                                insertIntoCompare(model_product);
+                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
+                            }else{
+                                Toast.makeText(getContext(),"You have exceeded the maximum limit of 4 products in the compare list",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
                     }
-                    LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
-                }
+
             }
         });
 
 
         return view;
     }
+
 
     private void visibleArrowButtons(){
 //        Log.d("ttt", "visibleArrowButtons: "+current_poistion);
