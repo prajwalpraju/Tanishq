@@ -33,7 +33,7 @@ public class ThankYou_Screen extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(getApplicationContext(),Tanishq_Screen.class);
+                Intent intent=new Intent(getApplicationContext(),Featured.class);
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);

@@ -3,6 +3,7 @@ package com.feet.tanishq.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,7 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
         holder.tv_product_name.setText(model.getProduct_title());
 
         try {
-
+//            Log.d("ttt", "onBindViewHolder: "+model.getDevice_image());
             imageLoader.get(model.getDevice_image(), new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {

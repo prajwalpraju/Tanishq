@@ -28,6 +28,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.adapter.Category_Adapter;
 import com.feet.tanishq.adapter.Filter_Adapter;
@@ -58,8 +62,12 @@ import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
+import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +87,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     RecyclerView.LayoutManager filter_layoutManager;
 
     RequestQueue requestQueue;
+    ImageLoader imageLoader;
 
     ArrayList<Model_Filter> arr_filter=new ArrayList<Model_Filter>();
     public static Activity activity;
@@ -92,6 +101,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         activity=this;
 
         requestQueue= Volley.newRequestQueue(this);
+        imageLoader=Singleton_volley.getInstance().getImageLoader();
         LocalBroadcastManager.getInstance(this).registerReceiver(FilterRecyclerBroadcast,new IntentFilter("filter"));
 
         ll_display = (LinearLayout) findViewById(R.id.ll_display);
@@ -99,6 +109,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         ll_icon=(LinearLayout) findViewById(R.id.ll_icon);
         ll_recycler=(LinearLayout) findViewById(R.id.ll_recycler);
         ll_selected_filters=(LinearLayout) findViewById(R.id.ll_selected_filters);
+
 
         iv_logo3=(ImageView) findViewById(R.id.iv_logo3);
         iv_toggle=(ImageView) findViewById(R.id.iv_toggle);
@@ -120,6 +131,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         tv_wish_count=(TextView) findViewById(R.id.tv_wish_count);
         tv_compare_count=(TextView) findViewById(R.id.tv_compare_count);
 
+
         tv_welcome_user.setTypeface(AsifUtils.getRaleWay_SemiBold(this));
         tv_logout.setTypeface(AsifUtils.getRaleWay_SemiBold(this));
         tv_item_name.setTypeface(AsifUtils.getRaleWay_Bold(this));
@@ -136,6 +148,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
         rv_cat_item=(RecyclerView) findViewById(R.id.rv_cat_item);
         rv_selected_filter=(RecyclerView) findViewById(R.id.rv_selected_filter);
+
+
 
         rv_cat_item.setHasFixedSize(true);
         rv_selected_filter.setHasFixedSize(true);
@@ -250,14 +264,28 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         UserDetails user=new UserDetails(getApplicationContext());
         tv_welcome_user.setText("Welcome " + user.getUserName());
 
-        gotoAllCollectionFragment();
+        Bundle bundle=getIntent().getExtras();
+        if (bundle!=null){
+            String featured_id=bundle.getString("featured_id");
+            String featured_name=bundle.getString("featured_name");
+            onMethodCallback(featured_id,featured_name);
+
+        }else {
+            gotoAllCollectionFragment();
+        }
+
+
         setUpFrameUI();
         resetCategory();
        checkForWish();
         checkForCompare();
 
 
+
+
     }
+
+
 
     private void checkForWish(){
         Intent intent=new Intent("filter");
@@ -580,23 +608,25 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
             Cursor cs=db.rawQuery("select * from "+DataBaseHandler.TABLE_CATEGORY+" where cat_id="+id,null);
 
-            if (cs.moveToFirst()){
-                do {
-                    String item_id=cs.getString(cs.getColumnIndex("item_id"));
-                    String item_name=cs.getString(cs.getColumnIndex("item_name"));
-                    String cat_id=cs.getString(cs.getColumnIndex("cat_id"));
-                    String cat_name=cs.getString(cs.getColumnIndex("cat_name"));
-                    String selected=cs.getString(cs.getColumnIndex("selected"));
-                    boolean isSelected=false;
-                    if (selected.matches("1")){
-                        isSelected=true;
-                    }
+            if (db.isOpen()) {
+                if (cs.moveToFirst()){
+                    do {
+                        String item_id=cs.getString(cs.getColumnIndex("item_id"));
+                        String item_name=cs.getString(cs.getColumnIndex("item_name"));
+                        String cat_id=cs.getString(cs.getColumnIndex("cat_id"));
+                        String cat_name=cs.getString(cs.getColumnIndex("cat_name"));
+                        String selected=cs.getString(cs.getColumnIndex("selected"));
+                        boolean isSelected=false;
+                        if (selected.matches("1")){
+                            isSelected=true;
+                        }
 
 
-                    Model_Category model=new Model_Category(cat_id,cat_name,item_id,item_name,isSelected);
-                    arr_list.add(model);
-                } while (cs.moveToNext());
+                        Model_Category model=new Model_Category(cat_id,cat_name,item_id,item_name,isSelected);
+                        arr_list.add(model);
+                    } while (cs.moveToNext());
 
+                }
             }
         } finally {
             db.close();
@@ -676,8 +706,8 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
            Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
            return;
        }
-
         AsifUtils.start(this);
+
         UserDetails user=new UserDetails(this);
         HashMap<String,String> params=new HashMap<String,String>();
         params.put(Const.URL,Const.LOGOUT);
@@ -852,16 +882,18 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     @Override
     public void onMethodCallback(String cat_id,String cat_name) {
-            gotoSub_CollectionFragment(cat_id,cat_name);
+            gotoSub_CollectionFragment(cat_id, cat_name);
     }
     @Override
     public void onMethodCallbackArr(int adapterPosition, ArrayList<Model_Product> arr_list, ArrayList<Model_TopFilter> arr_top) {
-        gotoPagerFilterProductFragment(adapterPosition,arr_list, arr_top);
+        gotoPagerFilterProductFragment(adapterPosition, arr_list, arr_top);
     }
     @Override
     public void onMethodCallFilterProduct(Model_Params model_params) {
         gotoFilterProductFragment(model_params);
     }
+
+
 
 
     @Override
@@ -875,7 +907,7 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
                     finish();
                 }
 
-                break;
+
         }
     }
 

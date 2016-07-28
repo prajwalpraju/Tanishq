@@ -23,6 +23,7 @@ public class Const {
     public static final String USER_LOGIN=STORE_API+"userlogin?";
     public static final String OTP_VERIFY=STORE_API+"otpcodeverification?";
     public static final String LOGOUT=STORE_API+"signout?";
+    public static final String FEATURED=STORE_API+"featured?";
     public static final String ALL_COLLECTIONS=STORE_API+"tanishqcollections?";
 	public static final String COLLECTION_CATEGORY=STORE_API+"tanishqcollectioncategories?";
 	public static final String PRODUCT_LIST=STORE_API+"tanishqproductslist2?";
@@ -71,5 +72,6 @@ public class Const {
         public static final int PRODUCT_LIST_NOTIFY=7;
         public static final int FEEDBACK=8;
         public static final int MAIL_INFO=9;
+        public static final int FEATURED=10;
     }
 }
