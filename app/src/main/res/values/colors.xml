@@ -13,6 +13,7 @@
     <color name="light_black_filter">#1E1E1E</color>
     <color name="green_fungus">#6B5D42</color>
     <color name="cream">#D5BE8A</color>
+    <color name="black_alpha_60">#c0000000</color>
     <color name="black_iconlay">#131212</color>
     <color name="black_recyclelay">#191818</color>
     <color name="black_filterlay">#e0000000</color>

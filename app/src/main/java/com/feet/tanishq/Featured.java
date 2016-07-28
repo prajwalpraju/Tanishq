@@ -53,6 +53,7 @@ public class Featured extends AppCompatActivity implements AsyncTaskCompleteList
         pg_bar=(ProgressBar) findViewById(R.id.pg_bar);
         requestQueue= Volley.newRequestQueue(this);
         imageLoader= Singleton_volley.getInstance().getImageLoader();
+        bt_view.setTypeface(AsifUtils.getRaleWay_Medium(this));
 
         bt_view.setVisibility(View.GONE);
         iv_close.setVisibility(View.GONE);
@@ -192,5 +193,9 @@ public class Featured extends AppCompatActivity implements AsyncTaskCompleteList
     @Override
     public void onErrorResponse(VolleyError error) {
         AsifUtils.validateResponse(this, error.getMessage());
+        Intent intent=new Intent(getApplicationContext(),Tanishq_Screen.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
     }
 }

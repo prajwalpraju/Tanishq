@@ -11,10 +11,9 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <supports-screens
-        android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="false"
-        android:resizeable="true"
+        android:requiresSmallestWidthDp="600"
         android:smallScreens="false"
         android:xlargeScreens="true" />
 
@@ -50,7 +49,8 @@
         <activity
             android:name=".YouTuber"
             android:screenOrientation="landscape"></activity>
-        <activity android:name=".Featured"></activity>
+        <activity android:name=".Featured"
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
