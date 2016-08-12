@@ -25,6 +25,8 @@ import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,10 +44,17 @@ public class Featured extends AppCompatActivity implements AsyncTaskCompleteList
     RequestQueue requestQueue;
     ImageLoader imageLoader;
 
+    Tracker tracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_featured);
+
+        Singleton_volley analyticsApplication= (Singleton_volley) getApplication();
+        tracker=analyticsApplication.getDefaultTracker();
+        tracker.setScreenName("Featured Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         iv_close=(ImageView) findViewById(R.id.iv_close);
         bt_view=(Button) findViewById(R.id.bt_view);
@@ -74,6 +83,7 @@ public class Featured extends AppCompatActivity implements AsyncTaskCompleteList
             @Override
             public void onClick(View v) {
                 if (!featured_id.isEmpty() || featured_id != null) {
+                    reportEventToGoogle("Featured","Clicks",featured_title);
                     Intent intent=new Intent(getApplicationContext(),Tanishq_Screen.class);
                     intent.putExtra("featured_id",featured_id);
                     intent.putExtra("featured_name",featured_title);
@@ -88,6 +98,14 @@ public class Featured extends AppCompatActivity implements AsyncTaskCompleteList
                 }
             }
         });
+    }
+
+    public void reportEventToGoogle(String category, String action, String label) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .setLabel(label)
+                .build());
     }
 
     private void callFeatureApi(){

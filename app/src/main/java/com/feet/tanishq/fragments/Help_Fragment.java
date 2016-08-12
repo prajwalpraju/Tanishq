@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.YouTuber;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.utils.AsifUtils;
+import com.google.android.gms.analytics.HitBuilders;
 
 public class Help_Fragment extends Fragment {
 
@@ -32,7 +34,12 @@ public class Help_Fragment extends Fragment {
     Button bt_feed,bt_userman;
     AdapterCallback adapterCallback;
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Tanishq_Screen.tracker.setScreenName("Help Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

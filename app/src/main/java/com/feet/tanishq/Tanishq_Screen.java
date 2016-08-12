@@ -65,6 +65,8 @@ import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,12 +95,20 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
     public static Activity activity;
      SQLiteDatabase db;
 
+    public static Tracker tracker;
+    public static Singleton_volley analyticsApplication;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tanishq__screen);
         activity=this;
+
+        analyticsApplication= (Singleton_volley) getApplication();
+        tracker=analyticsApplication.getDefaultTracker();
+        tracker.setScreenName("Dashboard Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         requestQueue= Volley.newRequestQueue(this);
         imageLoader=Singleton_volley.getInstance().getImageLoader();
@@ -285,6 +295,14 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
     }
 
+    public static void reportEventToGoogle(String category, String action, String label) {
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory(category)
+                .setAction(action)
+                .setLabel(label)
+                .build());
+    }
+
 
 
     private void checkForWish(){
@@ -308,40 +326,73 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
         HashMap<String,String> occas_map=new HashMap<String,String>();//anniversary,valetine..
         HashMap<String,String> price_map=new HashMap<String,String>();//price..
 
+        String value="";
+
         for(Model_Filter model:arr_filter){
             switch (model.getCat_id()){
                 case "1":
                     jewel_map.put("cat_id",model.getCat_id());
                     jewel_map.put("id",model.getItem_id());
                     jewel_map.put("name", model.getItem_name());
-                    Log.d("ttt", "setUpFilterProducts: "+jewel_map);
+                    if (value.isEmpty()&&value.matches("")){
+                        value=model.getItem_name();
+                    }else{
+                        value=value+","+model.getItem_name();
+                    }
+//                    Log.d("ttt", "setUpFilterProducts: "+jewel_map);
                 break;
                 case "2":
                     coll_map.put("cat_id",model.getCat_id());
                     coll_map.put("id",model.getItem_id());
                     coll_map.put("name",model.getItem_name());
-                    Log.d("ttt", "setUpFilterProducts: " + coll_map);
+//                    Log.d("ttt", "setUpFilterProducts: " + coll_map);
+                    if (value.isEmpty()&&value.matches("")){
+                        value=model.getItem_name();
+                    }else{
+                        value=value+","+model.getItem_name();
+                    }
                     break;
                 case "3":
                     mat_map.put("cat_id",model.getCat_id());
                     mat_map.put("id",model.getItem_id());
                     mat_map.put("name",model.getItem_name());
-                    Log.d("ttt", "setUpFilterProducts: " + mat_map);
+//                    Log.d("ttt", "setUpFilterProducts: " + mat_map);
+                    if (value.isEmpty()&&value.matches("")){
+                        value=model.getItem_name();
+                    }else{
+                        value=value+","+model.getItem_name();
+                    }
                     break;
                 case "4":
                     occas_map.put("cat_id",model.getCat_id());
                     occas_map.put("id",model.getItem_id());
                     occas_map.put("name",model.getItem_name());
-                    Log.d("ttt", "setUpFilterProducts: " + occas_map);
+//                    Log.d("ttt", "setUpFilterProducts: " + occas_map);
+                    if (value.isEmpty()&&value.matches("")){
+                        value=model.getItem_name();
+                    }else{
+                        value=value+","+model.getItem_name();
+                    }
                     break;
                 case "5":
                     price_map.put("cat_id",model.getCat_id());
                     price_map.put("id",model.getItem_id());
                     price_map.put("name",model.getItem_name());
-                    Log.d("ttt", "setUpFilterProducts: " + price_map);
+//                    Log.d("ttt", "setUpFilterProducts: " + price_map);
+                    if (value.isEmpty()&&value.matches("")){
+                        value=model.getItem_name();
+                    }else{
+                        value=value+","+model.getItem_name();
+                    }
                     break;
             }
         }
+
+//        Log.d("ttt", "setUpFilterProducts: value="+value);
+        Tanishq_Screen.reportEventToGoogle("Filters","Clicks",value);
+
+
+
 
         Model_Params model_params=new Model_Params(coll_map,jewel_map,occas_map,mat_map,price_map);
         gotoFilterProductFragment(model_params);
@@ -689,6 +740,10 @@ public class Tanishq_Screen extends CustomAppCompactActivity implements AsyncTas
 
 
     private void openSlideWithAnim(){
+
+
+        tracker.setScreenName("Navigation Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
         final Animation anim= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.pull_in_left);
         ll_filter.setVisibility(View.VISIBLE);
         ll_filter.setAnimation(anim);

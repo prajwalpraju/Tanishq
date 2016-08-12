@@ -3,7 +3,6 @@ package com.feet.tanishq;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.Animation;
@@ -14,18 +13,28 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
+import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.UserDetails;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 
 public class Splash_Screen extends AppCompatActivity implements AsyncTaskCompleteListener,Response.ErrorListener{
 
     ImageView iv_logo;
 
+
+    Tracker tracker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash__screen);
 
+
+        Singleton_volley analyticsApplication= (Singleton_volley) getApplication();
+        tracker=analyticsApplication.getDefaultTracker();
+        tracker.setScreenName("Splash Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
         iv_logo=(ImageView) findViewById(R.id.iv_logo);
         Animation anim = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         iv_logo.setAnimation(anim);

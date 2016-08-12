@@ -20,12 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+import com.google.android.gms.analytics.HitBuilders;
 
 import java.util.HashMap;
 
@@ -54,6 +56,14 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
     RequestQueue requestQueue;
     AdapterCallback adapterCallback;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Tanishq_Screen.tracker.setScreenName("Feedback Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,6 +108,7 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
             @Override
             public void onClick(View v) {
                 if (validateFeedBack()) {
+                    Tanishq_Screen.reportEventToGoogle("Feedback","Clicks","Send");
                     callFeedBackApi();
                 }
             }

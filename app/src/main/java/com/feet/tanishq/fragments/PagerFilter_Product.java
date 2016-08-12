@@ -36,6 +36,7 @@ import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.model.Model_Product;
 import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
+import com.google.android.gms.analytics.HitBuilders;
 
 import java.util.ArrayList;
 
@@ -102,6 +103,9 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
             arr_filter = (ArrayList<Model_TopFilter>) getArguments().getSerializable(MODEL_PRO);
             current_poistion=getArguments().getInt(PRO_POSITION);
         }
+
+        Tanishq_Screen.tracker.setScreenName("Product Detail Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
         ArrayList<String> arr_wish=new ArrayList<String>();
@@ -444,6 +448,8 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
     private synchronized void insertIntoWishList(Model_Product model_product){
 
         try {
+            Tanishq_Screen.reportEventToGoogle("Wishlist","Add",model_product.getProduct_title());
+
             db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
             ContentValues values=new ContentValues();
             values.put("device_image",model_product.getDevice_image());
@@ -492,6 +498,9 @@ public class PagerFilter_Product extends Fragment implements ViewPager.OnPageCha
 
     private synchronized void insertIntoCompare(Model_Product model_product){
         try {
+
+            Tanishq_Screen.reportEventToGoogle("Compare","Add",model_product.getProduct_title());
+
             db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
             ContentValues values=new ContentValues();
 

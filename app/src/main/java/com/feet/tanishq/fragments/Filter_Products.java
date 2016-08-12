@@ -44,6 +44,7 @@ import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.SpacesItemDecoration;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+import com.google.android.gms.analytics.HitBuilders;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -124,6 +125,10 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
 
             model= (Model_Params) getArguments().getSerializable("model");
         }
+
+        Tanishq_Screen.tracker.setScreenName("Filter Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+
         adapterCallback= (AdapterCallback) getContext();
 
         requestQueue= Volley.newRequestQueue(getContext());

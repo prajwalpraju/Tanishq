@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.nfc.Tag;
-import android.opengl.ETC1;
 import android.os.AsyncTask;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,8 +28,11 @@ import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
+import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
@@ -68,6 +68,8 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
 
     SQLiteDatabase db;
 
+    Tracker tracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,12 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
         requestQueue= Volley.newRequestQueue(this);
         validator=new Validator(this);
         validator.setValidationListener(this);
+
+
+        Singleton_volley analyticsApplication= (Singleton_volley) getApplication();
+        tracker=analyticsApplication.getDefaultTracker();
+        tracker.setScreenName("Login Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         rl_main=(RelativeLayout) findViewById(R.id.rl_main);
         ll_login=(LinearLayout)findViewById(R.id.ll_login);
@@ -247,6 +255,7 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
 //            Log.d(TAG, "parseUserAndCategoryInsertDb: jArrUser="+jArrUser.length());
             for (int i=0;i<jArrUser.length();i++){
                 JSONObject jArrObj=jArrUser.getJSONObject(i);
+                tracker.setClientId(jArrObj.getString("id"));
                 user.setUserId(jArrObj.getString("id"));
                 user.setUserTitle(jArrObj.getString("title"));
                 user.setUserName(jArrObj.getString("username"));
@@ -320,6 +329,8 @@ public class Login_Screen extends AppCompatActivity implements AsyncTaskComplete
                     user.setMobileNumber(et_mobile.getText().toString().trim());
                     ll_otp.setVisibility(View.VISIBLE);
                     ll_login.setVisibility(View.GONE);
+                    tracker.setScreenName("OTP Screen");
+                    tracker.send(new HitBuilders.ScreenViewBuilder().build());
                 }
                 AsifUtils.stop();
                 break;

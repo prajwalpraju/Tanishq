@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_Params;
 import com.feet.tanishq.model.Model_SubColl;
@@ -103,6 +104,10 @@ public class Sub_Collection_Adapter extends RecyclerView.Adapter<Sub_Collection_
             coll_map.put("name", model.getCat_name());
 
             Model_Params params=new Model_Params(coll_map,jewel_map);
+            Tanishq_Screen.reportEventToGoogle("All Colleciton (D)",model.getCat_name(),model.getItem_name());
+            Log.d("ttt", "onClick:   dee="+model.getItem_name());
+            Log.d("ttt", "onClick:   ssd="+model.getCat_name());
+
             adapterCallback.onMethodCallFilterProduct(params);
         }
     }

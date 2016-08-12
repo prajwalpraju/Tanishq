@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.utils.AsifUtils;
@@ -31,6 +32,7 @@ import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+import com.google.android.gms.analytics.HitBuilders;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +67,9 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Tanishq_Screen.tracker.setScreenName("Mail Wishlist Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     TextView tv_mail,tv_title,tv_name,tv_mobile,tv_email;
@@ -113,6 +118,7 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
             @Override
             public void onClick(View v) {
                 if (validateInfo()) {
+                    Tanishq_Screen.reportEventToGoogle("Mail Wishlist","Form fill","Send");
                     callMailInfoApi();
                 }
             }

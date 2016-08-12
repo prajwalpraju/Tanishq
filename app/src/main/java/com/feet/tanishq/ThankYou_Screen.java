@@ -9,16 +9,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.feet.tanishq.utils.AsifUtils;
+import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.UserDetails;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 public class ThankYou_Screen extends AppCompatActivity {
 
     TextView tv_thankyou,tv_forllog,tv_username;
+    Tracker tracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thank_you__screen);
+
+        Singleton_volley analyticsApplication= (Singleton_volley) getApplication();
+        tracker=analyticsApplication.getDefaultTracker();
+        tracker.setScreenName("Thankyou Screen");
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
         tv_thankyou=(TextView) findViewById(R.id.tv_thankyou);
         tv_forllog=(TextView) findViewById(R.id.tv_for_log);
         tv_username=(TextView) findViewById(R.id.tv_username);

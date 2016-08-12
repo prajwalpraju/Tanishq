@@ -8,8 +8,8 @@ android {
         applicationId "com.feet.tanishq"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.3"
+        versionCode 5
+        versionName "1.4"
     }
     buildTypes {
         release {
@@ -33,5 +33,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
     compile 'jp.wasabeef:recyclerview-animators:2.2.1'
+    compile 'com.google.android.gms:play-services-analytics:9.2.0'
     compile project(':YouTubeAndroidPlayerApi')
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.interfaces.OnItemClickListener;
 import com.feet.tanishq.model.Model_Product;
@@ -111,7 +112,11 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
         @Override
         public void onClick(View v) {
 //            onItemClickListener.onItemClick(v,getAdapterPosition());
-            adapterCallback.onMethodCallbackArr(getAdapterPosition(),arr_list,arr_top);
+
+            Model_Product model_product=arr_list.get(getAdapterPosition());
+//            Log.d("ttt", "onClick:   d=" +model_product.getCategory()+"   b="+model_product.getCollection()+" o="+model_product.getProduct_title());
+            Tanishq_Screen.reportEventToGoogle(model_product.getCollection()+"-"+model_product.getCategory(), "Clicks", model_product.getProduct_title());
+            adapterCallback.onMethodCallbackArr(getAdapterPosition(), arr_list, arr_top);
         }
     }
 }

@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "435717383730",
+    "project_id": "tanishq-debug"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435717383730:android:caf009fdaa879033",
+        "android_client_info": {
+          "package_name": "com.feet.tanishq"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwZE02r5ZaYWJ__YHKg465b5NS6JmqNgs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-81707687-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

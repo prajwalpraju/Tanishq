@@ -37,6 +37,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import org.json.JSONObject;
 
 
@@ -248,6 +251,16 @@ public class AsifUtils {
 
 		return validate;
 	}
+
+
+	public static void reportEventToGoogle(Tracker tracker,String category, String action, String label) {
+		tracker.send(new HitBuilders.EventBuilder()
+				.setCategory(category)
+				.setAction(action)
+				.setLabel(label)
+				.build());
+	}
+
 
 	public static void showNetworkErrorMessage(final Context context) {
 		Builder dlg = new Builder(context);

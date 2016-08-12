@@ -22,12 +22,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.adapter.WishAdapter;
 import com.feet.tanishq.database.DataBaseHandler;
 import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_Product;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.SpacesItemDecoration;
+import com.google.android.gms.analytics.HitBuilders;
 
 import java.util.ArrayList;
 
@@ -80,6 +82,9 @@ public class Wish_List extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        Tanishq_Screen.tracker.setScreenName("Wishlist Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
     }
 
@@ -200,6 +205,7 @@ public class Wish_List extends Fragment {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
+                        Tanishq_Screen.reportEventToGoogle("Wishlist","Clicks","Delete");
                         new DeleteAllWishList().execute();
                         dialog.dismiss();
                     }

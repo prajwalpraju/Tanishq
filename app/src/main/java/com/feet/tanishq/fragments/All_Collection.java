@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.adapter.All_Collection_Adapter;
 import com.feet.tanishq.model.Model_AllCollection;
 import com.feet.tanishq.utils.AsifUtils;
@@ -29,6 +30,7 @@ import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.SpacesItemDecoration;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
+import com.google.android.gms.analytics.HitBuilders;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -98,6 +100,8 @@ public class All_Collection extends Fragment implements AsyncTaskCompleteListene
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        Tanishq_Screen.tracker.setScreenName("All Collection Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         requestQueue= Volley.newRequestQueue(getContext());
 

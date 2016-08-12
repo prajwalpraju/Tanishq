@@ -6,6 +6,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.feet.tanishq.R;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 public class Singleton_volley extends Application {
 	 
@@ -23,6 +26,22 @@ public class Singleton_volley extends Application {
 	        mInstance = this;
 	       
 	    }
+
+	private Tracker mTracker;
+
+	/**
+	 * Gets the default {@link Tracker} for this {@link Application}.
+	 * @return tracker
+	 */
+	synchronized public Tracker getDefaultTracker() {
+		if (mTracker == null) {
+			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+			// To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+//			mTracker = analytics.newTracker(R.xml.global_tracker);
+			mTracker = analytics.newTracker("UA-81487116-1");
+		}
+		return mTracker;
+	}
 	 
 	    public static synchronized Singleton_volley getInstance() {
 	        return mInstance;

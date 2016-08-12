@@ -16,8 +16,10 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.feet.tanishq.R;
+import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.UserDetails;
+import com.google.android.gms.analytics.HitBuilders;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,6 +71,10 @@ public class User_Manual extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        Tanishq_Screen.tracker.setScreenName("User Manual Screen");
+        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+
     }
 
 
