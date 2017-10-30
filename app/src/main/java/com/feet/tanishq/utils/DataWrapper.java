@@ -1,6 +1,6 @@
 package com.feet.tanishq.utils;
 
-import com.feet.tanishq.model.Model_Filter;
+import com.feet.tanishq.model.Model_FilterOld;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,13 +10,13 @@ import java.util.ArrayList;
  */
 public class DataWrapper implements Serializable {
 
-    private ArrayList<Model_Filter> model;
+    private ArrayList<Model_FilterOld> model;
 
-    public DataWrapper(ArrayList<Model_Filter> data) {
+    public DataWrapper(ArrayList<Model_FilterOld> data) {
         this.model = data;
     }
 
-    public ArrayList<Model_Filter> getParliaments() {
+    public ArrayList<Model_FilterOld> getParliaments() {
         return this.model;
     }
 

@@ -1,44 +1,158 @@
 package com.feet.tanishq.model;
 
-import android.os.Parcelable;
+//import android.icu.text.SymbolTable;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * Created by asif on 06-04-2016.
+ * Created by asif on 22-04-2017.
  */
-public class Model_Filter implements Serializable{
 
-    String cat_id,item_id,item_name;
+public class Model_Filter implements Serializable {
 
-    public Model_Filter(String cat_id,String item_id,String item_name){
-        this.cat_id=cat_id;
-        this.item_id=item_id;
-        this.item_name=item_name;
+    @SerializedName("response")
+    List<Response> responseList;
 
+    //object
+
+//    @SerializedName("response")
+//    Response response;
+
+
+    public List<Response> getResponseList() {
+        return responseList;
     }
 
-    public String getCat_id() {
-        return cat_id;
+    public void setResponseList(List<Response> responseList) {
+        this.responseList = responseList;
     }
 
-    public void setCat_id(String cat_id) {
-        this.cat_id = cat_id;
+    public class Response{
+
+        @SerializedName("title")
+        String title;
+
+        @SerializedName("selectiontype")
+        String selectiontype;
+
+        public String getSelectiontype() {
+            return selectiontype;
+        }
+
+        public void setSelectiontype(String selectiontype) {
+            this.selectiontype = selectiontype;
+        }
+
+        @SerializedName("filterinfo")
+        List<FilterInfo> filterInfoList;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public List<FilterInfo> getFilterInfoList() {
+            return filterInfoList;
+        }
+
+        public void setFilterInfoList(List<FilterInfo> filterInfoList) {
+            this.filterInfoList = filterInfoList;
+        }
     }
 
-    public String getItem_id() {
-        return item_id;
+    public static class FilterInfo implements Serializable{
+
+        @SerializedName("filterid")
+        String filterid;
+
+        @SerializedName("filtername")
+        String filtername;
+
+        @SerializedName("activestatus")
+        String activestatus;
+
+        @SerializedName("checked")
+        String checked;
+
+        @SerializedName("mainfilter")
+        String mainfilter;
+
+        @SerializedName("prodcutsCount")
+        String prodcutsCount;
+
+        public FilterInfo(String filterid, String filtername, String activestatus, String checked, String mainfilter, String prodcutsCount, boolean select) {
+            this.filterid = filterid;
+            this.filtername = filtername;
+            this.activestatus = activestatus;
+            this.checked = checked;
+            this.mainfilter = mainfilter;
+            this.prodcutsCount = prodcutsCount;
+            this.select = select;
+        }
+
+        public String getProdcutsCount() {
+            return prodcutsCount;
+        }
+
+        public void setProdcutsCount(String prodcutsCount) {
+            this.prodcutsCount = prodcutsCount;
+        }
+
+        public String getActivestatus() {
+            return activestatus;
+        }
+
+        public void setActivestatus(String activestatus) {
+            this.activestatus = activestatus;
+        }
+
+        public String getChecked() {
+            return checked;
+        }
+
+        public void setChecked(String checked) {
+            this.checked = checked;
+        }
+
+        public String getMainfilter() {
+            return mainfilter;
+        }
+
+        public void setMainfilter(String mainfilter) {
+            this.mainfilter = mainfilter;
+        }
+
+        boolean select;
+
+        public boolean isSelect() {
+            return select;
+        }
+
+        public void setSelect(boolean select) {
+            this.select = select;
+        }
+
+        public String getFilterid() {
+            return filterid;
+        }
+
+        public void setFilterid(String filterid) {
+            this.filterid = filterid;
+        }
+
+        public String getFiltername() {
+            return filtername;
+        }
+
+        public void setFiltername(String filtername) {
+            this.filtername = filtername;
+        }
     }
 
-    public void setItem_id(String item_id) {
-        this.item_id = item_id;
-    }
-
-    public String getItem_name() {
-        return item_name;
-    }
-
-    public void setItem_name(String item_name) {
-        this.item_name = item_name;
-    }
 }

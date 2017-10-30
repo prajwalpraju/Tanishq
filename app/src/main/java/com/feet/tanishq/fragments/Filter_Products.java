@@ -1,12 +1,11 @@
 package com.feet.tanishq.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,39 +22,37 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
 import com.feet.tanishq.Tanishq_Screen;
-import com.feet.tanishq.adapter.FilterTop_Adapter;
 import com.feet.tanishq.adapter.Product_Adapter;
 import com.feet.tanishq.interfaces.AdapterCallback;
+import com.feet.tanishq.model.ModelTopFilterNew;
 import com.feet.tanishq.model.Model_Filter;
-import com.feet.tanishq.model.Model_Params;
 import com.feet.tanishq.model.Model_Product;
-import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.AsyncTaskCompleteListener;
 import com.feet.tanishq.utils.Const;
-import com.feet.tanishq.utils.OnAddMoreListener;
-import com.feet.tanishq.utils.Singleton_volley;
 import com.feet.tanishq.utils.SpacesItemDecoration;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,176 +62,376 @@ import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
  * Use the {@link Filter_Products#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Filter_Products extends Fragment implements AsyncTaskCompleteListener,Response.ErrorListener{
+public class Filter_Products extends Fragment implements AsyncTaskCompleteListener, Response.ErrorListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String MODEL = "model";
+    private static final String PRODUCSTYPE = "producstype";
+    private static final String SELLECTED_ARRAY = "sellected_array";
+    private static final String NAME = "name";
+    private static final String FROMSEARCH = "fromsearch";
+    private static final String SEARCHNAME = "searchname";
+    private static final String FILTERPARAMETER = "filterparameter";
+    private static final String FROMPRODUCTCLICK = "fromProductClick";
+    private static final String ITEM_ID = "itemid";
+    private static final String DIR = "itemid";
+    private static final String PARENTNAME = "parentname";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+//    private String mParam1;
+    public List<Model_Filter.FilterInfo> sellected_array;
+    private String producstype;
+    private String name;
+    private String searchname;
+    private String filterparameter;
+    private String itemId;
+    private String dir = "";
+    private String parentname;
+    private boolean fromProductClick;
+    private boolean fromsearch;
 
-    Model_Params model;
 
     RequestQueue requestQueue;
-//    String cat_id="",jewellery="",occasion="",material="";
 
 
     public Filter_Products() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Filter_Products.
-     */
+    Filter_Products fragment;
+
     // TODO: Rename and change types and number of parameters
-    public static Filter_Products newInstance(String param1, String param2) {
+
+    public static Filter_Products newInstance(String name, boolean fromsearch) {
         Filter_Products fragment = new Filter_Products();
+        Log.e("bbb", "newInstance: "+name );
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(SEARCHNAME, name);
+        args.putBoolean(FROMSEARCH, fromsearch);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static Filter_Products newInstance(Model_Params model){
+    public static Filter_Products newInstance(String name, String filterparameter, boolean fromProductClick, String itemId, String parentname, String dir) {
         Filter_Products fragment = new Filter_Products();
         Bundle args = new Bundle();
-        args.putSerializable(MODEL, model);
+        args.putString(NAME, name);
+        args.putString(FILTERPARAMETER, filterparameter);
+        args.putBoolean(FROMPRODUCTCLICK, fromProductClick);
+        args.putString(ITEM_ID, itemId);
+        args.putString(DIR, dir);
+        args.putString(PARENTNAME, parentname);
+        fragment.setArguments(args);
+        return fragment;
+
+
+    }
+
+
+    public static Filter_Products newInstance(List<Model_Filter.FilterInfo> selected_arr, String producstype) {
+        Filter_Products fragment = new Filter_Products();
+        Bundle args = new Bundle();
+        args.putString(PRODUCSTYPE, producstype);
+        args.putSerializable(SELLECTED_ARRAY, (Serializable) selected_arr);
         fragment.setArguments(args);
         return fragment;
 
     }
+
     UserDetails userDetails;
     String device_resolution;
+    String directory;
     AdapterCallback adapterCallback;
+    ArrayList<ModelTopFilterNew> arrTopFilternew = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
+            AsifUtils.stop();
 
-            model= (Model_Params) getArguments().getSerializable("model");
+            fromsearch = getArguments().getBoolean(FROMSEARCH);
+            Log.e("bbb", "onCreate: "+fromsearch );
+
+            producstype = getArguments().getString(PRODUCSTYPE);
+            sellected_array = (List<Model_Filter.FilterInfo>) getArguments().getSerializable("sellected_array");
+
+            name = getArguments().getString(NAME);
+            searchname = getArguments().getString(SEARCHNAME);
+
+            parentname = getArguments().getString(PARENTNAME);
+            filterparameter = getArguments().getString(FILTERPARAMETER);
+            itemId = getArguments().getString(ITEM_ID);
+            dir = getArguments().getString(DIR);
+            fromProductClick = getArguments().getBoolean(FROMPRODUCTCLICK);
+
+
+            if (!fromProductClick&&!fromsearch) {
+                updateTopArray();
+            }else if (fromsearch){
+                arrTopFilternew.clear();
+                ModelTopFilterNew modelTopFilterNew = new ModelTopFilterNew(searchname);
+                arrTopFilternew.add(modelTopFilterNew);
+            }
+            else {
+                arrTopFilternew.clear();
+                ModelTopFilterNew modelTopFilterNew = new ModelTopFilterNew(name);
+                arrTopFilternew.add(modelTopFilterNew);
+
+            }
+
+//            callFilterApi(itemId);
         }
 
-        Tanishq_Screen.tracker.setScreenName("Filter Screen");
-        Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        if (parentname != null && name != null) {
+            Tanishq_Screen.tracker.setScreenName(parentname + " " + name + " screen");
+            directory = parentname + "-" + name;
+            Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
 
-        adapterCallback= (AdapterCallback) getContext();
+        } else {
+            directory = "Filter";
+            Tanishq_Screen.tracker.send(new HitBuilders.ScreenViewBuilder().build());
+        }
 
-        requestQueue= Volley.newRequestQueue(getContext());
+        adapterCallback = (AdapterCallback) getContext();
+        requestQueue = Volley.newRequestQueue(getContext());
 
 
 
+
+    }
+
+    public void updateTopArray() {
+        arrTopFilternew.clear();
+        for (int i = 0; i < sellected_array.size(); i++) {
+            ModelTopFilterNew modelTopFilterNew = new ModelTopFilterNew(sellected_array.get(i).getFiltername());
+            arrTopFilternew.add(modelTopFilterNew);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        userDetails=new UserDetails(getContext());
-        device_resolution=userDetails.getUserDevice();
-        if (model!=null){
-            setUpTopFilter();
-            count=0;
-            arr_list.clear();
-            next_page=1;
-            total_pages=2;
-            callFilterApi();
-        }
-    }
-    RecyclerView.Adapter filterTop_adapter;
+        AdapterCallback adapterCallback1 = (AdapterCallback) this.getContext();
+        adapterCallback1.setFilterToVisable();
 
-    ArrayList<Model_TopFilter> arr_TopFilter=new ArrayList<Model_TopFilter>();
-    private void setUpTopFilter() {
-        arr_TopFilter.clear();
-        if (model.getColl_map()!=null&&model.getColl_map().get("cat_id")!=null){
-            Model_TopFilter coll=new Model_TopFilter(model.getColl_map().get("cat_id"),model.getColl_map().get("id"),model.getColl_map().get("name"));
-            arr_TopFilter.add(coll);
-        }
-        if(model.getJewel_map() !=null&&model.getJewel_map().get("cat_id")!=null){
-            Model_TopFilter jewel=new Model_TopFilter(model.getJewel_map().get("cat_id"),model.getJewel_map().get("id"),model.getJewel_map().get("name"));
-            arr_TopFilter.add(jewel);
-        }
-        if (model.getOccas_map()!=null&&model.getOccas_map().get("cat_id")!=null){
-            Model_TopFilter occas=new Model_TopFilter(model.getOccas_map().get("cat_id"),model.getOccas_map().get("id"),model.getOccas_map().get("name"));
-            arr_TopFilter.add(occas);
-        }
-        if (model.getMat_map()!=null&&model.getMat_map().get("cat_id")!=null){
-            Model_TopFilter mat=new Model_TopFilter(model.getMat_map().get("cat_id"),model.getMat_map().get("id"),model.getMat_map().get("name"));
-            arr_TopFilter.add(mat);
-        }
-        if (model.getPrice_map()!=null&&model.getPrice_map().get("cat_id")!=null){
-            Model_TopFilter price=new Model_TopFilter(model.getPrice_map().get("cat_id"),model.getPrice_map().get("id"),model.getPrice_map().get("name"));
-            arr_TopFilter.add(price);
+        try {
+            if (dir != null) {
+                AdapterCallback adapterCallback = (AdapterCallback) this.getContext();
+                adapterCallback.setBreadcrumb(dir);
+            }
+
+            if (!fromsearch){
+                callFilterApi(itemId);
+            }
+
+//}
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        filterTop_adapter=new FilterTop_Adapter(getContext(),arr_TopFilter,Filter_Products.this);
-        rv_filter.setAdapter(filterTop_adapter);
     }
 
-    private void callFilterApi() {
-        Log.d("ttt", "callFilterApi:er ");
+    private void callSearchApi(String searchname) {
+        if (!AsifUtils.isNetworkAvailable(getActivity())) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        AsifUtils.start(getContext());
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put(Const.URL, Const.SEARCH_URL);
+        params.put(Const.Params.NEXT_PAGE, "" + next_page);
+        params.put(Const.Params.SEARCHTERM, searchname);
+        Log.e("ggg", "callSearchApi: -->"+params );
+        requestQueue.add(new VolleyHttpRequest(Request.Method.GET, params, Const.ServiceCode.PRODUCT_LIST, this, this));
+    }
 
-        String cat_id=model.getColl_map()!=null&&model.getColl_map().get("id")!=null?model.getColl_map().get("id"):"";
-        String jewellery=model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null?model.getJewel_map().get("id"):"";
-        String occasion=model.getOccas_map()!=null&&model.getOccas_map().get("id")!=null?model.getOccas_map().get("id"):"";
-        String material=model.getMat_map()!=null&&model.getMat_map().get("id")!=null?model.getMat_map().get("id"):"";
-        String pricebar=model.getPrice_map()!=null&&model.getPrice_map().get("id")!=null?model.getPrice_map().get("id"):"";
+    private void callFilterApi(String itemId) {
+        if (!AsifUtils.isNetworkAvailable(getActivity())) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+//        AsifUtils.start(getContext());
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put(Const.URL, Const.FILTER_URL);
+        params.put(Const.Params.ITEM_ID, itemId + "&" + filterparameter);
+        Log.e("ggg", "callFilterProductApi: request----> " + params);
+        requestQueue.add(new VolleyHttpRequest(Request.Method.GET, params, Const.ServiceCode.FILTER, this, this));
+    }
+
+
+    private void callFilterProductApifromProduct(String filterparameter) {
 
         if (!AsifUtils.isNetworkAvailable(getActivity())) {
             Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
             return;
         }
-
-        UserDetails user=new UserDetails(getContext());
-        HashMap<String,String> map=new HashMap<String,String>();
-        map.put(Const.URL,Const.PRODUCT_LIST);
-        map.put(Const.Params.ID, user.getUserId());
-        map.put(Const.Params.COLLECTIONID, cat_id);
-        map.put(Const.Params.JEWELLERY, jewellery);
-        map.put(Const.Params.OCCASSION, occasion);
-        map.put(Const.Params.MATERIAL, material);
-        map.put(Const.Params.PRICEBAR, pricebar);
-        map.put(Const.Params.PAGENO, ""+next_page);
-        requestQueue.add(new VolleyHttpRequest(Request.Method.GET,map,Const.ServiceCode.PRODUCT_LIST,this,this));
+        AsifUtils.start(this.getContext());
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put(Const.URL, Const.PRODUCT_LIST + "?" + filterparameter + "&" + Const.Params.NEXT_PAGE + "=0" + next_page);
+        Log.e("ggg", "callFilterProductApifromProduct requiest " + map);
+        requestQueue.add(new VolleyHttpRequest(Request.Method.GET, map, Const.ServiceCode.PRODUCT_LIST_FROM_CLICK, this, this));
     }
 
 
-    RecyclerView rv_filter,rv_filter_product;
+    private void callFilterProductApi() {
+        if (!AsifUtils.isNetworkAvailable(getActivity())) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AsifUtils.start(this.getContext());
+        HashMap<String, String> map = new HashMap<String, String>();
+        String newkey, oldValue;
+
+        for (int i = 0; i < sellected_array.size(); i++) {
+            String key = sellected_array.get(i).getMainfilter();
+            String newvalue = sellected_array.get(i).getFilterid();
+            if (map.containsKey(key)) {
+                newkey = key;
+                oldValue = map.get(key);
+                map.remove(key);
+                map.put(newkey, oldValue + "," + newvalue);
+            } else {
+                map.put(key, newvalue);
+            }
+        }
+        map.put(Const.URL, Const.PRODUCT_LIST);
+        map.put(Const.Params.PRODUCTSTYPE, producstype);
+        map.put(Const.Params.NEXT_PAGE, "" + next_page);
+        Log.e("ggg", "callFilterProductApi: " + map);
+        requestQueue.add(new VolleyHttpRequest(Request.Method.GET, map, Const.ServiceCode.PRODUCT_LIST, this, this));
+
+    }
+
+
+    RecyclerView rv_filter, rv_filter_product;
     LinearLayoutManager gridLayoutManager;
     LinearLayoutManager layoutManager;
     RelativeLayout rl_nowish;
     TextView tv_nowish;
+    RecyclerView.Adapter topfilteradapter, itemClick_Adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_filter__products, container, false);
+        View view = inflater.inflate(R.layout.fragment_filter__products, container, false);
 
-        rv_filter=(RecyclerView)view.findViewById(R.id.rv_filter);
-        layoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        rv_filter = (RecyclerView) view.findViewById(R.id.rv_filter);
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         rv_filter.setHasFixedSize(true);
         rv_filter.setLayoutManager(layoutManager);
         rv_filter.setItemAnimator(new SlideInRightAnimator(new OvershootInterpolator(1f)));
 
-        rl_nowish=(RelativeLayout) view.findViewById(R.id.rl_nowish);
-        tv_nowish=(TextView) view.findViewById(R.id.tv_nowish);
+        rl_nowish = (RelativeLayout) view.findViewById(R.id.rl_nowish);
+        tv_nowish = (TextView) view.findViewById(R.id.tv_nowish);
         tv_nowish.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
 
-        rv_filter_product=(RecyclerView)view.findViewById(R.id.rv_filter_product);
-        gridLayoutManager=new GridLayoutManager(getActivity(),3);
+        rv_filter_product = (RecyclerView) view.findViewById(R.id.rv_filter_product);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         rv_filter_product.setHasFixedSize(true);
         rv_filter_product.setLayoutManager(gridLayoutManager);
         rv_filter_product.addItemDecoration(new SpacesItemDecoration(30));
+
+
+        userDetails = new UserDetails(getContext());
+        device_resolution = userDetails.getUserDevice();
+        count = 0;
+        arr_list_product.clear();
+        next_page = 1;
+        total_pages = 2;
+
+        ArrayList<Model_Product> preservedArray = userDetails.getPreservedArray();
+//        int preservedPosition = userDetails.getPreservedPosition();
+
+        if (fromsearch&&preservedArray!=null){
+
+            next_page = userDetails.getNextPosition();
+            total_pages = userDetails.getTotalPosition();
+            Log.e("zzz", "onCreateView: " + next_page);
+            arr_list_product.clear();
+            arr_list_product = preservedArray;
+            if (count == 0) {
+                count++;
+            }
+
+            madapter = new Product_Adapter(getContext(), preservedArray, arrTopFilternew, directory, next_page, total_pages);
+            topfilteradapter = new Filter_MaintopPager_Adapter(getContext(), arrTopFilternew);
+            rv_filter.setAdapter(topfilteradapter);
+
+            rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
+            if (preservedArray.size() > 0) {
+                rl_nowish.setVisibility(View.GONE);
+            } else {
+                rl_nowish.setVisibility(View.VISIBLE);
+                tv_nowish.setText(getResources().getString(R.string.no_list));
+            }
+            userDetails.ClearPreservedArrayAndPosition();
+            madapter.notifyDataSetChanged();
+            loading = true;
+
+        }else if (fromsearch) {
+            callSearchApi(searchname);
+        } else if (fromProductClick && preservedArray != null) {
+
+            next_page = userDetails.getNextPosition();
+            total_pages = userDetails.getTotalPosition();
+            Log.e("zzz", "onCreateView: " + next_page);
+            arr_list_product.clear();
+            arr_list_product = preservedArray;
+
+            if (count == 0) {
+                count++;
+            }
+
+            madapter = new Product_Adapter(getContext(), preservedArray, arrTopFilternew, directory, next_page, total_pages);
+            itemClick_Adapter = new ItemClick_Adapter(getContext());
+            rv_filter.setAdapter(itemClick_Adapter);
+            rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
+            if (preservedArray.size() > 0) {
+                rl_nowish.setVisibility(View.GONE);
+            } else {
+                rl_nowish.setVisibility(View.VISIBLE);
+                tv_nowish.setText(getResources().getString(R.string.no_list));
+            }
+            userDetails.ClearPreservedArrayAndPosition();
+            madapter.notifyDataSetChanged();
+            loading = true;
+
+        } else if (fromProductClick) {
+            callFilterProductApifromProduct(filterparameter);
+        } else if (!fromProductClick && preservedArray != null) {
+
+            next_page = userDetails.getNextPosition();
+            total_pages = userDetails.getTotalPosition();
+            Log.e("zzz", "onCreateView: " + next_page);
+            arr_list_product.clear();
+            arr_list_product = preservedArray;
+            if (count == 0) {
+                count++;
+            }
+
+            madapter = new Product_Adapter(getContext(), preservedArray, arrTopFilternew, directory, next_page, total_pages);
+            topfilteradapter = new Filter_MaintopPager_Adapter(getContext(), arrTopFilternew);
+            rv_filter.setAdapter(topfilteradapter);
+
+            rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
+            if (preservedArray.size() > 0) {
+                rl_nowish.setVisibility(View.GONE);
+            } else {
+                rl_nowish.setVisibility(View.VISIBLE);
+                tv_nowish.setText(getResources().getString(R.string.no_list));
+            }
+            userDetails.ClearPreservedArrayAndPosition();
+            madapter.notifyDataSetChanged();
+            loading = true;
+
+        } else if (!fromProductClick && !fromsearch) {
+            callFilterProductApi();
+        }
+
 
         rv_filter_product.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -251,8 +447,15 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
                         if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                             loading = false;
                             //Do pagination.. i.e. fetch new data
-                            if(next_page<=total_pages){
-                                callFilterApi();
+                            if (next_page <= total_pages) {
+                                if (fromsearch) {
+                                    callSearchApi(searchname);
+                                } else if (!fromProductClick &&!fromsearch) {
+                                    callFilterProductApi();
+                                } else {
+                                    callFilterProductApifromProduct(filterparameter);
+                                }
+
                             }
 
                         }
@@ -260,10 +463,6 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
                 }
             }
         });
-
-
-
-
 
 
         return view;
@@ -284,79 +483,14 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
     }
 
     Product_Adapter madapter;
-    int count=0;
+    int count = 0;
 
 
-    public void onItemClick(View view, int position) {
-        int size=arr_TopFilter.size();
-        if (size>1) {
-            Model_TopFilter model_topFilter = arr_TopFilter.get(position);
-
-            if (model.getColl_map()!=null&&model.getColl_map().get("id")!=null) {
-                if (model_topFilter.getId().matches(model.getColl_map().get("id"))){
-                    model.removeCollmap();
-                }
-            }
-            if (model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null) {
-                if(model_topFilter.getId().matches(model.getJewel_map().get("id"))){
-                        model.removeJewelmap();
-                    }
-            }
-            if (model.getMat_map()!=null&&model.getMat_map().get("id")!=null) {
-                if(model_topFilter.getId().matches(model.getMat_map().get("id"))){
-                        model.removeMat_map();
-                    }
-            }
-            if (model.getOccas_map()!=null&&model.getOccas_map().get("id")!=null) {
-                if(model_topFilter.getId().matches(model.getOccas_map().get("id"))){
-                        model.removeOccas_map();
-                    }
-            }
-            if (model.getPrice_map()!=null&&model.getPrice_map().get("id")!=null) {
-                if(model_topFilter.getId().matches(model.getPrice_map().get("id"))){
-                        model.removePrice_map();
-                    }
-            }
-            arr_TopFilter.remove(position);
-            filterTop_adapter.notifyDataSetChanged();
-            next_page=1;
-            total_pages=2;
-            callFilterApiNotify();
-        }else{
-            adapterCallback.onMethodCallback(3);//all collections
-        }
-
-    }
-
-    private void callFilterApiNotify() {
-            String cat_id=model.getColl_map()!=null&&model.getColl_map().get("id")!=null?model.getColl_map().get("id"):"";
-            String jewellery=model.getJewel_map()!=null&&model.getJewel_map().get("id")!=null?model.getJewel_map().get("id"):"";
-            String occasion=model.getOccas_map()!=null&&model.getOccas_map().get("id")!=null?model.getOccas_map().get("id"):"";
-            String material=model.getMat_map()!=null&&model.getMat_map().get("id")!=null?model.getMat_map().get("id"):"";
-            String pricebar=model.getPrice_map()!=null&&model.getPrice_map().get("id")!=null?model.getPrice_map().get("id"):"";
-
-            if (!AsifUtils.isNetworkAvailable(getActivity())) {
-                Toast.makeText(getActivity(), getResources().getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            UserDetails user=new UserDetails(getContext());
-            HashMap<String,String> map=new HashMap<String,String>();
-            map.put(Const.URL,Const.PRODUCT_LIST);
-            map.put(Const.Params.ID, user.getUserId());
-            map.put(Const.Params.COLLECTIONID, cat_id);
-            map.put(Const.Params.JEWELLERY, jewellery);
-            map.put(Const.Params.OCCASSION, occasion);
-            map.put(Const.Params.MATERIAL, material);
-            map.put(Const.Params.PRICEBAR, pricebar);
-            map.put(Const.Params.PAGENO, ""+next_page);
-            requestQueue.add(new VolleyHttpRequest(Request.Method.GET,map,Const.ServiceCode.PRODUCT_LIST_NOTIFY,this,this));
-    }
-
-    class ParseProductListResponse extends AsyncTask<Void,Void,Void>{
+    class ParseProductListResponse extends AsyncTask<Void, Void, Void> {
         String response;
+
         public ParseProductListResponse(String response) {
-            this.response=response;
+            this.response = response;
         }
 
         @Override
@@ -373,59 +507,245 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (count==0){
-                count++;
-                madapter=new Product_Adapter(getContext(),arr_list,arr_TopFilter);
-                rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
-                if (arr_list.size()>0) {
-                    rl_nowish.setVisibility(View.GONE);
-                } else {
-                    rl_nowish.setVisibility(View.VISIBLE);
-                    tv_nowish.setText(getResources().getString(R.string.no_list));
+            if (!fromProductClick) {
+                if (count == 0) {
+                    count++;
+                    madapter = new Product_Adapter(getContext(), arr_list_product, arrTopFilternew, directory, next_page, total_pages);
+                    topfilteradapter = new Filter_MaintopPager_Adapter(getContext(), arrTopFilternew);
+                    rv_filter.setAdapter(topfilteradapter);
+                    rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
+                    madapter.notifyItemRangeChanged(arr_list_product.size() - 1, arr_list_product.size());
+                    if (arr_list_product.size() > 0) {
+                        rl_nowish.setVisibility(View.GONE);
+                    } else {
+                        rl_nowish.setVisibility(View.VISIBLE);
+                        tv_nowish.setText(getResources().getString(R.string.no_list));
+                    }
                 }
+
+                madapter.notifyDataSetChanged();
+                loading = true;
+            } else {
+                if (count == 0) {
+                    count++;
+                    madapter = new Product_Adapter(getContext(), arr_list_product, arrTopFilternew, directory, next_page, total_pages);
+                    itemClick_Adapter = new ItemClick_Adapter(getContext());
+                    rv_filter.setAdapter(itemClick_Adapter);
+                    rv_filter_product.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(madapter)));
+                    madapter.notifyItemRangeChanged(arr_list_product.size() - 1, arr_list_product.size());
+                    if (arr_list_product.size() > 0) {
+                        rl_nowish.setVisibility(View.GONE);
+                    } else {
+                        rl_nowish.setVisibility(View.VISIBLE);
+                        tv_nowish.setText(getResources().getString(R.string.no_list));
+                    }
+                }
+
+                madapter.notifyDataSetChanged();
+                loading = true;
             }
 
-            madapter.notifyDataSetChanged();
-            loading=true;
+            AsifUtils.stop();
+
         }
     }
 
 
-    ArrayList<Model_Product> arr_list=new ArrayList<Model_Product>();
-    int next_page=1,total_pages=2;
+    //---------------------------------------------itemClickAdapter--------------------------------------------------//
+
+    public class ItemClick_Adapter extends RecyclerView.Adapter<ItemClick_Adapter.ViewHolder> {
+
+        Context context;
+
+        public ItemClick_Adapter(Context context) {
+            this.context = context;
+
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(context).inflate(R.layout.filter_item_trans, null);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+
+            holder.tv_filter.setText(name);
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 1;
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            TextView tv_filter;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                tv_filter = (TextView) itemView.findViewById(R.id.tv_filter);
+                tv_filter.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        }
+    }
+
+
+    //---------------------------------------------filterAdapter-----------------------------------------------------//
+
+
+    public class Filter_MaintopPager_Adapter extends RecyclerView.Adapter<Filter_MaintopPager_Adapter.ViewHolder> {
+
+        Context context;
+        ArrayList<ModelTopFilterNew> arr_list;
+
+        public Filter_MaintopPager_Adapter(Context context, ArrayList<ModelTopFilterNew> arr_list) {
+            this.context = context;
+            this.arr_list = arr_list;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(context).inflate(R.layout.filter_item_trans, null);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+            ModelTopFilterNew model = arr_list.get(position);
+            holder.tv_filter.setText(model.getTitle());
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return arr_list.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+            TextView tv_filter;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                tv_filter = (TextView) itemView.findViewById(R.id.tv_filter);
+
+                tv_filter.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+                int size = arrTopFilternew.size();
+                if (size > 1) {
+
+                    ModelTopFilterNew modelTopFilterNew = arrTopFilternew.get(getAdapterPosition());
+
+                    Model_Filter.FilterInfo filterInfo = sellected_array.get(getAdapterPosition());
+
+                    if (modelTopFilterNew.getTitle().equals(filterInfo.getFiltername())) {
+                        sellected_array.remove(getAdapterPosition());
+                        arrTopFilternew.remove(getAdapterPosition());
+
+                        if (!fromProductClick) {
+                            updateTopArray();
+                        } else {
+                            arrTopFilternew.clear();
+                            ModelTopFilterNew modelTopFilter = new ModelTopFilterNew(name);
+                            arrTopFilternew.add(modelTopFilter);
+
+                        }
+
+                        next_page = 1;
+                        total_pages = 2;
+                        if (fromsearch) {
+                            callSearchApi(searchname);
+                        } else if (fromProductClick) {
+                            callFilterProductApifromProduct(filterparameter);
+                        } else {
+                            callFilterProductApi();
+                        }
+                        arr_list_product.clear();
+                        madapter.notifyDataSetChanged();
+                        topfilteradapter.notifyDataSetChanged();
+                    }
+
+                } else {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            }
+        }
+    }
+
+
+    ArrayList<Model_Product> arr_list_product = new ArrayList<Model_Product>();
+    int next_page = 1, total_pages = 2;
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
     private void parseResponse(String response) {
 
+
         try {
-            JSONObject jObj=new JSONObject(response);
-            JSONObject jResObj=jObj.getJSONObject("response");
-            JSONArray jArrPro=jResObj.getJSONArray("products");
-            int size=jArrPro.length();
-            for (int i=0;i<size;i++){
-                JSONObject obj=jArrPro.getJSONObject(i);
-                String device_image=getDeviceImage(obj);
-                String product_image=obj.getString("product_image");
-                String product_title= obj.getString("product_title");
-                String product_price= obj.getString("product_price");
-                String discount_price= obj.getString("discount_price");
-                String discount_percent=obj.getString("discount_percent");
-                String product_url=obj.getString("product_url");
+            Log.e("ggg", "parseResponse: ->" + response);
+            JSONObject jObj = new JSONObject(response);
+            JSONObject jResObj = jObj.getJSONObject("response");
 
-                String description= obj.getString("description");
-                String Collection= obj.getString("Collection");
-                String Material=obj.getString("Material");
-                String category=obj.getString("category");
+            JSONArray jArrPro = jResObj.getJSONArray("products");
+            int size = jArrPro.length();
 
-                String gold_karatage=obj.getString("Gold kartage");
-                String weight=obj.getString("weight");
-                Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
-                        description,Collection,Material,category,product_url,false,false,gold_karatage,weight);
-                arr_list.add(model_product);
+
+            for (int i = 0; i < size; i++) {
+
+                ArrayList<String> stringArrayUrlList = new ArrayList<>();
+                JSONObject obj = jArrPro.getJSONObject(i);
+                String device_image = getDeviceImage(obj);
+                JSONArray jsonArrayMultiAngleImages = obj.getJSONArray("product_images_list");
+                for (int j = 0; j < jsonArrayMultiAngleImages.length(); j++) {
+                    JSONObject objMultiAngle = jsonArrayMultiAngleImages.getJSONObject(j);
+                    String url = getDeviceMultiAngleImageImage(objMultiAngle);
+                    Log.e("zzz", "parseResponse: " + url);
+                    stringArrayUrlList.add(url);
+
+                }
+
+                String product_image = obj.getString("product_image");
+                String product_title = obj.getString("product_title");
+                String product_price = obj.getString("product_price");
+                String discount_price = obj.getString("discount_price");
+                String discount_percent = obj.getString("discount_percent");
+                String product_url = obj.getString("product_url");
+
+                String description = obj.getString("description");
+                String Collection = obj.getString("collection");
+                String Material = obj.getString("material");
+                String category = obj.getString("category");
+
+                String gold_karatage = obj.getString("gold_karatage");
+                String weight = obj.getString("weight");
+                String onlineexclusive = obj.getString("onlineexclusive");
+
+                String community = obj.getString("community");
+                String occasion = obj.getString("occasion");
+                String disclaimer = obj.getString("disclaimer");
+
+
+                Model_Product model_product = new Model_Product(device_image, product_image, product_title, product_price, discount_price, discount_percent,
+                        description, Collection, Material, category, product_url, false, false, gold_karatage, weight, onlineexclusive, "", community, occasion, stringArrayUrlList, disclaimer);
+                arr_list_product.add(model_product);
             }
-             next_page=jResObj.getInt("next_page");
-             total_pages=jResObj.getInt("total_pages");
+            next_page = jResObj.getInt("next_page");
+            total_pages = jResObj.getInt("total_pages");
+            userDetails.savePagePosition(next_page, total_pages);
+            Log.e("qqq", "nextpage : " + next_page + "  total page : " + total_pages);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -433,24 +753,24 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
     }
 
     private String getDeviceImage(JSONObject obj) {
-        String image="";
+        String image = "";
         try {
-            JSONObject jobj=obj.getJSONObject("0");
-            switch (device_resolution){
+            JSONObject jobj = obj.getJSONObject("0");
+            switch (device_resolution) {
                 case Const.Resolution.MDPI_TXT:
-                    image=jobj.getString(Const.Resolution.MDPI_TXT);
+                    image = jobj.getString(Const.Resolution.MDPI_TXT);
                     break;
                 case Const.Resolution.HDPI_TXT:
-                    image=jobj.getString(Const.Resolution.HDPI_TXT);
+                    image = jobj.getString(Const.Resolution.HDPI_TXT);
                     break;
                 case Const.Resolution.XHDPI_TXT:
-                    image=jobj.getString(Const.Resolution.XHDPI_TXT);
+                    image = jobj.getString(Const.Resolution.XHDPI_TXT);
                     break;
                 case Const.Resolution.XXHPDI_TXT:
-                    image=jobj.getString(Const.Resolution.XXHPDI_TXT);
+                    image = jobj.getString(Const.Resolution.XXHPDI_TXT);
                     break;
                 case Const.Resolution.XXXHDPI_TXT:
-                    image=jobj.getString(Const.Resolution.XXXHDPI_TXT);
+                    image = jobj.getString(Const.Resolution.XXXHDPI_TXT);
                     break;
             }
         } catch (JSONException e) {
@@ -460,14 +780,48 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
         return image;
     }
 
+    private String getDeviceMultiAngleImageImage(JSONObject obj) {
+        String image = "";
+        Log.e("zzz", "getDeviceMultiAngleImageImage: " + obj.toString());
+        try {
+
+            switch (device_resolution) {
+                case Const.Resolution.MDPI_TXT:
+                    image = obj.getString(Const.Resolution.MDPI_TXT);
+                    break;
+                case Const.Resolution.HDPI_TXT:
+                    image = obj.getString(Const.Resolution.HDPI_TXT);
+                    break;
+                case Const.Resolution.XHDPI_TXT:
+                    image = obj.getString(Const.Resolution.XHDPI_TXT);
+                    break;
+                case Const.Resolution.XXHPDI_TXT:
+                    image = obj.getString(Const.Resolution.XXHPDI_TXT);
+                    break;
+                case Const.Resolution.XXXHDPI_TXT:
+                    image = obj.getString(Const.Resolution.XXXHDPI_TXT);
+                    break;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return image;
+    }
+
     @Override
     public void onTaskCompleted(String response, int serviceCode) {
-        switch (serviceCode){
+        AsifUtils.stop();
+        switch (serviceCode) {
             case Const.ServiceCode.PRODUCT_LIST:
-                if (AsifUtils.validateResponse(getContext(),response)){
+                Log.e("ggg", "PRODUCT_LIST response: "+response );
+                AsifUtils.stop();
+                if (AsifUtils.validateResponse(getContext(), response)) {
                     rl_nowish.setVisibility(View.GONE);
+
                     new ParseProductListResponse(response).execute();
-                }else {
+                } else {
                     rl_nowish.setVisibility(View.VISIBLE);
                     try {
                         tv_nowish.setText(new JSONObject(response).getString("message"));
@@ -477,23 +831,53 @@ public class Filter_Products extends Fragment implements AsyncTaskCompleteListen
                 }
 
                 break;
-
-            case Const.ServiceCode.PRODUCT_LIST_NOTIFY:
-                if (AsifUtils.validateResponse(getContext(),response)) {
+            case Const.ServiceCode.PRODUCT_LIST_FROM_CLICK:
+                AsifUtils.stop();
+                if (AsifUtils.validateResponse(getContext(), response)) {
                     rl_nowish.setVisibility(View.GONE);
-                    arr_list.clear();
-                    madapter.notifyDataSetChanged();
+
                     new ParseProductListResponse(response).execute();
-                }else {
+                } else {
                     rl_nowish.setVisibility(View.VISIBLE);
                     try {
                         tv_nowish.setText(new JSONObject(response).getString("message"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }
+                break;
+
+            case Const.ServiceCode.FILTER:
+                AsifUtils.stop();
+                if (AsifUtils.validateResponse(getContext(), response)) {
+
+                    parseFilter(response);
+
                 }
                 break;
         }
+    }
+
+    public void parseFilter(String response) {
+
+        try {
+            //mapping
+
+            Gson gson = new GsonBuilder().create();
+            Model_Filter model_filter = gson.fromJson(response, Model_Filter.class);
+            Log.e("ggg", "parseFilter: val=------------------------>" + response);
+
+            //saving in sharedPreference
+            if (getActivity() != null) {
+                SharedPreferences preferences = getActivity().getSharedPreferences("filter", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("filter_arr", response);
+                editor.commit();
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

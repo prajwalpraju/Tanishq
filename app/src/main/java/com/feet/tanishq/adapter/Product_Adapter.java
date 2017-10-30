@@ -9,20 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.Volley;
 import com.feet.tanishq.R;
 import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.interfaces.AdapterCallback;
-import com.feet.tanishq.interfaces.OnItemClickListener;
+import com.feet.tanishq.model.ModelTopFilterNew;
 import com.feet.tanishq.model.Model_Product;
-import com.feet.tanishq.model.Model_TopFilter;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.Singleton_volley;
+import com.feet.tanishq.utils.UserDetails;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -32,17 +31,22 @@ import java.util.ArrayList;
 public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyViewHolder>{
     Context context;
     ArrayList<Model_Product> arr_list;
-    ArrayList<Model_TopFilter> arr_top;
+    ArrayList<ModelTopFilterNew> arr_top;
     ImageLoader imageLoader;
-//    OnItemClickListener onItemClickListener;
+    String directory;
+    int next_page;
+    int total_pages;
     AdapterCallback adapterCallback;
 
-    public Product_Adapter(Context context,ArrayList<Model_Product> arr_list,ArrayList<Model_TopFilter> arr_top){
+    public Product_Adapter(Context context, ArrayList<Model_Product> arr_list, ArrayList<ModelTopFilterNew> arr_top, String directory, int next_page, int total_pages){
         this.context=context;
         this.arr_list=arr_list;
         this.arr_top=arr_top;
         this.adapterCallback=((AdapterCallback)context);
         this.imageLoader= Singleton_volley.getInstance().getImageLoader();
+        this.directory= directory;
+        this.next_page = next_page;
+        this.total_pages = total_pages;
 
     }
 
@@ -58,7 +62,6 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
         holder.tv_product_name.setText(model.getProduct_title());
 
         try {
-//            Log.d("ttt", "onBindViewHolder: "+model.getDevice_image());
             imageLoader.get(model.getDevice_image(), new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
@@ -71,6 +74,7 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
                 }
             });
             holder.nv_product.setImageUrl(model.getDevice_image(), imageLoader);
+//            Log.e("url", "product Url "+model.getDevice_image() );
             holder.pg.setVisibility(View.VISIBLE);
 
         } catch (Exception e) {
@@ -82,10 +86,6 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
 
     }
 
-//    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
-//        this.onItemClickListener=onItemClickListener;
-//
-//    }
 
     @Override
     public int getItemCount() {
@@ -111,12 +111,19 @@ public class Product_Adapter extends RecyclerView.Adapter<Product_Adapter.MyView
 
         @Override
         public void onClick(View v) {
-//            onItemClickListener.onItemClick(v,getAdapterPosition());
 
             Model_Product model_product=arr_list.get(getAdapterPosition());
-//            Log.d("ttt", "onClick:   d=" +model_product.getCategory()+"   b="+model_product.getCollection()+" o="+model_product.getProduct_title());
-            Tanishq_Screen.reportEventToGoogle(model_product.getCollection()+"-"+model_product.getCategory(), "Clicks", model_product.getProduct_title());
+            Tanishq_Screen.reportEventToGoogle(directory, "Clicks", model_product.getProduct_title());
+//            Log.e("ttt", "onClick: "+directory+",Clicks,"+model_product.getProduct_title() );
             adapterCallback.onMethodCallbackArr(getAdapterPosition(), arr_list, arr_top);
+
+
+            Gson gson = new Gson();
+            String json = gson.toJson(arr_list);
+            UserDetails user = new UserDetails(context);
+//            user.setAndPreservePosition(json,next_page,total_pages);
+            user.setAndPreservePosition(json);
+
         }
     }
 }

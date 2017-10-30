@@ -1,16 +1,66 @@
 package com.feet.tanishq.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by asif on 15-04-2016.
  */
 public class Model_Product implements Serializable{
-    String device_image,product_image,product_title,product_price,discount_price,discount_percent,product_url,description,collection,material,category,gold_karatage, weight;
-    boolean inWish,inCompare;
+    public String getCommunity() {
+        return community;
+    }
 
-    public Model_Product(String device_image,String product_image,String product_title,String product_price,String discount_price,String discount_percent,
-                         String description,String collection,String material,String category,String product_url,boolean inWish,boolean inCompare,String gold_karatage,String weight){
+    public void setCommunity(String community) {
+        this.community = community;
+    }
+
+    public String getOccasion() {
+        return occasion;
+    }
+
+    public void setOccasion(String occasion) {
+        this.occasion = occasion;
+    }
+
+    String device_image,product_image,product_title,product_price,discount_price,discount_percent,product_url,description,community,occasion,collection,material,category,onlineexclusive,gold_karatage, weight,catalogue_display_image,disclaimer;
+    boolean inWish,inCompare;
+    ArrayList<String> stringArrayUrlList;
+
+    public ArrayList<String> getStringArrayUrlList() {
+        return stringArrayUrlList;
+    }
+
+    public void setStringArrayUrlList(ArrayList<String> stringArrayUrlList) {
+        this.stringArrayUrlList = stringArrayUrlList;
+    }
+
+    public String getOnlineexclusive() {
+        return onlineexclusive;
+    }
+
+    public void setOnlineexclusive(String onlineexclusive) {
+        this.onlineexclusive = onlineexclusive;
+    }
+
+    public String getCatalogue_display_image() {
+        return catalogue_display_image;
+    }
+
+    public void setCatalogue_display_image(String catalogue_display_image) {
+        this.catalogue_display_image = catalogue_display_image;
+    }
+
+    public String getDisclaimer() {
+        return disclaimer;
+    }
+
+    public void setDisclaimer(String disclaimer) {
+        this.disclaimer = disclaimer;
+    }
+
+    public Model_Product(String device_image, String product_image, String product_title, String product_price, String discount_price, String discount_percent,
+                         String description, String collection, String material, String category, String product_url, boolean inWish, boolean inCompare, String gold_karatage, String weight, String onlineexclusive, String catalogue_display_image, String community, String occasion, ArrayList<String> stringArrayUrlList, String disclaimer){
 
         this.device_image=device_image;
         this.product_image=product_image;
@@ -27,9 +77,15 @@ public class Model_Product implements Serializable{
 
         this.gold_karatage=gold_karatage;
         this.weight=weight;
+        this.occasion=occasion;
+        this.community=community;
 
         this.inWish=inWish;
         this.inCompare=inCompare;
+        this.onlineexclusive=onlineexclusive;
+        this.catalogue_display_image=catalogue_display_image;
+        this.stringArrayUrlList = stringArrayUrlList;
+        this.disclaimer= disclaimer;
 
     }
 

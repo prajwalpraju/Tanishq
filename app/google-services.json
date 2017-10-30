@@ -1,35 +1,39 @@
 {
   "project_info": {
-    "project_number": "435717383730",
-    "project_id": "tanishq-debug"
+    "project_number": "544008027625",
+    "firebase_url": "https://tanishq-galleria-41ff7.firebaseio.com",
+    "project_id": "tanishq-galleria-41ff7",
+    "storage_bucket": "tanishq-galleria-41ff7.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:435717383730:android:caf009fdaa879033",
+        "mobilesdk_app_id": "1:544008027625:android:caf009fdaa879033",
         "android_client_info": {
           "package_name": "com.feet.tanishq"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "544008027625-82hik3as23aq89ceodp7rlo25t9nee10.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyBwZE02r5ZaYWJ__YHKg465b5NS6JmqNgs"
+          "current_key": "AIzaSyBiZQlLiY3t8cXObB47Fzg6JCR5Z2iqiHo"
         }
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-81707687-1"
-          }
+          "status": 1
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

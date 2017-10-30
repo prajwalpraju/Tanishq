@@ -34,6 +34,9 @@ import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 import com.google.android.gms.analytics.HitBuilders;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +121,7 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
             @Override
             public void onClick(View v) {
                 if (validateInfo()) {
-                    Tanishq_Screen.reportEventToGoogle("Mail Wishlist","Form fill","Send");
+                    Tanishq_Screen.reportEventToGoogle("Wishlist","Form fill","Send");
                     callMailInfoApi();
                 }
             }
@@ -191,24 +194,10 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
             }
         }
 
-        Log.d("ttt", "addToString: "+wish_id);
-        Log.d("ttt", "arr: "+arr);
+//        Log.d("ttt", "addToString: "+wish_id);
+//        Log.d("ttt", "arr: "+arr);
     }
 
-    public long getCountWishList(){
-        long count =0;
-        try {
-            db = getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE, null);
-            count= DatabaseUtils.queryNumEntries(db, DataBaseHandler.TABLE_WISHLIST);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            db.close();
-        }
-        return count;
-
-
-    }
 
     public void callMailInfoApi(){
         String name=sp_title.getSelectedItem()+"."+et_name.getText().toString().trim();
@@ -221,11 +210,13 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
         UserDetails user=new UserDetails(getContext());
         HashMap<String,String> map=new HashMap<String,String>();
         map.put(Const.URL,Const.MAIL_INFO);
-        map.put(Const.Params.ID, user.getUserId());
+        map.put(Const.Params.STORENAME, user.getUserName());
+        map.put(Const.Params.STOREMOBILENO, user.getMobileNumber());
         map.put(Const.Params.MOBILE, et_mobile.getText().toString().trim());
         map.put(Const.Params.WISHLIST, wish_id);
         map.put(Const.Params.EMAILID, et_email.getText().toString().trim());
         map.put(Const.Params.USERNAME, name);
+        Log.e("map", "callMailInfoApi: "+map);
         requestQueue.add(new VolleyHttpRequest(Request.Method.POST, map, Const.ServiceCode.MAIL_INFO, this, this));
     }
 
@@ -234,6 +225,7 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
         switch (serviceCode){
             case Const.ServiceCode.MAIL_INFO:
                 if (AsifUtils.validateResponse(getContext(),response)){
+                        Toast.makeText(getContext()," Wishlist sent Successfully ",Toast.LENGTH_SHORT).show();
                     adapterCallback.onMethodCallback(3);
                 }
 
@@ -241,6 +233,8 @@ public class Mail_WishList extends Fragment implements AsyncTaskCompleteListener
         }
         AsifUtils.stop();
     }
+
+
 
     @Override
     public void onErrorResponse(VolleyError error) {

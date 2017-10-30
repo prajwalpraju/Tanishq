@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.feet.tanishq.R;
+import com.feet.tanishq.model.ModelTopFilterNew;
 import com.feet.tanishq.model.Model_TopFilter;
 
 import java.util.ArrayList;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 public class Filter_topPager_Adapter extends RecyclerView.Adapter<Filter_topPager_Adapter.MyViewHolder>{
 
     Context context;
-    ArrayList<Model_TopFilter> arr_list;
-    public Filter_topPager_Adapter(Context context,ArrayList<Model_TopFilter> arr_list){
+    ArrayList<ModelTopFilterNew> arr_list;
+    public Filter_topPager_Adapter(Context context,ArrayList<ModelTopFilterNew> arr_list){
         this.context=context;
         this.arr_list=arr_list;
     }
@@ -33,8 +34,9 @@ public class Filter_topPager_Adapter extends RecyclerView.Adapter<Filter_topPage
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Model_TopFilter model=arr_list.get(position);
-        holder.tv_filter.setText(model.getName());
+        ModelTopFilterNew model=arr_list.get(position);
+        holder.tv_filter.setAlpha(0.5f);
+        holder.tv_filter.setText(model.getTitle());
 
     }
 
@@ -52,6 +54,7 @@ public class Filter_topPager_Adapter extends RecyclerView.Adapter<Filter_topPage
 
         @Override
         public void onClick(View v) {
+
 
         }
     }

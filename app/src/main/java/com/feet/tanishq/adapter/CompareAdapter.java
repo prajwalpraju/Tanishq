@@ -1,6 +1,7 @@
 package com.feet.tanishq.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.LocalBroadcastManager;
@@ -36,6 +37,12 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyHolder
         this.imageLoader= Singleton_volley.getInstance().getImageLoader();
 
     }
+
+    public CompareAdapter(Context context) {
+        this.context = context;
+
+    }
+
     @Override
     public MyHolderView onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(context).inflate(R.layout.compare_item, parent,false);
@@ -47,7 +54,8 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyHolder
     public void onBindViewHolder(MyHolderView holder, int position) {
         Model_Product model=arr_list.get(holder.getAdapterPosition());
         holder.tv_com_title.setText(model.getProduct_title());
-        holder.tv_com_price.setText(context.getResources().getString(R.string.rs)+" "+model.getProduct_price());
+//        holder.tv_com_price.setText(context.getResources().getString(R.string.rs)+" "+model.getProduct_price());
+        holder.tv_com_price.setText(model.getProduct_price());
         holder.tv_com_name.setText(model.getDescription());
         holder.tv_com_material.setText(model.getMaterial());
         holder.tv_com_category.setText(model.getCategory());

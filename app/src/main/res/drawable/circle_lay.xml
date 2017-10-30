@@ -3,8 +3,8 @@
     android:shape="oval" >
     <solid
         android:color="@color/tanishq_light_gold"/>
-   <!-- <padding android:bottom="3dp"
+   <padding android:bottom="1dp"
         android:left="3dp"
         android:right="3dp"
-        android:top="3dp"/>-->
+        android:top="1dp"/>
     </shape>

@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.feet.tanishq.R;
 import com.feet.tanishq.Tanishq_Screen;
 import com.feet.tanishq.adapter.CompareAdapter;
 import com.feet.tanishq.database.DataBaseHandler;
+import com.feet.tanishq.interfaces.AdapterCallback;
 import com.feet.tanishq.model.Model_Product;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.SpacesItemDecoration;
@@ -94,20 +96,19 @@ public class Compare_List extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new GetFromCompareList().execute();
     }
 
     RecyclerView rv_compare;
     RelativeLayout rl_nocompare;
     TextView tv_header_compare,tv_nocompare;
-//    GridLayoutManager gridLayoutManager;
     LinearLayoutManager linearLayoutManager;
     ImageView iv_delete;
+    AdapterCallback adapterCallback;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_compare__list, container, false);
+        adapterCallback = ((AdapterCallback) getContext());
         rv_compare=(RecyclerView) view.findViewById(R.id.rv_compare);
         rl_nocompare=(RelativeLayout) view.findViewById(R.id.rl_nocompare);
         tv_header_compare=(TextView) view.findViewById(R.id.tv_header_compare);
@@ -116,7 +117,6 @@ public class Compare_List extends Fragment {
         tv_header_compare.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_nocompare.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         linearLayoutManager=new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
-//        rv_compare.setHasFixedSize(true);
         rv_compare.setLayoutManager(linearLayoutManager);
         rv_compare.addItemDecoration(new SpacesItemDecoration(30));
         iv_delete.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +129,8 @@ public class Compare_List extends Fragment {
 
             }
         });
+        adapterCallback.setFilterToGone();
+        new GetFromCompareList().execute();
 
         return view;
 
@@ -137,17 +139,23 @@ public class Compare_List extends Fragment {
     private AlertDialog AskOption()
     {
         AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getContext())
-                //set message, title, and icon
                 .setTitle("Delete")
                 .setMessage("Do you want to Remove All?")
                 .setIcon(R.drawable.delete)
                 .setPositiveButton("Remove", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        //your deleting code
-                        Tanishq_Screen.reportEventToGoogle("Compare","Clicks","Delete");
-                            new DeleteAllCompareList().execute();
-                        dialog.dismiss();
+
+
+                        String sku ="";
+                        for(int i=0;i<arr_list.size();i++){
+                            sku=sku+" "+arr_list.get(i).getProduct_title();
+                        }
+                        Tanishq_Screen.reportEventToGoogle("Compare","Delete",sku);
+                        new DeleteAllCompareList().execute();
+                        dialog.dismiss();;
+
+
                     }
 
                 })
@@ -168,6 +176,7 @@ public class Compare_List extends Fragment {
     CompareAdapter adapter;
 
     private void getValuesFromCompareList() {
+        arr_list.clear();
         try {
             db=getActivity().openOrCreateDatabase(DataBaseHandler.DATABASE_NAME, Context.MODE_PRIVATE,null);
             Cursor cs=db.rawQuery("select * from compare",null);
@@ -187,7 +196,7 @@ public class Compare_List extends Fragment {
                     String product_url=cs.getString(cs.getColumnIndex("product_url"));
 
                     Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
-                            description,collection,material,category,product_url,false,false,"","");
+                            description,collection,material,category,product_url,false,false,"","","","","","",null,"");
                     arr_list.add(model_product);
 
                 } while (cs.moveToNext());

@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatSpinner;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,9 @@ import com.feet.tanishq.utils.Const;
 import com.feet.tanishq.utils.UserDetails;
 import com.feet.tanishq.utils.VolleyHttpRequest;
 import com.google.android.gms.analytics.HitBuilders;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -56,6 +60,12 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
     RequestQueue requestQueue;
     AdapterCallback adapterCallback;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AdapterCallback adapterCallback = (AdapterCallback) this.getActivity();
+//        adapterCallback.setFilterToVisable();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +118,8 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
             @Override
             public void onClick(View v) {
                 if (validateFeedBack()) {
-                    Tanishq_Screen.reportEventToGoogle("Feedback","Clicks","Send");
+                    Tanishq_Screen.reportEventToGoogle("Feedback","Form fill","Send");
+//                    Log.e("screenClick", "onClick: ---------------> Feedback,Form fill,Send" );
                     callFeedBackApi();
                 }
             }
@@ -130,11 +141,11 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
         HashMap<String,String> map=new HashMap<String,String>();
         map.put(Const.URL,Const.FEEDBACK);
         map.put(Const.Params.ID, user.getUserId());
-//        map.put(Const.Params.MOBILE, user.getMobileNumber());
         map.put(Const.Params.SUBJECT, et_subject.getText().toString().trim());
         map.put(Const.Params.EMAILID, et_email.getText().toString().trim());
         map.put(Const.Params.USERNAME, et_name.getText().toString().trim());
         map.put(Const.Params.FEEDBACK, et_message.getText().toString().trim());
+
         requestQueue.add(new VolleyHttpRequest(Request.Method.POST,map,Const.ServiceCode.FEEDBACK,this,this));
     }
 
@@ -163,7 +174,13 @@ public class FeedBack extends Fragment implements AsyncTaskCompleteListener,Resp
     public void onTaskCompleted(String response, int serviceCode) {
         switch (serviceCode){
             case Const.ServiceCode.FEEDBACK:
+                Log.e("xres", "responce wish list "+response );
                if (AsifUtils.validateResponse(getContext(),response)){
+                   try {
+                       Toast.makeText(getContext(),new JSONObject(response).getString("message"),Toast.LENGTH_SHORT).show();
+                   } catch (JSONException e) {
+                       e.printStackTrace();
+                   }
                    adapterCallback.onMethodCallback(3);
                }
 

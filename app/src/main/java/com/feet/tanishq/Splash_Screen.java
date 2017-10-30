@@ -82,11 +82,21 @@ public class Splash_Screen extends AppCompatActivity implements AsyncTaskComplet
 
             UserDetails user=new UserDetails(getApplicationContext());
             user.setUserDevice(res);
-            Log.d("ddd", "user_id pref: " + user.getUserId());
+
+
+
+//            Log.d("ddd", "user_id pref: push=" + user.getPush());
+//            if(user.getPush()){
+//                user.setPush(false);
+//                //logout
+//            }
+
+
             if (user.getUserId().isEmpty()||user.getUserId()==null){
                 Intent intent=new Intent(getApplicationContext(),Login_Screen.class);
                 startActivity(intent);
                 finish();
+//                user.setPush(false);
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             }else{
                 Intent intent=new Intent(getApplicationContext(),Tanishq_Screen.class);
@@ -113,7 +123,7 @@ public class Splash_Screen extends AppCompatActivity implements AsyncTaskComplet
         }else if(res==Const.Resolution.XXXHDPI){
             res_str=Const.Resolution.XXXHDPI_TXT;
         }
-        Log.d("ttt", "getDeviceResolution: "+res_str+"  res="+res);
+//        Log.d("ttt", "getDeviceResolution: "+res_str+"  res="+res);
 
         return res_str;
     }

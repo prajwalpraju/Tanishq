@@ -61,7 +61,7 @@ public class FilterTop_Adapter extends RecyclerView.Adapter<FilterTop_Adapter.My
 
         @Override
         public void onClick(View v) {
-            filter_products.onItemClick(v,getAdapterPosition());
+//            filter_products.onItemClick(v,getAdapterPosition());
         }
     }
 }

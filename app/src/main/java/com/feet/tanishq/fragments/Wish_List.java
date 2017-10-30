@@ -14,6 +14,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +89,8 @@ public class Wish_List extends Fragment {
 
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -104,7 +107,6 @@ public class Wish_List extends Fragment {
             if (cs.moveToFirst()){
                 do {
                     String device_image=cs.getString(cs.getColumnIndex("device_image"));
-
                     String product_image=cs.getString(cs.getColumnIndex("product_image"));
                     String product_title=cs.getString(cs.getColumnIndex("product_title"));
                     String product_price=cs.getString(cs.getColumnIndex("product_price"));
@@ -119,7 +121,7 @@ public class Wish_List extends Fragment {
                     String category=cs.getString(cs.getColumnIndex("product_url"));
 
                     Model_Product model_product=new Model_Product(device_image,product_image,product_title,product_price,discount_price,discount_percent,
-                            description,collection,material,category,product_url,false,false,"","");
+                            description,collection,material,category,product_url,false,false,"","","","","","",null,"");
                     arr_list.add(model_product);
 
                 } while (cs.moveToNext());
@@ -163,6 +165,7 @@ public class Wish_List extends Fragment {
         iv_delete=(ImageView) view.findViewById(R.id.iv_delete);
 
         this.adapterCallback= (AdapterCallback) getContext();
+        adapterCallback.setFilterToGone();
 
         tv_header_wish.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
         tv_nowish.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
@@ -205,9 +208,14 @@ public class Wish_List extends Fragment {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
-                        Tanishq_Screen.reportEventToGoogle("Wishlist","Clicks","Delete");
+                        String sku ="";
+                        for(int i=0;i<arr_list.size();i++){
+                            sku=sku+" "+arr_list.get(i).getProduct_title();
+                        }
+                        Tanishq_Screen.reportEventToGoogle("Wishlist","Delete",sku);
                         new DeleteAllWishList().execute();
                         dialog.dismiss();
+
                     }
 
                 })
@@ -284,6 +292,10 @@ public class Wish_List extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
+            if(arr_list != null && arr_list.size() > 0)
+            {
+                arr_list.clear();
+            }
             getValuesFromWishList();
             return null;
         }
@@ -291,6 +303,7 @@ public class Wish_List extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
             adapter=new WishAdapter(getContext(),arr_list);
             rv_wish.setAdapter(new ScaleInAnimationAdapter(new AlphaInAnimationAdapter(adapter)));
         }

@@ -1,6 +1,5 @@
 package com.feet.tanishq.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,7 +15,6 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.feet.tanishq.R;
 import com.feet.tanishq.database.DataBaseHandler;
-import com.feet.tanishq.model.Model_AllCollection;
 import com.feet.tanishq.model.Model_Product;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.Singleton_volley;

@@ -56,7 +56,6 @@ public class Tab_Product_Pager extends Fragment {
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     pg.setVisibility(View.GONE);
                 }
-
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     pg.setVisibility(View.GONE);
@@ -73,9 +72,32 @@ public class Tab_Product_Pager extends Fragment {
 //            @Override
 //            public void onClick(View v) {
 //                Log.d("ttt", "onClick: ");
-//                nv_pro_pager.bringToFront();
+////                nv_pro_pager.bringToFront();
 //            }
 //        });
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        try {
+//            imageLoader.get(model_product.getDevice_image(), new ImageLoader.ImageListener() {
+//                @Override
+//                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+//                    pg.setVisibility(View.GONE);
+//                }
+//
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    pg.setVisibility(View.GONE);
+//                }
+//            });
+//            nv_pro_pager.setImageUrl(model_product.getDevice_image(), imageLoader);
+//            pg.setVisibility(View.VISIBLE);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            pg.setVisibility(View.GONE);
+//        }
     }
 }

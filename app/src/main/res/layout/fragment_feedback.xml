@@ -22,16 +22,14 @@
     </LinearLayout>
 
 
-
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        >
+        android:paddingTop="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,30 +38,31 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp">
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/user_name"
                     android:layout_marginTop="20dp"
+                    android:text="@string/user_name"
                     android:textColor="@color/tanishq_gold"
-                    android:textSize="19sp"
-                    android:id="@+id/tv_name" />
+                    android:textSize="19sp" />
 
 
                 <EditText
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:textColor="@color/tanishq_gold"
-                    android:background="@drawable/bt_border_gold"
-                    android:textSize="19sp"
-                    android:padding="10dp"
                     android:layout_marginTop="10dp"
-                    android:singleLine="true">
+                    android:background="@drawable/bt_border_gold"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/tanishq_gold"
+                    android:textSize="19sp">
 
                 </EditText>
 
@@ -71,30 +70,31 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <TextView
+                    android:id="@+id/tv_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/email"
                     android:layout_marginTop="20dp"
+                    android:text="@string/email"
                     android:textColor="@color/tanishq_gold"
-                    android:textSize="19sp"
-                    android:id="@+id/tv_email" />
+                    android:textSize="19sp" />
 
 
                 <EditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:textColor="@color/tanishq_gold"
-                    android:background="@drawable/bt_border_gold"
-                    android:textSize="19sp"
-                    android:padding="10dp"
                     android:layout_marginTop="10dp"
-                    android:singleLine="true">
+                    android:background="@drawable/bt_border_gold"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/tanishq_gold"
+                    android:textSize="19sp">
 
                 </EditText>
 
@@ -102,91 +102,88 @@
         </LinearLayout>
 
 
-
-
-
         <TextView
+            android:id="@+id/tv_subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/subject"
             android:layout_marginTop="20dp"
+            android:text="@string/subject"
             android:textColor="@color/tanishq_gold"
-            android:textSize="19sp"
-            android:id="@+id/tv_subject" />
+            android:textSize="19sp" />
 
-
-            <EditText
-                android:id="@+id/et_subject"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:textColor="@color/tanishq_gold"
-                android:background="@drawable/bt_border_gold"
-                android:textSize="19sp"
-                android:padding="10dp"
-                android:layout_marginTop="10dp"
-                android:singleLine="true">
-
-            </EditText>
-
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/message"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/tanishq_gold"
-            android:textSize="19sp"
-            android:id="@+id/tv_message" />
 
         <EditText
+            android:id="@+id/et_subject"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bt_border_gold"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="19sp">
+
+        </EditText>
+
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/message"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="19sp" />
+
+        <EditText
+            android:id="@+id/et_message"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/bt_border_gold"
-            android:textColor="@color/tanishq_gold"
-            android:textSize="19sp"
-            android:padding="10dp"
             android:gravity="top"
-            android:maxLines="4"
             android:imeOptions="actionDone"
-            android:id="@+id/et_message" />
+            android:maxLines="4"
+            android:inputType="textLongMessage"
+            android:padding="10dp"
+            android:textColor="@color/tanishq_gold"
+            android:textSize="19sp" />
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal">
 
             <Button
+                android:id="@+id/bt_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/send"
                 android:layout_marginRight="5dp"
-                android:paddingTop="10dp"
+                android:background="@drawable/bt_dark_gold"
                 android:paddingBottom="10dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
-                android:background="@drawable/bt_dark_gold"
+                android:paddingTop="10dp"
+                android:text="@string/send"
                 android:textColor="@color/tanishq_gold"
-                android:textSize="19sp"
-                android:id="@+id/bt_send" />
+                android:textSize="19sp" />
 
             <Button
+                android:id="@+id/bt_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cancel"
                 android:layout_marginLeft="5dp"
+                android:background="@drawable/bt_dark_gold"
                 android:padding="10dp"
-                android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp"
-                android:background="@drawable/bt_dark_gold"
+                android:paddingTop="10dp"
+                android:text="@string/cancel"
                 android:textColor="@color/tanishq_gold"
                 android:textSize="19sp"
-                android:visibility="gone"
-                android:id="@+id/bt_cancel" />
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 

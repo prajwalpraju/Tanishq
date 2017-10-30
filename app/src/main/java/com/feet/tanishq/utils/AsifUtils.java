@@ -215,17 +215,20 @@ public class AsifUtils {
 	public static boolean validateResponse(Context context,String response){
 		boolean validate=false;
 		try {
+			AsifUtils.stop();
 //			Log.d("response", "validateResponse: "+response);
 			int status=new JSONObject(response).getInt("status");
 
-			Toast.makeText(context,new JSONObject(response).getString("message"),Toast.LENGTH_SHORT).show();
+//			Toast.makeText(context,new JSONObject(response).getString("message"),Toast.LENGTH_SHORT).show();
 			switch (status){
 				case 200:
 				//success message
 					validate=true;
+
 					break;
 				case 400:
 				//failure message
+					Toast.makeText(context,new JSONObject(response).getString("message"),Toast.LENGTH_SHORT).show();
 					break;
 
 				case 404:
@@ -393,6 +396,30 @@ public class AsifUtils {
 		}
 		return false;
 	}
+
+
+	/*
+	with global context
+	 */
+
+	public static boolean isNetworkAvailable(Context con) {
+		ConnectivityManager connectivity = (ConnectivityManager) con
+				.getSystemService(con.getApplicationContext().CONNECTIVITY_SERVICE);
+		if (connectivity == null) {
+			return false;
+		} else {
+			NetworkInfo[] info = connectivity.getAllNetworkInfo();
+			if (info != null) {
+				for (int i = 0; i < info.length; i++) {
+					if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 
 	public static boolean eMailValidation(String emailstring) {
 		if (null == emailstring || emailstring.length() == 0) {

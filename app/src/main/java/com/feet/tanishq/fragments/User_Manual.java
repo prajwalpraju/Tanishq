@@ -17,6 +17,7 @@ import android.widget.VideoView;
 
 import com.feet.tanishq.R;
 import com.feet.tanishq.Tanishq_Screen;
+import com.feet.tanishq.YouTuber;
 import com.feet.tanishq.utils.AsifUtils;
 import com.feet.tanishq.utils.UserDetails;
 import com.google.android.gms.analytics.HitBuilders;
@@ -88,7 +89,6 @@ public class User_Manual extends Fragment {
         View view=inflater.inflate(R.layout.fragment_user__manual, container, false);
         tv_userman=(TextView) view.findViewById(R.id.tv_userman);
         tv_userman_header=(TextView) view.findViewById(R.id.tv_userman_header);
-//        vv_tanishq=(VideoView) view.findViewById(R.id.vv_tanishq);
 
         tv_userman.setTypeface(AsifUtils.getRaleWay_Medium(getContext()));
         tv_userman_header.setTypeface(AsifUtils.getRaleWay_Bold(getContext()));
@@ -102,18 +102,6 @@ public class User_Manual extends Fragment {
             }
         });
 
-//        try {
-//            MediaController mediaController = new MediaController(getActivity());
-//            mediaController.setAnchorView(vv_tanishq);
-//            Uri video = Uri.parse(url);
-//            vv_tanishq.setMediaController(mediaController);
-//            vv_tanishq.setVideoURI(video);
-//            vv_tanishq.start();
-//        } catch (Exception e) {
-//            // TODO: handle exception
-//            Toast.makeText(getActivity(), "Error connecting", Toast.LENGTH_SHORT).show();
-//        }
-
         return view;
     }
 
@@ -121,8 +109,8 @@ public class User_Manual extends Fragment {
         UserDetails details=new UserDetails(getContext());
         String url=details.getDemoUrl();
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + "byXHv3NsOmg"));
-            startActivity(intent);
+            Intent i = new Intent(getActivity(), YouTuber.class);
+            startActivity(i);
         } catch (ActivityNotFoundException ex) {
             Intent intent = new Intent(Intent.ACTION_VIEW,
                     Uri.parse(url));

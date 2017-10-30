@@ -1,5 +1,6 @@
 package com.feet.tanishq.adapter;
 
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -19,6 +20,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public ViewPagerAdapter(FragmentManager fm,ArrayList<Model_Product> arr_product) {
         super(fm);
         this.arr_product=arr_product;
+    }
+
+    @Override
+    public Parcelable saveState() {
+        return null;
     }
 
     @Override
