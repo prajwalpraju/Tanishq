@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'tanishq'
             keyPassword 'tanishq'
-            storeFile file('D:/project back_up/TNIQ/6-29-2017 multiple sellect filter analitics added/Tanishq/tanishq.jks')
+            storeFile file('D:/project back_up/TNIQ/FCM/Tanishq/tanishq.jks')
             storePassword 'tanishq'
         }
     }
@@ -15,8 +15,8 @@ android {
         applicationId "com.feet.tanishq"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 10
-        versionName "1.9"
+        versionCode 11
+        versionName "2.0"
     }
     buildTypes {
         release {
